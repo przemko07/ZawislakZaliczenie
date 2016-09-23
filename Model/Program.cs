@@ -10,7 +10,8 @@ namespace Model
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("ala ma kota");
+            Permutacja perm = new Permutacja(30, 8);
+            Console.WriteLine(perm);
         }
     }
 }

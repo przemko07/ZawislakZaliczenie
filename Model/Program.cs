@@ -10,8 +10,10 @@ namespace Model
     {
         static void Main(string[] args)
         {
-            Permutacja perm = new Permutacja(30, 8);
-            Console.WriteLine(perm);
+            //Permutacja perm = new Permutacja(30, 8);
+            //Console.WriteLine(perm);
+
+            Macierz m = new Macierz(10, 0, 100);
         }
     }
 }

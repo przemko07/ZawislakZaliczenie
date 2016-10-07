@@ -8,7 +8,7 @@ namespace Model
 {
     class Permutacja
     {
-        public readonly int[,] permutacja;
+        public int[,] permutacja;
 
         public Permutacja(uint population_size, uint single_length, bool unique_population = false)
         {

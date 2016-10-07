@@ -9,7 +9,7 @@ namespace Model
     class Macierz
     {
         private Random random = new Random();
-        private int[,] values;
+        public int[,] values;
 
         public Macierz(int n, int from, int to)
         {

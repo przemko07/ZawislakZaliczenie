@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Ewolucyjny.cs" />
     <Compile Include="Macierz.cs" />
     <Compile Include="Permutacja.cs" />
     <Compile Include="Program.cs" />

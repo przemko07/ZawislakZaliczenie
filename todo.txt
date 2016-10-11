@@ -2,9 +2,39 @@ DONE:
 
 TODO:
 - program wyswietla grafy (wierzcho³ki rysowane na kole b¹dŸ randomowo)
+        . rysowanie grafu ma byæ skalowane do wysokoœci i szerokoœci panelu
+        . rysowanie jest równe narysowaniu wierzcho³ów, krawêdzi, nazw wierzcho³ków oraz wag krawêdzi
+        . brak mo¿liwoœci przesuwania grafu b¹dŸ zoomowania
+        . brak mo¿liwoœci przesuwania wierzcho³ków
+        . mo¿liwoœæ dynamicznego zmieniania wag krawêdzi
+        . mo¿liwoœæ dynamicznego zmieniania iloœci wierzcho³ków
+        . mo¿liwoœæ narysowania dowolnej œcie¿ki na grafie, oznaczenie kolejnych odwiedzanych nodów
+
 - program wyœwietla macierze M1 oraz M2, wag dla wierzcho³ków
-- program wyœwietla najlepszego osobnika (mo¿e te¿ mediana, œrednia)
+        . rysowanie grida z wartoœci numerycznych NxN
+        . mo¿liwoœæ zmiany wartoœci innych ni¿ przek¹tn¹ grida
+        . zmiana wartoœci jest propagowana symetrycznie uwzglêdniaj¹c przek¹tn¹ value[i, j] = value[j, i];
+
+- program wyœwietla najlepszego osobnika
+        . lista osobników posortowana wed³óg funkcji F1
+        . Tak samo dla funkcji F2
+        . wyœwietlenie osobnika znajduj¹cego sie na pareto front, u¿ywaj¹c granicy (pareto front) oraz wartoœci numerycznej z przedzialu (0,1) oznaczaj¹c¹ d³ugoœc na granicy (pareto front)
+
 - program wyœwietla œcie¿kê na grafiê, osobnika (najlepszy albo dowolny)
+        . wyœwietlenie œciezki po zaznaczeniu osobnika na dowolnej z trzech list osobników (F1, F2, pareto front)
+
 - program wyœwietla osobników na wykresie XY, pareto front (osobnikow z poprzednich generacji równierz)
+        . wyœwietlenie skalowalnego wykresu do wysokoœci i szerokoœci panelu
+        . oznaczenie na wykresie osobników z aktualnej generacji, oraz poprzednich, mo¿e by u¿yæ bitmapy i skali szaroœci
+        . skalowanie wykresu do lewego dolnego (0, 0) oraz do prawego górnego (max(f2), max(F2)
+
 - program wyœwietla funkcjê F1 i F2 na wykresie XY w czasie
+        . wyœwietlenie wartoœci funkcji F1 i F2 w czasie dla 3 róznych typów F1, F2, pareto front (dowolny)
+        . mo¿liwoœc zmiany który wykres z trzech siê wyœwietla
+        . skalowanie wykresu w pionie i poziomie
+
 - program umozliwia wyplucie pliku w którym znajd¹ siê (dane wejœciowe, dane wyjœciowe)
+        . plik posiada dane startowe programu
+        . plik posiada osobników z ostatniej generacji
+        . plik posiada wyszczególnionych po 10 najlepszyh osobników z funkcji F1, F2
+        . plik posiada wszystkich osobników na pareto front

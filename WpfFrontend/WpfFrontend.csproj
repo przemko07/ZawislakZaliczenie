@@ -72,6 +72,10 @@
     </Compile>
     <Compile Include="Extensions\ActionCommand.cs" />
     <Compile Include="Extensions\ObjectVM.cs" />
+    <Compile Include="Model\GraphFactory.cs" />
+    <Compile Include="ViewModel\GraphVM.cs" />
+    <Compile Include="ViewModel\GraphEdgeVM.cs" />
+    <Compile Include="ViewModel\GraphNodeVM.cs" />
     <Compile Include="View\App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -111,7 +115,12 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\Images\" />
-    <Folder Include="ViewModel\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Model\Model.csproj">
+      <Project>{58d29961-d265-4237-95ba-18f4fdcd9fd0}</Project>
+      <Name>Model</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

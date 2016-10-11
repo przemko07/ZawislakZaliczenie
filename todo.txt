@@ -1,0 +1,10 @@
+DONE:
+
+TODO:
+- program wyswietla grafy (wierzcho³ki rysowane na kole b¹dŸ randomowo)
+- program wyœwietla macierze M1 oraz M2, wag dla wierzcho³ków
+- program wyœwietla najlepszego osobnika (mo¿e te¿ mediana, œrednia)
+- program wyœwietla œcie¿kê na grafiê, osobnika (najlepszy albo dowolny)
+- program wyœwietla osobników na wykresie XY, pareto front (osobnikow z poprzednich generacji równierz)
+- program wyœwietla funkcjê F1 i F2 na wykresie XY w czasie
+- program umozliwia wyplucie pliku w którym znajd¹ siê (dane wejœciowe, dane wyjœciowe)

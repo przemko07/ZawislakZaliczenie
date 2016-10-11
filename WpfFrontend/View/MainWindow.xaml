@@ -15,6 +15,6 @@
         
         <TextBlock Grid.Column="0" Text="{Binding text}"/>
 
-        <view:GraphV Grid.Column="1" />
+        <view:GraphV Grid.Column="1" Graph="{Binding Graph}"/>
     </Grid>
 </Window>

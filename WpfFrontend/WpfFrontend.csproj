@@ -76,6 +76,8 @@
     </Compile>
     <Compile Include="Extensions\ActionCommand.cs" />
     <Compile Include="Extensions\ObjectVM.cs" />
+    <Compile Include="Extensions\ObservableDictionary.cs" />
+    <Compile Include="Model\CircleGraphPositioner.cs" />
     <Compile Include="Model\GraphFactory.cs" />
     <Compile Include="ViewModel\GraphVM.cs" />
     <Compile Include="ViewModel\GraphEdgeVM.cs" />

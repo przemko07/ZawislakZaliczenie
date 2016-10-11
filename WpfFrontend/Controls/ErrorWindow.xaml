@@ -1,0 +1,25 @@
+﻿<Window x:Class="WpfFrontend.Controls.ErrorWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfFrontend.Controls"
+        Title="Application error"
+        mc:Ignorable="d"
+        Height="300" Width="300">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Text="Unhandler error" FontFamily="Curier" FontSize="20" TextAlignment="Center"/>
+
+        <ScrollViewer Grid.Row="1">
+            <TextBox Text="{Binding ErrorMessage, Mode=OneWay, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}" TextWrapping="Wrap" FontFamily="Curier" IsReadOnly="True"/>
+        </ScrollViewer>
+
+        <Button Grid.Row="2" Content="Close" HorizontalAlignment="Right" Margin="5, 5, 50, 5" Padding="10, 5" Command="{Binding CloseCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}" />
+    </Grid>
+</Window>

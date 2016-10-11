@@ -23,6 +23,20 @@ namespace WpfFrontend.Context
                     graph.Nodes.Add(new GraphNodeVM() {  Name = i.ToString() });
                 }
 
+                Random random = new Random();
+
+                for (int i = 0; i < graph.Nodes.Count; i++)
+                {
+                    int i1 = random.Next(0, graph.Nodes.Count);
+                    int i2 = random.Next(0, graph.Nodes.Count);
+                    graph.Edges.Add(new GraphEdgeVM()
+                    {
+                        Name = i1 + "-" + i2,
+                        Begin = graph.Nodes[i1],
+                        End = graph.Nodes[i2],
+                    });
+                }
+
                 return graph;
             }
         }

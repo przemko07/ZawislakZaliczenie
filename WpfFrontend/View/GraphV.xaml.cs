@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -23,8 +27,10 @@ namespace WpfFrontend.View
     /// <summary>
     /// Interaction logic for GraphV.xaml
     /// </summary>
-    public partial class GraphV : UserControl
+    public partial class GraphV : UserControl, INotifyPropertyChanged
     {
+        private int margin = 10;
+
         public GraphVM Graph
         {
             get { return (GraphVM)GetValue(GraphProperty); }
@@ -45,10 +51,10 @@ namespace WpfFrontend.View
             if (graphV.Graph == null) return;
             CircleGraphPositioner positioner = new CircleGraphPositioner(graphV.Graph);
 
-            double width = graphV.ActualWidth;
-            double height = graphV.ActualHeight;
-            double rx = width / 2 - 10; // -10 cause the margin
-            double ry = height / 2 - 10; // -10 cause the margin
+            double width = graphV.ActualWidth - graphV.margin;
+            double height = graphV.ActualHeight - graphV.margin;
+            double rx = width / 2; // -10 cause the margin
+            double ry = height / 2; // -10 cause the margin
             double cx = width / 2;
             double cy = height / 2;
             if (rx < 10) rx = 10; // I just want to see anything, uglynees is not important
@@ -58,7 +64,11 @@ namespace WpfFrontend.View
             {
                 foreach (var node in graphV.Graph.Nodes)
                 {
-                    graphV.Nodes.Add(node, positioner.Position(node, rx, ry, cx, cy));
+                    // I only need to calculate new positions
+                    var newPos = positioner.Position(node, rx, ry, cx, ry);
+                    newPos.X -= graphV.margin / 2;
+                    newPos.Y += graphV.margin / 2;
+                    graphV.Nodes[node] = newPos;
                 }
 
                 foreach (var edge in graphV.Graph.Edges)
@@ -70,16 +80,30 @@ namespace WpfFrontend.View
             {
                 Trace.WriteLine(ex);
             }
+            ++graphV.ChangeCount;
         }
+
 
         public ObservableDictionary<GraphNodeVM, Point> Nodes { get; } = new ObservableDictionary<GraphNodeVM, Point>();
         public ObservableCollection<GraphEdgeVM> Edges { get; } = new ObservableCollection<GraphEdgeVM>();
+        private int _ChangeCount = 0;
+        public int ChangeCount
+        {
+            get { return _ChangeCount; }
+            set
+            {
+                _ChangeCount = value;
+                OnPropertyChanged(nameof(ChangeCount));
+            }
+        }
+
 
         public GraphV()
         {
             InitializeComponent();
             SizeChanged += GraphV_SizeChanged;
         }
+
 
         private void GraphV_SizeChanged(object sender, SizeChangedEventArgs e)
         {
@@ -90,8 +114,8 @@ namespace WpfFrontend.View
         {
             CircleGraphPositioner positioner = new CircleGraphPositioner(Graph);
 
-            double width = ActualWidth - 10; // -10 cause the margin
-            double height = ActualHeight - 10; // -10 cause the margin
+            double width = ActualWidth - margin; // -10 cause the margin
+            double height = ActualHeight - margin; // -10 cause the margin
             double rx = width / 2;
             double ry = height / 2;
             double cx = width / 2;
@@ -105,8 +129,8 @@ namespace WpfFrontend.View
                 {
                     // I only need to calculate new positions
                     var newPos = positioner.Position(node, rx, ry, cx, ry);
-                    newPos.X -= 5;
-                    newPos.Y += 5;
+                    newPos.X -= margin / 2;
+                    newPos.Y += margin / 2;
                     Nodes[node] = newPos;
                 }
 
@@ -116,6 +140,12 @@ namespace WpfFrontend.View
             {
                 Trace.WriteLine(ex);
             }
+            ++ChangeCount;
         }
+
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected void OnPropertyChanged([CallerMemberName] string propertyName = "")
+            => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 }

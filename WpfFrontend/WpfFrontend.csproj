@@ -74,7 +74,9 @@
     <Compile Include="Controls\ErrorWindow.xaml.cs">
       <DependentUpon>ErrorWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Converters\Dictionaryitem.cs" />
     <Compile Include="Extensions\ActionCommand.cs" />
+    <Compile Include="Extensions\DebugConverter.cs" />
     <Compile Include="Extensions\ObjectVM.cs" />
     <Compile Include="Extensions\ObservableDictionary.cs" />
     <Compile Include="Model\CircleGraphPositioner.cs" />

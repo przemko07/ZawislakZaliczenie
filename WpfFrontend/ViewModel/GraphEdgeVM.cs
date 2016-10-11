@@ -10,7 +10,7 @@ namespace WpfFrontend.ViewModel
     {
         public string Name { get; set; } = string.Empty;
         public double Wage { get; set; } = 0.0;
-        public GraphNodeVM Begin = null;
-        public GraphNodeVM End = null;
+        public GraphNodeVM Begin { get; set; } = null;
+        public GraphNodeVM End { get; set; } = null;
     }
 }

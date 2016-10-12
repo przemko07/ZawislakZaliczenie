@@ -24,6 +24,7 @@
     </UserControl.Resources>
     
     <Grid>
+        <!-- Show Nodes of graph-->
         <ItemsControl Panel.ZIndex="2" ItemsSource="{Binding Nodes, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
@@ -36,6 +37,7 @@
             </ItemsControl.ItemTemplate>
         </ItemsControl>
 
+        <!-- Show Edges of graph-->
         <ItemsControl Panel.ZIndex="1" ItemsSource="{Binding Edges, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
@@ -62,6 +64,19 @@
                                               
                             </Path.Data>
                         </Path>
+                    </Canvas>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+
+        <!-- Show Nodes of graph-->
+        <ItemsControl Panel.ZIndex="2" ItemsSource="{Binding NodesNames, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Canvas>
+                        <TextBlock Text="{Binding Key.Name}" Margin="-10, -10, 0,  0" FontSize="16" FontWeight="Black"
+                               Canvas.Left="{Binding Value.X}"
+                               Canvas.Top="{Binding Value.Y}"/>
                     </Canvas>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>

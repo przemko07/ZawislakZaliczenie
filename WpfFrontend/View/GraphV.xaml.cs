@@ -29,7 +29,9 @@ namespace WpfFrontend.View
     /// </summary>
     public partial class GraphV : UserControl, INotifyPropertyChanged
     {
-        private int margin = 10;
+        private double marginE = 50;
+        private double margin = 100;
+        CircleGraphPositioner positioner = null;
 
         public GraphVM Graph
         {
@@ -49,26 +51,16 @@ namespace WpfFrontend.View
             graphV.Edges.Clear();
 
             if (graphV.Graph == null) return;
-            CircleGraphPositioner positioner = new CircleGraphPositioner(graphV.Graph);
 
-            double width = graphV.ActualWidth - graphV.margin;
-            double height = graphV.ActualHeight - graphV.margin;
-            double rx = width / 2; // -10 cause the margin
-            double ry = height / 2; // -10 cause the margin
-            double cx = width / 2;
-            double cy = height / 2;
-            if (rx < 10) rx = 10; // I just want to see anything, uglynees is not important
-            if (ry < 10) ry = 10; // I just want to see anything, uglynees is not important
+            graphV.positioner = new CircleGraphPositioner(graphV.Graph);
+        
 
             try
             {
                 foreach (var node in graphV.Graph.Nodes)
                 {
-                    // I only need to calculate new positions
-                    var newPos = positioner.Position(node, rx, ry, cx, ry);
-                    newPos.X -= graphV.margin / 2;
-                    newPos.Y += graphV.margin / 2;
-                    graphV.Nodes[node] = newPos;
+                    graphV.Nodes[node] = graphV.CalculatePosition(node, graphV.margin);
+                    graphV.NodesNames[node] = graphV.CalculatePosition(node, graphV.marginE);
                 }
 
                 foreach (var edge in graphV.Graph.Edges)
@@ -84,6 +76,7 @@ namespace WpfFrontend.View
         }
 
 
+        public ObservableDictionary<GraphNodeVM, Point> NodesNames { get; } = new ObservableDictionary<GraphNodeVM, Point>();
         public ObservableDictionary<GraphNodeVM, Point> Nodes { get; } = new ObservableDictionary<GraphNodeVM, Point>();
         public ObservableCollection<GraphEdgeVM> Edges { get; } = new ObservableCollection<GraphEdgeVM>();
         private int _ChangeCount = 0;
@@ -112,26 +105,12 @@ namespace WpfFrontend.View
 
         private void GenerateNodePositions()
         {
-            CircleGraphPositioner positioner = new CircleGraphPositioner(Graph);
-
-            double width = ActualWidth - margin; // -10 cause the margin
-            double height = ActualHeight - margin; // -10 cause the margin
-            double rx = width / 2;
-            double ry = height / 2;
-            double cx = width / 2;
-            double cy = height / 2;
-            if (rx < 10) rx = 10; // I just want to see anything, uglynees is not important
-            if (ry < 10) ry = 10; // I just want to see anything, uglynees is not important
-
             try
             {
                 foreach (var node in Nodes.Keys.ToArray())
                 {
-                    // I only need to calculate new positions
-                    var newPos = positioner.Position(node, rx, ry, cx, ry);
-                    newPos.X -= margin / 2;
-                    newPos.Y += margin / 2;
-                    Nodes[node] = newPos;
+                    Nodes[node] = CalculatePosition(node, margin);
+                    NodesNames[node] = CalculatePosition(node, marginE);
                 }
 
                 // doesnt need to generate new edges
@@ -141,6 +120,23 @@ namespace WpfFrontend.View
                 Trace.WriteLine(ex);
             }
             ++ChangeCount;
+        }
+
+        private Point CalculatePosition(GraphNodeVM node, double margin)
+        {
+            double width = ActualWidth - margin;
+            double height = ActualHeight - margin;
+            double rx = width / 2;
+            double ry = height / 2;
+            double cx = width / 2;
+            double cy = height / 2;
+            if (rx < 10) rx = 10; // I just want to see anything, uglynees is not important
+            if (ry < 10) ry = 10; // I just want to see anything, uglynees is not important
+
+            var newPos = positioner.Position(node, rx, ry, cx, ry);
+            newPos.X += margin / 2;
+            newPos.Y += margin / 2;
+            return newPos;
         }
 
 

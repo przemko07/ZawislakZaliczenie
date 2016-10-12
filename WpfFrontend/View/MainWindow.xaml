@@ -3,11 +3,12 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:ext="clr-namespace:WpfFrontend.Extensions"
         xmlns:local="clr-namespace:WpfFrontend"
         xmlns:view="clr-namespace:WpfFrontend.View"
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
-    <Grid>
+    <Grid>        
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="auto"/>
@@ -17,7 +18,16 @@
                      Graph="{Binding Graph}"
                      NodeSize="{Binding NodeSize}"
                      NodesMargin="{Binding NodesMargin}"
-                     NamesMargin="{Binding NamesMargin}"/>
+                     NamesMargin="{Binding NamesMargin}">
+            <ext:DataPiping.DataPipes>
+                <ext:DataPipeCollection>
+                    <ext:DataPipe Source="{Binding Path=ActualWidth, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type view:GraphV}}}"
+                                  Target="{Binding Path=WindowWidth, Mode=OneWayToSource}"/>
+                    <ext:DataPipe Source="{Binding Path=ActualHeight, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type view:GraphV}}}"
+                                  Target="{Binding Path=WindowHeight, Mode=OneWayToSource}"/>
+                </ext:DataPipeCollection>
+            </ext:DataPiping.DataPipes>
+        </view:GraphV>
 
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>

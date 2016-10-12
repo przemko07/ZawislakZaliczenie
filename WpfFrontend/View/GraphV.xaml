@@ -40,8 +40,7 @@
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <Canvas>
-                        <Path Stroke="DarkBlue"
-                              StrokeThickness="{Binding NodeSize, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}, Converter={StaticResource DivConverter}, ConverterParameter=5}">
+                        <Path Stroke="DarkBlue" StrokeThickness="{Binding NodeSize, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}, Converter={StaticResource DivConverter}, ConverterParameter=5}">
                             <Path.Data>
                                 <LineGeometry>
                                     <LineGeometry.StartPoint>

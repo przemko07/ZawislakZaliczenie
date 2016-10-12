@@ -71,6 +71,7 @@
       <SubType>Designer</SubType>
     </Page>
     <Compile Include="Context\MainWindowVM.cs" />
+    <Compile Include="Extensions\BindingProxy.cs" />
     <Compile Include="Controls\ErrorWindow.xaml.cs">
       <DependentUpon>ErrorWindow.xaml</DependentUpon>
     </Compile>
@@ -79,6 +80,7 @@
     <Compile Include="Converters\NodeSizeToMargin.cs" />
     <Compile Include="Converters\TextBlockToMargin.cs" />
     <Compile Include="Extensions\ActionCommand.cs" />
+    <Compile Include="Extensions\DataPipe.cs" />
     <Compile Include="Extensions\DebugConverter.cs" />
     <Compile Include="Extensions\ObjectVM.cs" />
     <Compile Include="Extensions\ObservableDictionary.cs" />
@@ -127,7 +129,6 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\Model\Model.csproj">
       <Project>{58d29961-d265-4237-95ba-18f4fdcd9fd0}</Project>

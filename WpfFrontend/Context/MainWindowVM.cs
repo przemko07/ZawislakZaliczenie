@@ -60,8 +60,32 @@ namespace WpfFrontend.Context
             }
         }
 
+        private double _WindowWidth;
+        public double WindowWidth
+        {
+            get { return _WindowWidth; }
+            set
+            {
+                _WindowWidth = value;
+                OnPropertyChanged(nameof(WindowWidth));
 
+                Combine = Math.Min(WindowWidth, WindowHeight) / 6;
+            }
+        }
 
+        private double _WindowHeight;
+        public double WindowHeight
+        {
+            get { return _WindowHeight; }
+            set
+            {
+                _WindowHeight = value;
+                OnPropertyChanged(nameof(WindowHeight));
+
+                Combine = Math.Min(WindowWidth, WindowHeight) / 6;
+            }
+        }
+        
 
         public GraphVM Graph
         {

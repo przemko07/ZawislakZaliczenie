@@ -12,6 +12,57 @@ namespace WpfFrontend.Context
     {
         public string text { get; } = "Ala ma kota";
 
+        private double _NodeSize;
+        public double NodeSize
+        {
+            get { return _NodeSize; }
+            set
+            {
+                _NodeSize = value;
+                OnPropertyChanged(nameof(NodeSize));
+            }
+        }
+
+        private double _NodesMargin;
+        public double NodesMargin
+        {
+            get { return _NodesMargin; }
+            set
+            {
+                _NodesMargin = value;
+                OnPropertyChanged(nameof(NodesMargin));
+            }
+        }
+
+        private double _NamesMargin;
+        public double NamesMargin
+        {
+            get { return _NamesMargin; }
+            set
+            {
+                _NamesMargin = value;
+                OnPropertyChanged(nameof(NamesMargin));
+            }
+        }
+
+        private double _Combine;
+        public double Combine
+        {
+            get { return _Combine; }
+            set
+            {
+                _Combine = value;
+                OnPropertyChanged(nameof(Combine));
+
+                NodeSize = value;
+                NodesMargin = value * 2;
+                NamesMargin = value * 0.45;
+            }
+        }
+
+
+
+
         public GraphVM Graph
         {
             get
@@ -20,7 +71,7 @@ namespace WpfFrontend.Context
 
                 for (int i = 0; i < 10; i++)
                 {
-                    graph.Nodes.Add(new GraphNodeVM() {  Name = i.ToString() });
+                    graph.Nodes.Add(new GraphNodeVM() { Name = i.ToString() });
                 }
 
                 Random random = new Random();

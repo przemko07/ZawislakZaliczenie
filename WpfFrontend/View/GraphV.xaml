@@ -8,19 +8,14 @@
              xmlns:converters="clr-namespace:WpfFrontend.Converters"
              xmlns:viewmodel="clr-namespace:WpfFrontend.ViewModel"
              mc:Ignorable="d"
-             x:Name="GraphControl">
+             x:Name="GraphControl"
+             Background="LightBlue">
     <UserControl.Resources>
         <ext:DebugConverter x:Key="DebugConverter"/>
         <converters:Dictionaryitem x:Key="Dictionaryitem"/>
-        
-        <LinearGradientBrush x:Key="asd" StartPoint="1, 0" EndPoint="0, 1">
-            <LinearGradientBrush.Transform>
-                <RotateTransform Angle="{Binding angle, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}"/>
-            </LinearGradientBrush.Transform>
-            <GradientStop Offset="0" Color="White"/>
-            <GradientStop Offset="0.5" Color="LightBlue"/>
-            <GradientStop Offset="1" Color="Black"/>
-        </LinearGradientBrush>
+        <converters:NodeSizeToMargin x:Key="NodeSizeToMargin"/>
+        <converters:TextBlockToMargin x:Key="TextBlockToMargin"/>
+        <converters:DivConverter x:Key="DivConverter"/>
     </UserControl.Resources>
     
     <Grid>
@@ -29,7 +24,10 @@
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <Canvas>
-                        <Image Source="\Resources\Images\node.png" RenderOptions.BitmapScalingMode="HighQuality" Width="20" Height="20" Margin="-10, -10, 0, 0"
+                        <Image Source="\Resources\Images\node.png" RenderOptions.BitmapScalingMode="HighQuality"
+                               Width="{Binding NodeSize, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}"
+                               Height="{Binding NodeSize, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}"
+                               Margin="{Binding NodeSize, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}, Converter={StaticResource NodeSizeToMargin}}"
                                Canvas.Left="{Binding Value.X}"
                                Canvas.Top="{Binding Value.Y}"/>
                     </Canvas>
@@ -42,7 +40,8 @@
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <Canvas>
-                        <Path StrokeThickness="4" Stroke="DarkBlue"> 
+                        <Path Stroke="DarkBlue"
+                              StrokeThickness="{Binding NodeSize, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}, Converter={StaticResource DivConverter}, ConverterParameter=5}">
                             <Path.Data>
                                 <LineGeometry>
                                     <LineGeometry.StartPoint>
@@ -74,9 +73,20 @@
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <Canvas>
-                        <TextBlock Text="{Binding Key.Name}" Margin="-10, -10, 0,  0" FontSize="16" FontWeight="Black"
-                               Canvas.Left="{Binding Value.X}"
-                               Canvas.Top="{Binding Value.Y}"/>
+                        <TextBlock Panel.ZIndex="2" Text="{Binding Key.Name}"
+                                   Foreground="White"
+                                   TextAlignment="Center"
+                                   FontSize="{Binding NodeSize, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}"
+                                   FontWeight="Black"
+                                   Canvas.Left="{Binding Value.X}"
+                                   Canvas.Top="{Binding Value.Y}">
+                            <TextBlock.Margin>
+                                <MultiBinding Converter="{StaticResource TextBlockToMargin}">
+                                    <Binding RelativeSource="{RelativeSource Self}"/>
+                                    <Binding Path="NodeSize" RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType=UserControl}"/>
+                                </MultiBinding>
+                            </TextBlock.Margin>                            
+                        </TextBlock>
                     </Canvas>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>

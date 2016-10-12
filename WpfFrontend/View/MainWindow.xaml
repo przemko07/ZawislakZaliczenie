@@ -8,13 +8,40 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
-        
-        <TextBlock Grid.Column="0" Text="{Binding text}"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
 
-        <view:GraphV Grid.Column="1" Graph="{Binding Graph}"/>
+        <view:GraphV Grid.Row="0"
+                     Graph="{Binding Graph}"
+                     NodeSize="{Binding NodeSize}"
+                     NodesMargin="{Binding NodesMargin}"
+                     NamesMargin="{Binding NamesMargin}"/>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="150"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Grid.Column="0" Grid.Row="0" Text="{Binding NodeSize}" Margin="5"/>
+            <Slider Grid.Column="1" Grid.Row="0" Minimum="1" Maximum="700" Value="{Binding NodeSize, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
+
+            <TextBlock Grid.Column="0" Grid.Row="1" Text="{Binding NodesMargin}" Margin="5"/>
+            <Slider Grid.Column="1" Grid.Row="1" Minimum="1" Maximum="700" Value="{Binding NodesMargin, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
+
+            <TextBlock Grid.Column="0" Grid.Row="2" Text="{Binding NamesMargin}" Margin="5"/>
+            <Slider Grid.Column="1" Grid.Row="2" Minimum="1" Maximum="700" Value="{Binding NamesMargin, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
+            
+            <TextBlock Grid.Column="0" Grid.Row="3" Text="{Binding Combine}" Margin="5"/>
+            <Slider Grid.Column="1" Grid.Row="3" Minimum="1" Maximum="700" Value="{Binding Combine, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
+        </Grid>
     </Grid>
 </Window>

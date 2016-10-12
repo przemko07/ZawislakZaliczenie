@@ -29,9 +29,7 @@ namespace WpfFrontend.View
     /// </summary>
     public partial class GraphV : UserControl, INotifyPropertyChanged
     {
-        private double marginE = 50;
-        private double margin = 100;
-        CircleGraphPositioner positioner = null;
+        private CircleGraphPositioner positioner = null;
 
         public GraphVM Graph
         {
@@ -53,14 +51,14 @@ namespace WpfFrontend.View
             if (graphV.Graph == null) return;
 
             graphV.positioner = new CircleGraphPositioner(graphV.Graph);
-        
+
 
             try
             {
                 foreach (var node in graphV.Graph.Nodes)
                 {
-                    graphV.Nodes[node] = graphV.CalculatePosition(node, graphV.margin);
-                    graphV.NodesNames[node] = graphV.CalculatePosition(node, graphV.marginE);
+                    graphV.Nodes[node] = graphV.CalculatePosition(node, graphV.NodesMargin);
+                    graphV.NodesNames[node] = graphV.CalculatePosition(node, graphV.NamesMargin);
                 }
 
                 foreach (var edge in graphV.Graph.Edges)
@@ -73,6 +71,54 @@ namespace WpfFrontend.View
                 Trace.WriteLine(ex);
             }
             ++graphV.ChangeCount;
+        }
+
+        public double NodesMargin
+        {
+            get { return (double)GetValue(InnerRadiusProperty); }
+            set { SetValue(InnerRadiusProperty, value); }
+        }
+        public static readonly DependencyProperty InnerRadiusProperty =
+            DependencyProperty.Register("NodesMargin", typeof(double), typeof(GraphV), new PropertyMetadata(100.0, NodesMarginChangedCallback));
+        private static void NodesMarginChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (d == null) return;
+            GraphV graphV = d as GraphV;
+            if (graphV == null) return;
+
+            graphV.GenerateNodePositions();
+        }
+
+        public double NamesMargin
+        {
+            get { return (double)GetValue(NamesMarginProperty); }
+            set { SetValue(NamesMarginProperty, value); }
+        }
+        public static readonly DependencyProperty NamesMarginProperty =
+            DependencyProperty.Register("NamesMargin", typeof(double), typeof(GraphV), new PropertyMetadata(50.0, NamesMarginChangedCallback));
+        private static void NamesMarginChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (d == null) return;
+            GraphV graphV = d as GraphV;
+            if (graphV == null) return;
+
+            graphV.GenerateNodePositions();
+        }
+
+        public double NodeSize
+        {
+            get { return (double)GetValue(NodeSizeProperty); }
+            set { SetValue(NodeSizeProperty, value); }
+        }
+        public static readonly DependencyProperty NodeSizeProperty =
+            DependencyProperty.Register("NodeSize", typeof(double), typeof(GraphV), new PropertyMetadata(20.0, NodeSizeChanged));
+        private static void NodeSizeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (d == null) return;
+            GraphV graphV = d as GraphV;
+            if (graphV == null) return;
+
+            graphV.GenerateNodePositions();
         }
 
 
@@ -89,7 +135,7 @@ namespace WpfFrontend.View
                 OnPropertyChanged(nameof(ChangeCount));
             }
         }
-
+        
 
         public GraphV()
         {
@@ -109,8 +155,8 @@ namespace WpfFrontend.View
             {
                 foreach (var node in Nodes.Keys.ToArray())
                 {
-                    Nodes[node] = CalculatePosition(node, margin);
-                    NodesNames[node] = CalculatePosition(node, marginE);
+                    Nodes[node] = CalculatePosition(node, NodesMargin);
+                    NodesNames[node] = CalculatePosition(node, NamesMargin);
                 }
 
                 // doesnt need to generate new edges

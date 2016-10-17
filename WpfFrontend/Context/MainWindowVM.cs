@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -70,7 +71,7 @@ namespace WpfFrontend.Context
                 _WindowWidth = value;
                 OnPropertyChanged(nameof(WindowWidth));
 
-                Combine = Math.Min(WindowWidth, WindowHeight) / 6;
+                Combine = Math.Min(WindowWidth, WindowHeight) / (Graph.Nodes.Count);
             }
         }
 
@@ -83,40 +84,18 @@ namespace WpfFrontend.Context
                 _WindowHeight = value;
                 OnPropertyChanged(nameof(WindowHeight));
 
-                Combine = Math.Min(WindowWidth, WindowHeight) / 6;
+                Combine = Math.Min(WindowWidth, WindowHeight) / (Graph.Nodes.Count);
             }
         }
-
+        
+        Permutacja p = new Permutacja(1, 10, true);
 
         private GraphVM _Graph;
         public GraphVM Graph
         {
             get
             {
-                if (_Graph == null)
-                {
-                    _Graph = new GraphVM();
-
-                    for (int i = 0; i < 10; i++)
-                    {
-                        _Graph.Nodes.Add(new GraphNodeVM() { Name = i.ToString() });
-                    }
-
-                    Random random = new Random();
-
-                    for (int i = 0; i < 20; i++)
-                    {
-                        int i1 = random.Next(0, _Graph.Nodes.Count);
-                        int i2 = random.Next(0, _Graph.Nodes.Count);
-                        _Graph.Edges.Add(new GraphEdgeVM()
-                        {
-                            Name = i1 + "-" + i2,
-                            Begin = _Graph.Nodes[i1],
-                            End = _Graph.Nodes[i2],
-                        });
-                    }
-                    GraphFactory.FillEdges(_Graph);
-                }
+                if (_Graph == null) _Graph = GraphFactory.GenerateClique(p);
 
                 return _Graph;
             }
@@ -127,19 +106,7 @@ namespace WpfFrontend.Context
         {
             get
             {
-                if (_GraphPath == null)
-                {
-                    _GraphPath = new GraphVM();
-                    Random random = new Random();
-                    GraphNodeVM node = Graph.Nodes[random.Next(Graph.Nodes.Count)];
-                    for (int i = 0; i < 4; i++)
-                    {
-                        GraphEdgeVM edge = node.Edges.Where(n=>n.Begin != node).OrderByDescending(n => n.Begin.Edges.Count).FirstOrDefault();
-                        if (edge == null) break;
-                        _GraphPath.Edges.Add(edge);
-                        node = edge.Begin;
-                    }
-                }
+                if (_GraphPath == null) _GraphPath = GraphFactory.GeneratePath(Graph, p);
 
                 return _GraphPath;
 

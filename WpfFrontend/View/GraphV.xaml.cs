@@ -15,6 +15,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
@@ -29,6 +30,8 @@ namespace WpfFrontend.View
     /// </summary>
     public partial class GraphV : UserControl, INotifyPropertyChanged
     {
+        private uint animTimeSpan = 800;
+        Storyboard storyBoard = null;
         private CircleGraphPositioner positioner = null;
 
         public GraphVM Graph
@@ -73,6 +76,29 @@ namespace WpfFrontend.View
             ++graphV.ChangeCount;
         }
 
+        public GraphVM GraphPath
+        {
+            get { return (GraphVM)GetValue(GraphPathProperty); }
+            set { SetValue(GraphPathProperty, value); }
+        }
+        public static readonly DependencyProperty GraphPathProperty =
+            DependencyProperty.Register("GraphPath", typeof(GraphVM), typeof(GraphV), new PropertyMetadata(null, GraphPathChangedCallback));
+        private static void GraphPathChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (d == null) return;
+            GraphV graphV = d as GraphV;
+            if (graphV == null) return;
+
+            graphV.EdgesPath.Clear();
+
+            if (graphV.GraphPath == null) return;
+
+            foreach (var edge in graphV.GraphPath.Edges)
+            {
+                graphV.EdgesPath.Add(edge);
+            }
+        }
+
         public double NodesMargin
         {
             get { return (double)GetValue(InnerRadiusProperty); }
@@ -111,8 +137,8 @@ namespace WpfFrontend.View
             set { SetValue(NodeSizeProperty, value); }
         }
         public static readonly DependencyProperty NodeSizeProperty =
-            DependencyProperty.Register("NodeSize", typeof(double), typeof(GraphV), new PropertyMetadata(20.0, NodeSizeChanged));
-        private static void NodeSizeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+            DependencyProperty.Register("NodeSize", typeof(double), typeof(GraphV), new PropertyMetadata(20.0, NodeSizeChangedCallback));
+        private static void NodeSizeChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             if (d == null) return;
             GraphV graphV = d as GraphV;
@@ -122,6 +148,7 @@ namespace WpfFrontend.View
         }
 
 
+        public ObservableCollection<GraphEdgeVM> EdgesPath { get; } = new ObservableCollection<GraphEdgeVM>();
         public ObservableDictionary<GraphNodeVM, Point> NodesNames { get; } = new ObservableDictionary<GraphNodeVM, Point>();
         public ObservableDictionary<GraphNodeVM, Point> Nodes { get; } = new ObservableDictionary<GraphNodeVM, Point>();
         public ObservableCollection<GraphEdgeVM> Edges { get; } = new ObservableCollection<GraphEdgeVM>();
@@ -135,14 +162,114 @@ namespace WpfFrontend.View
                 OnPropertyChanged(nameof(ChangeCount));
             }
         }
-        
+
 
         public GraphV()
         {
             InitializeComponent();
             SizeChanged += GraphV_SizeChanged;
+            Thread thread = new Thread(() =>
+            {
+                Thread.Sleep(500);
+                Dispatcher.Invoke(() =>
+                {
+                    SetAnimation();
+                });
+            })
+            { IsBackground = true };
+            thread.Start();
         }
 
+        private void SetAnimation()
+        {
+            storyBoard?.Stop(Selected);
+
+            if ((EdgesPath?.Count ?? 0) == 0) return;
+
+            storyBoard = new Storyboard();
+            DoubleAnimationUsingKeyFrames leftAnimation = new DoubleAnimationUsingKeyFrames();
+            DoubleAnimationUsingKeyFrames topAnimation = new DoubleAnimationUsingKeyFrames();
+            leftAnimation.RepeatBehavior = RepeatBehavior.Forever;
+            topAnimation.RepeatBehavior = RepeatBehavior.Forever;
+
+            Storyboard.SetTargetName(leftAnimation, Selected.Name);
+            Storyboard.SetTargetProperty(leftAnimation, new PropertyPath("(0)", Canvas.LeftProperty));
+
+            Storyboard.SetTargetName(topAnimation, Selected.Name);
+            Storyboard.SetTargetProperty(topAnimation, new PropertyPath("(0)", Canvas.TopProperty));
+
+            GraphNodeVM[] nodePath = new GraphNodeVM[0];
+            try
+            {
+                nodePath = GraphFactory.NodesPath(GraphPath);
+            }
+            catch
+            {
+                return;
+            }
+            if (nodePath.Length == 0) return;
+
+            var point = Nodes[nodePath.First()];
+            double sumDist = 0;
+            for (int i = 1; i < nodePath.Count(); i++) sumDist += Distance(nodePath[i - 1], nodePath[i]);
+            double sumTime = 0;
+
+            leftAnimation.KeyFrames.Add(new EasingDoubleKeyFrame(point.X, KeyTime.FromTimeSpan(new TimeSpan(0, 0, 0, 0, (int)sumTime))));
+            topAnimation.KeyFrames.Add(new EasingDoubleKeyFrame(point.Y, KeyTime.FromTimeSpan(new TimeSpan(0, 0, 0, 0, (int)sumTime))));
+
+            for (int i = 1; i < nodePath.Length; i++)
+            {
+                double dist = Distance(nodePath[i - 1], nodePath[i]);
+                sumTime += (dist / sumDist) * (animTimeSpan * EdgesPath.Count);
+                point = Nodes[nodePath[i]];
+                leftAnimation.KeyFrames.Add(new EasingDoubleKeyFrame(point.X, KeyTime.FromTimeSpan(new TimeSpan(0, 0, 0, 0, (int)sumTime))));
+                topAnimation.KeyFrames.Add(new EasingDoubleKeyFrame(point.Y, KeyTime.FromTimeSpan(new TimeSpan(0, 0, 0, 0, (int)sumTime))));
+            }
+
+            leftAnimation.Freeze();
+            topAnimation.Freeze();
+            storyBoard.Children.Add(leftAnimation);
+            storyBoard.Children.Add(topAnimation);
+            storyBoard.Begin(Selected, true);
+
+            /*
+            storyBoard = new Storyboard();
+            ThicknessAnimationUsingKeyFrames anim = new ThicknessAnimationUsingKeyFrames();
+            anim.RepeatBehavior = RepeatBehavior.Forever;
+
+            Storyboard.SetTargetName(anim, Selected.Name);
+            Storyboard.SetTargetProperty(anim, new PropertyPath("(0)", Image.MarginProperty));
+
+            var point = NodesNames[EdgesPath.First().Begin];
+            anim.KeyFrames.Add(new EasingThicknessKeyFrame(
+                new Thickness(point.X, point.Y, 0, 0),
+                KeyTime.FromTimeSpan(new TimeSpan(0, 0, 0))));
+            double sumDist = EdgesPath.Sum(edge => Distance(edge));
+            double sumTime = 0;
+            foreach (var edge in EdgesPath)
+            {
+                double dist = Distance(edge);
+                sumTime += (dist / sumDist) * (animTimeSpan * EdgesPath.Count);
+                point = NodesNames[edge.End];
+                anim.KeyFrames.Add(new EasingThicknessKeyFrame(
+                    new Thickness(point.X, point.Y, 0, 0),
+                    KeyTime.FromTimeSpan(new TimeSpan(0, 0, 0, 0, (int)sumTime))));
+            }
+            
+            anim.Freeze();
+            storyBoard.Children.Add(anim);
+            storyBoard.Begin(Selected, true);
+            */
+        }
+
+        private double Distance(GraphNodeVM n1, GraphNodeVM n2)
+        {
+            return GraphFactory.Distance(
+                Nodes[n1].X,
+                Nodes[n1].Y,
+                Nodes[n2].X,
+                Nodes[n2].Y);
+        }
 
         private void GraphV_SizeChanged(object sender, SizeChangedEventArgs e)
         {
@@ -153,6 +280,8 @@ namespace WpfFrontend.View
         {
             try
             {
+                SetAnimation();
+
                 foreach (var node in Nodes.Keys.ToArray())
                 {
                     Nodes[node] = CalculatePosition(node, NodesMargin);

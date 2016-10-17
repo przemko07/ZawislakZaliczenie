@@ -19,8 +19,15 @@
     </UserControl.Resources>
     
     <Grid>
-        <!-- Show Nodes of graph-->
-        <ItemsControl Panel.ZIndex="2" ItemsSource="{Binding Nodes, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}">
+        <Canvas>
+            <Image Panel.ZIndex="5" x:Name="Selected" Source="\Resources\Images\node_selected.png" RenderOptions.BitmapScalingMode="HighQuality"
+                   Width="{Binding NodeSize, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}"
+                   Height="{Binding NodeSize, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}"
+                   Margin="{Binding NodeSize, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}, Converter={StaticResource NodeSizeToMargin}}"/>
+        </Canvas>
+        
+        <!-- Show Nodes of graph -->
+        <ItemsControl Panel.ZIndex="4" ItemsSource="{Binding Nodes, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <Canvas>
@@ -35,7 +42,7 @@
             </ItemsControl.ItemTemplate>
         </ItemsControl>
 
-        <!-- Show Edges of graph-->
+        <!-- Show Edges of graph -->
         <ItemsControl Panel.ZIndex="1" ItemsSource="{Binding Edges, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
@@ -67,8 +74,8 @@
             </ItemsControl.ItemTemplate>
         </ItemsControl>
 
-        <!-- Show Nodes of graph-->
-        <ItemsControl Panel.ZIndex="2" ItemsSource="{Binding NodesNames, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}">
+        <!-- Show names of Nodes of graph -->
+        <ItemsControl Panel.ZIndex="6" ItemsSource="{Binding NodesNames, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <Canvas>
@@ -86,6 +93,38 @@
                                 </MultiBinding>
                             </TextBlock.Margin>                            
                         </TextBlock>
+                    </Canvas>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+
+        <!-- Show Edges of graph path -->
+        <ItemsControl Panel.ZIndex="3" ItemsSource="{Binding EdgesPath, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Canvas>
+                        <Path Stroke="Purple" StrokeThickness="{Binding NodeSize, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}, Converter={StaticResource DivConverter}, ConverterParameter=5}">
+                            <Path.Data>
+                                <LineGeometry>
+                                    <LineGeometry.StartPoint>
+                                        <MultiBinding Converter="{StaticResource Dictionaryitem}">
+                                            <Binding Path="Nodes" RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType=UserControl}"/>
+                                            <Binding Path="Begin"/>
+                                            <Binding Path="ChangeCount" RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType=UserControl}"/>
+                                        </MultiBinding>
+                                    </LineGeometry.StartPoint>
+
+                                    <LineGeometry.EndPoint>
+                                        <MultiBinding Converter="{StaticResource Dictionaryitem}">
+                                            <Binding Path="Nodes" RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType=UserControl}"/>
+                                            <Binding Path="End"/>
+                                            <Binding Path="ChangeCount" RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType=UserControl}"/>
+                                        </MultiBinding>
+                                    </LineGeometry.EndPoint>
+                                </LineGeometry>
+
+                            </Path.Data>
+                        </Path>
                     </Canvas>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>

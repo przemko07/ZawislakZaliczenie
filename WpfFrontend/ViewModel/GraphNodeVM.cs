@@ -11,5 +11,10 @@ namespace WpfFrontend.ViewModel
     {
         public string Name { get; set; } = string.Empty;
         public ObservableCollection<GraphEdgeVM> Edges { get; set; } = new ObservableCollection<GraphEdgeVM>();
+
+        public override string ToString()
+        {
+            return Name;
+        }
     }
 }

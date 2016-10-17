@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WpfFrontend.Extensions;
+using WpfFrontend.Model;
 using WpfFrontend.ViewModel;
 
 namespace WpfFrontend.Context
@@ -85,34 +86,63 @@ namespace WpfFrontend.Context
                 Combine = Math.Min(WindowWidth, WindowHeight) / 6;
             }
         }
-        
 
+
+        private GraphVM _Graph;
         public GraphVM Graph
         {
             get
             {
-                GraphVM graph = new GraphVM();
-
-                for (int i = 0; i < 10; i++)
+                if (_Graph == null)
                 {
-                    graph.Nodes.Add(new GraphNodeVM() { Name = i.ToString() });
-                }
+                    _Graph = new GraphVM();
 
-                Random random = new Random();
-
-                for (int i = 0; i < graph.Nodes.Count; i++)
-                {
-                    int i1 = random.Next(0, graph.Nodes.Count);
-                    int i2 = random.Next(0, graph.Nodes.Count);
-                    graph.Edges.Add(new GraphEdgeVM()
+                    for (int i = 0; i < 10; i++)
                     {
-                        Name = i1 + "-" + i2,
-                        Begin = graph.Nodes[i1],
-                        End = graph.Nodes[i2],
-                    });
+                        _Graph.Nodes.Add(new GraphNodeVM() { Name = i.ToString() });
+                    }
+
+                    Random random = new Random();
+
+                    for (int i = 0; i < 20; i++)
+                    {
+                        int i1 = random.Next(0, _Graph.Nodes.Count);
+                        int i2 = random.Next(0, _Graph.Nodes.Count);
+                        _Graph.Edges.Add(new GraphEdgeVM()
+                        {
+                            Name = i1 + "-" + i2,
+                            Begin = _Graph.Nodes[i1],
+                            End = _Graph.Nodes[i2],
+                        });
+                    }
+                    GraphFactory.FillEdges(_Graph);
                 }
 
-                return graph;
+                return _Graph;
+            }
+        }
+
+        private GraphVM _GraphPath;
+        public GraphVM GraphPath
+        {
+            get
+            {
+                if (_GraphPath == null)
+                {
+                    _GraphPath = new GraphVM();
+                    Random random = new Random();
+                    GraphNodeVM node = Graph.Nodes[random.Next(Graph.Nodes.Count)];
+                    for (int i = 0; i < 4; i++)
+                    {
+                        GraphEdgeVM edge = node.Edges.Where(n=>n.Begin != node).OrderByDescending(n => n.Begin.Edges.Count).FirstOrDefault();
+                        if (edge == null) break;
+                        _GraphPath.Edges.Add(edge);
+                        node = edge.Begin;
+                    }
+                }
+
+                return _GraphPath;
+
             }
         }
     }

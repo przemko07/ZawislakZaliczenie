@@ -12,5 +12,10 @@ namespace WpfFrontend.ViewModel
         public double Wage { get; set; } = 0.0;
         public GraphNodeVM Begin { get; set; } = null;
         public GraphNodeVM End { get; set; } = null;
+
+        public override string ToString()
+        {
+            return Name;
+        }
     }
 }

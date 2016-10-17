@@ -16,6 +16,7 @@
 
         <view:GraphV Grid.Row="0"
                      Graph="{Binding Graph}"
+                     GraphPath="{Binding GraphPath}"
                      NodeSize="{Binding NodeSize}"
                      NodesMargin="{Binding NodesMargin}"
                      NamesMargin="{Binding NamesMargin}">

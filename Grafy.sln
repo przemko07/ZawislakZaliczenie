@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Model", "Model\Model.csproj
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfFrontend", "WpfFrontend\WpfFrontend.csproj", "{B6776B74-89C9-4162-BE3F-4460821B0A91}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Model.Test", "Model.Test\Model.Test.csproj", "{BC3D7A7F-8A81-4A15-BF08-8B9D2DA6B6F6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{B6776B74-89C9-4162-BE3F-4460821B0A91}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B6776B74-89C9-4162-BE3F-4460821B0A91}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B6776B74-89C9-4162-BE3F-4460821B0A91}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BC3D7A7F-8A81-4A15-BF08-8B9D2DA6B6F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BC3D7A7F-8A81-4A15-BF08-8B9D2DA6B6F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BC3D7A7F-8A81-4A15-BF08-8B9D2DA6B6F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BC3D7A7F-8A81-4A15-BF08-8B9D2DA6B6F6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

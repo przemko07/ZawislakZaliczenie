@@ -10,8 +10,14 @@ namespace Model
     {
         static void Main(string[] args)
         {
-            Permutacja perm = new Permutacja(30, 8);
-            Console.WriteLine(perm);
+            var individuals = PermutationFactory.GenerateIndividuals(30, 7, true);
+            Console.WriteLine(string.Join("\n", individuals));
+
+            Matrix matrix = MatrixFactory.CreateRandomDiagonal(7, 0, 100);
+
+            Evolutionary evo = new Model.Evolutionary(individuals, matrix);
+
+            evo.Step();
 
             //Macierz m = new Macierz(10, 0, 100);
         }

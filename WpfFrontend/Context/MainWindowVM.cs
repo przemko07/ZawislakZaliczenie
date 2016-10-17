@@ -106,14 +106,14 @@ namespace WpfFrontend.Context
         }
 
 
-        Permutacja p = new Permutacja(1, 10, true);
+        Individual individual = PermutationFactory.GenerateIndividuals(1, 10, true)[0];
 
         private GraphVM _Graph;
         public GraphVM Graph
         {
             get
             {
-                if (_Graph == null) _Graph = GraphFactory.GenerateClique(p);
+                if (_Graph == null) _Graph = GraphFactory.GenerateClique(individual);
 
                 return _Graph;
             }
@@ -124,7 +124,7 @@ namespace WpfFrontend.Context
         {
             get
             {
-                if (_GraphPath == null) _GraphPath = GraphFactory.GeneratePath(Graph, p);
+                if (_GraphPath == null) _GraphPath = GraphFactory.GeneratePath(Graph, individual);
 
                 return _GraphPath;
 

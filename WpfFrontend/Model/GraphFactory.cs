@@ -12,12 +12,12 @@ namespace WpfFrontend.Model
     {
         public static string[] Names = "A,B,C,D,E,F,G,H,J,K,L,M,P,K,L".Split(',');
 
-        public static GraphVM GenerateClique(Permutacja permutacja)
+        public static GraphVM GenerateClique(Individual individual)
         {
             GraphVM graph = new GraphVM();
 
             // Create Nodes
-            for (int i = 0; i < permutacja.permutacja.GetLength(1); i++)
+            for (uint i = 0; i < individual.Length; i++)
             {
                 graph.Nodes.Add(new GraphNodeVM()
                 {
@@ -43,16 +43,16 @@ namespace WpfFrontend.Model
             return graph;
         }
 
-        public static GraphVM GeneratePath(GraphVM graph, Permutacja permutacja)
+        public static GraphVM GeneratePath(GraphVM graph, Individual individual)
         {
             GraphVM path = new GraphVM();
 
-            for (int i = 1; i < permutacja.permutacja.GetLength(1); i++)
+            for (uint i = 1; i < individual.Length; i++)
             {
                 var edge = new GraphEdgeVM()
                 {
-                    Begin = graph.Nodes[permutacja.permutacja[0, i - 1]],
-                    End = graph.Nodes[permutacja.permutacja[0, i]],
+                    Begin = graph.Nodes[(int)individual[i - 1]],
+                    End = graph.Nodes[(int)individual[i]],
                 };
                 path.Edges.Add(edge);
             }

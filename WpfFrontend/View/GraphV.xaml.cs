@@ -30,7 +30,7 @@ namespace WpfFrontend.View
     /// </summary>
     public partial class GraphV : UserControl, INotifyPropertyChanged
     {
-        private uint animTimeSpan = 800;
+        private uint animTimeSpan = 1500;
         Storyboard storyBoard = null;
         private CircleGraphPositioner positioner = null;
 

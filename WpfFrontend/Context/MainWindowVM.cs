@@ -1,6 +1,7 @@
 ﻿using Model;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,6 +23,8 @@ namespace WpfFrontend.Context
             {
                 _NodeSize = value;
                 OnPropertyChanged(nameof(NodeSize));
+                Debug.WriteLine("NodeSize:" + (value / NodeSize));
+
             }
         }
 
@@ -33,6 +36,7 @@ namespace WpfFrontend.Context
             {
                 _NodesMargin = value;
                 OnPropertyChanged(nameof(NodesMargin));
+                Debug.WriteLine("NodesMargin:" + (value / NodeSize));
             }
         }
 
@@ -44,6 +48,8 @@ namespace WpfFrontend.Context
             {
                 _NamesMargin = value;
                 OnPropertyChanged(nameof(NamesMargin));
+                Debug.WriteLine("NamesMargin:" + (value / NodeSize));
+
             }
         }
 
@@ -57,8 +63,8 @@ namespace WpfFrontend.Context
                 OnPropertyChanged(nameof(Combine));
 
                 NodeSize = value;
-                NodesMargin = value * 2;
-                NamesMargin = value * 0.45;
+                NodesMargin = value * 3.0;
+                NamesMargin = value * 1.65;
             }
         }
 
@@ -87,7 +93,19 @@ namespace WpfFrontend.Context
                 Combine = Math.Min(WindowWidth, WindowHeight) / (Graph.Nodes.Count);
             }
         }
-        
+
+        private bool _ShowGraphEdges = true;
+        public bool ShowGraphEdges
+        {
+            get { return _ShowGraphEdges; }
+            set
+            {
+                _ShowGraphEdges = value;
+                OnPropertyChanged(nameof(ShowGraphEdges));
+            }
+        }
+
+
         Permutacja p = new Permutacja(1, 10, true);
 
         private GraphVM _Graph;

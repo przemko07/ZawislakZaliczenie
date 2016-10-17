@@ -16,7 +16,7 @@ namespace WpfFrontend.Converters
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
             if (values.Length < 2 || values[0] == null || values[1] == null) return null;
-            TextBlock tb = values[0] as TextBlock;
+            FrameworkElement tb = values[0] as FrameworkElement;
             if (tb == null) return null;
             double size = (double)values[1];
 

@@ -34,6 +34,9 @@ namespace WpfFrontend.View
         Storyboard storyBoard = null;
         private CircleGraphPositioner positioner = null;
 
+
+        #region dependency property
+
         public GraphVM Graph
         {
             get { return (GraphVM)GetValue(GraphProperty); }
@@ -90,12 +93,16 @@ namespace WpfFrontend.View
             if (graphV == null) return;
 
             graphV.EdgesPath.Clear();
+            graphV.NodesPathOrder.Clear();
 
             if (graphV.GraphPath == null) return;
 
+            int index = 0;
+            graphV.NodesPathOrder.Add(graphV.GraphPath.Edges.First().Begin, index++);
             foreach (var edge in graphV.GraphPath.Edges)
             {
                 graphV.EdgesPath.Add(edge);
+                graphV.NodesPathOrder.Add(edge.End, index++);
             }
         }
 
@@ -147,7 +154,41 @@ namespace WpfFrontend.View
             graphV.GenerateNodePositions();
         }
 
+        public bool ShowGraphEdges
+        {
+            get { return (bool)GetValue(ShowGraphEdgesProperty); }
+            set { SetValue(ShowGraphEdgesProperty, value); }
+        }
+        public static readonly DependencyProperty ShowGraphEdgesProperty =
+            DependencyProperty.Register("ShowGraphEdges", typeof(bool), typeof(GraphV), new PropertyMetadata(true, ShowGraphEdgesChangedCallback));
+        private static void ShowGraphEdgesChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (d == null) return;
+            GraphV graphV = d as GraphV;
+            if (graphV == null) return;
 
+            graphV.OnPropertyChanged(nameof(ShowGraphEdges));
+        }
+
+        public bool ShowNodeNames
+        {
+            get { return (bool)GetValue(ShowNamesProperty); }
+            set { SetValue(ShowNamesProperty, value); }
+        }
+        public static readonly DependencyProperty ShowNamesProperty =
+            DependencyProperty.Register("ShowNodeNames", typeof(bool), typeof(GraphV), new PropertyMetadata(true, ShowNamesChangedCallback));
+        private static void ShowNamesChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (d == null) return;
+            GraphV graphV = d as GraphV;
+            if (graphV == null) return;
+
+            graphV.OnPropertyChanged(nameof(ShowNodeNames));
+        }
+
+        #endregion
+
+        public ObservableDictionary<GraphNodeVM, int> NodesPathOrder { get; } = new ObservableDictionary<GraphNodeVM, int>();
         public ObservableCollection<GraphEdgeVM> EdgesPath { get; } = new ObservableCollection<GraphEdgeVM>();
         public ObservableDictionary<GraphNodeVM, Point> NodesNames { get; } = new ObservableDictionary<GraphNodeVM, Point>();
         public ObservableDictionary<GraphNodeVM, Point> Nodes { get; } = new ObservableDictionary<GraphNodeVM, Point>();
@@ -198,7 +239,7 @@ namespace WpfFrontend.View
             Storyboard.SetTargetName(topAnimation, Selected.Name);
             Storyboard.SetTargetProperty(topAnimation, new PropertyPath("(0)", Canvas.TopProperty));
 
-            
+
             double sumDist = EdgesPath.Sum(edge => Distance(edge));
             double sumTime = 0;
 

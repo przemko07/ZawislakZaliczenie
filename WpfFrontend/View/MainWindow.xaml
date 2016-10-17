@@ -19,7 +19,8 @@
                      GraphPath="{Binding GraphPath}"
                      NodeSize="{Binding NodeSize}"
                      NodesMargin="{Binding NodesMargin}"
-                     NamesMargin="{Binding NamesMargin}">
+                     NamesMargin="{Binding NamesMargin}"
+                     ShowGraphEdges="{Binding ShowGraphEdges}">
             <ext:DataPiping.DataPipes>
                 <ext:DataPipeCollection>
                     <ext:DataPipe Source="{Binding Path=ActualWidth, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type view:GraphV}}}"
@@ -40,6 +41,7 @@
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
 
             <TextBlock Grid.Column="0" Grid.Row="0" Text="{Binding NodeSize}" Margin="5"/>
@@ -53,6 +55,8 @@
             
             <TextBlock Grid.Column="0" Grid.Row="3" Text="{Binding Combine}" Margin="5"/>
             <Slider Grid.Column="1" Grid.Row="3" Minimum="1" Maximum="700" Value="{Binding Combine, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
+
+            <CheckBox Grid.Row="4" Content="Show graph edges" IsChecked="{Binding ShowGraphEdges, UpdateSourceTrigger=PropertyChanged}"/>
         </Grid>
     </Grid>
 </Window>

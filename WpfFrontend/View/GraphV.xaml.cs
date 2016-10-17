@@ -198,32 +198,19 @@ namespace WpfFrontend.View
             Storyboard.SetTargetName(topAnimation, Selected.Name);
             Storyboard.SetTargetProperty(topAnimation, new PropertyPath("(0)", Canvas.TopProperty));
 
-            GraphNodeVM[] nodePath = new GraphNodeVM[0];
-            try
-            {
-                nodePath = GraphFactory.NodesPath(GraphPath);
-            }
-            catch
-            {
-                return;
-            }
-            if (nodePath.Length == 0) return;
-
-            var point = Nodes[nodePath.First()];
-            double sumDist = 0;
-            for (int i = 1; i < nodePath.Count(); i++) sumDist += Distance(nodePath[i - 1], nodePath[i]);
+            
+            double sumDist = EdgesPath.Sum(edge => Distance(edge));
             double sumTime = 0;
 
-            leftAnimation.KeyFrames.Add(new EasingDoubleKeyFrame(point.X, KeyTime.FromTimeSpan(new TimeSpan(0, 0, 0, 0, (int)sumTime))));
-            topAnimation.KeyFrames.Add(new EasingDoubleKeyFrame(point.Y, KeyTime.FromTimeSpan(new TimeSpan(0, 0, 0, 0, (int)sumTime))));
-
-            for (int i = 1; i < nodePath.Length; i++)
+            foreach (var edge in EdgesPath)
             {
-                double dist = Distance(nodePath[i - 1], nodePath[i]);
-                sumTime += (dist / sumDist) * (animTimeSpan * EdgesPath.Count);
-                point = Nodes[nodePath[i]];
-                leftAnimation.KeyFrames.Add(new EasingDoubleKeyFrame(point.X, KeyTime.FromTimeSpan(new TimeSpan(0, 0, 0, 0, (int)sumTime))));
-                topAnimation.KeyFrames.Add(new EasingDoubleKeyFrame(point.Y, KeyTime.FromTimeSpan(new TimeSpan(0, 0, 0, 0, (int)sumTime))));
+                leftAnimation.KeyFrames.Add(new EasingDoubleKeyFrame(Nodes[edge.Begin].X, KeyTime.FromTimeSpan(new TimeSpan(0, 0, 0, 0, (int)sumTime))));
+                topAnimation.KeyFrames.Add(new EasingDoubleKeyFrame(Nodes[edge.Begin].Y, KeyTime.FromTimeSpan(new TimeSpan(0, 0, 0, 0, (int)sumTime))));
+
+                sumTime += (Distance(edge) / sumDist) * (animTimeSpan * EdgesPath.Count);
+
+                leftAnimation.KeyFrames.Add(new EasingDoubleKeyFrame(Nodes[edge.End].X, KeyTime.FromTimeSpan(new TimeSpan(0, 0, 0, 0, (int)sumTime))));
+                topAnimation.KeyFrames.Add(new EasingDoubleKeyFrame(Nodes[edge.End].Y, KeyTime.FromTimeSpan(new TimeSpan(0, 0, 0, 0, (int)sumTime))));
             }
 
             leftAnimation.Freeze();
@@ -231,35 +218,11 @@ namespace WpfFrontend.View
             storyBoard.Children.Add(leftAnimation);
             storyBoard.Children.Add(topAnimation);
             storyBoard.Begin(Selected, true);
+        }
 
-            /*
-            storyBoard = new Storyboard();
-            ThicknessAnimationUsingKeyFrames anim = new ThicknessAnimationUsingKeyFrames();
-            anim.RepeatBehavior = RepeatBehavior.Forever;
-
-            Storyboard.SetTargetName(anim, Selected.Name);
-            Storyboard.SetTargetProperty(anim, new PropertyPath("(0)", Image.MarginProperty));
-
-            var point = NodesNames[EdgesPath.First().Begin];
-            anim.KeyFrames.Add(new EasingThicknessKeyFrame(
-                new Thickness(point.X, point.Y, 0, 0),
-                KeyTime.FromTimeSpan(new TimeSpan(0, 0, 0))));
-            double sumDist = EdgesPath.Sum(edge => Distance(edge));
-            double sumTime = 0;
-            foreach (var edge in EdgesPath)
-            {
-                double dist = Distance(edge);
-                sumTime += (dist / sumDist) * (animTimeSpan * EdgesPath.Count);
-                point = NodesNames[edge.End];
-                anim.KeyFrames.Add(new EasingThicknessKeyFrame(
-                    new Thickness(point.X, point.Y, 0, 0),
-                    KeyTime.FromTimeSpan(new TimeSpan(0, 0, 0, 0, (int)sumTime))));
-            }
-            
-            anim.Freeze();
-            storyBoard.Children.Add(anim);
-            storyBoard.Begin(Selected, true);
-            */
+        private double Distance(GraphEdgeVM edge)
+        {
+            return Distance(edge.Begin, edge.End);
         }
 
         private double Distance(GraphNodeVM n1, GraphNodeVM n2)

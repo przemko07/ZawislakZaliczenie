@@ -28,35 +28,5 @@ namespace WpfFrontend.Model
         {
             return Math.Sqrt(Math.Pow(x1 - x2, 2) + Math.Pow(y1 - y2, 2));
         }
-
-        public static GraphNodeVM[] NodesPath(GraphVM graph)
-        {
-            GraphNodeVM[] nodes = new GraphNodeVM[graph.Edges.Count + 1];
-
-            var edgeEnum = graph.Edges.GetEnumerator();
-            edgeEnum.MoveNext();
-            GraphEdgeVM edge = edgeEnum.Current;
-            if (edge != null)
-            {
-                nodes[0] = edge.Begin;
-                for (int i = 1; i < nodes.Length; i++)
-                {
-                    bool begExist = nodes[i - 1] == edge.Begin;
-                    bool endExist = nodes[i - 1] == edge.End;
-                    if (!begExist)
-                    {
-                        nodes[i] = edge.Begin;
-                    }
-                    else if (!endExist)
-                    {
-                        nodes[i] = edge.End;
-                    }
-                    edgeEnum.MoveNext();
-                    edge = edgeEnum.Current;
-                }
-            }
-
-            return nodes;
-        }
     }
 }

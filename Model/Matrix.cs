@@ -73,5 +73,18 @@ namespace Model
         }
 
         #endregion
+
+        public Matrix Clone()
+        {
+            Matrix clone = new Model.Matrix(this.Rows, this.Cols);
+            for (uint row = 0; row < this.Rows; row++)
+            {
+                for (uint col = 0; col < this.Cols; col++)
+                {
+                    clone[row, col] = this[row, col];
+                }
+            }
+            return clone;
+        }
     }
 }

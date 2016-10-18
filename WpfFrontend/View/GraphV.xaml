@@ -11,7 +11,7 @@
              x:Name="GraphControl"
              Background="LightBlue">
     <UserControl.Resources>
-        <ext:DebugConverter x:Key="DebugConverter"/>
+        <converters:DebugConverter x:Key="DebugConverter"/>
         <converters:Dictionaryitem x:Key="Dictionaryitem"/>
         <converters:DictionaryNodeInt x:Key="DictionaryNodeInt"/>
         <converters:NodeSizeToMargin x:Key="NodeSizeToMargin"/>

@@ -9,11 +9,11 @@ namespace Model
     public class CrossOverOX
     : ICrossOver
     {
-        private Individual _offspring1;
-        public Individual offspring1 { get { return _offspring1; }  }
+        private Individual _Offspring1;
+        public Individual Offspring1 { get { return _Offspring1; }  }
 
-        private Individual _offspring2;
-        public Individual offspring2 { get { return _offspring2; } }
+        private Individual _Offspring2;
+        public Individual Offspring2 { get { return _Offspring2; } }
 
         public void Cross(Individual _individual1, Individual _individual2)
         {
@@ -36,20 +36,20 @@ namespace Model
                 if (cycle[index1]) break;
             }
             
-            _offspring1 = Individual.IndividualOfLength((uint)individual1.Count);
-            _offspring2 = Individual.IndividualOfLength((uint)individual2.Count);
+            _Offspring1 = Individual.IndividualOfLength((uint)individual1.Count);
+            _Offspring2 = Individual.IndividualOfLength((uint)individual2.Count);
 
             for (uint i = 0; i < cycle.Length; i++)
             {
                 if (cycle[i])
                 {
-                    _offspring1[i] = _individual1[i];
-                    _offspring2[i] = _individual2[i];
+                    _Offspring1[i] = _individual1[i];
+                    _Offspring2[i] = _individual2[i];
                 }
                 else
                 {
-                    _offspring1[i] = _individual2[i];
-                    _offspring2[i] = _individual1[i];
+                    _Offspring1[i] = _individual2[i];
+                    _Offspring2[i] = _individual1[i];
                 }
             }
             

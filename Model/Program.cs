@@ -17,6 +17,9 @@ namespace Model
 
             Evolutionary evo = new Model.Evolutionary(individuals, matrix);
 
+            evo.CrossOver = new CrossOverOX();
+            evo.Mutation = new SimpleMutation(0.05); // 5%
+
             evo.Step();
 
             //Macierz m = new Macierz(10, 0, 100);

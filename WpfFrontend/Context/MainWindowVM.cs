@@ -13,8 +13,6 @@ namespace WpfFrontend.Context
 {
     public class MainWindowVM : ObjectVM
     {
-        public string text { get; } = "Ala ma kota";
-
         private double _NodeSize;
         public double NodeSize
         {
@@ -23,7 +21,7 @@ namespace WpfFrontend.Context
             {
                 _NodeSize = value;
                 OnPropertyChanged(nameof(NodeSize));
-                Debug.WriteLine("NodeSize:" + (value / NodeSize));
+                //Debug.WriteLine("NodeSize:" + (value / NodeSize));
 
             }
         }
@@ -36,7 +34,7 @@ namespace WpfFrontend.Context
             {
                 _NodesMargin = value;
                 OnPropertyChanged(nameof(NodesMargin));
-                Debug.WriteLine("NodesMargin:" + (value / NodeSize));
+                //Debug.WriteLine("NodesMargin:" + (value / NodeSize));
             }
         }
 
@@ -48,8 +46,7 @@ namespace WpfFrontend.Context
             {
                 _NamesMargin = value;
                 OnPropertyChanged(nameof(NamesMargin));
-                Debug.WriteLine("NamesMargin:" + (value / NodeSize));
-
+                //Debug.WriteLine("NamesMargin:" + (value / NodeSize));
             }
         }
 
@@ -105,6 +102,28 @@ namespace WpfFrontend.Context
             }
         }
 
+        private bool _Editable;
+        public bool Editable
+        {
+            get { return _Editable; }
+            set
+            {
+                _Editable = value;
+                OnPropertyChanged(nameof(Editable));
+            }
+        }
+
+        private bool _CopyByDiagonal;
+        public bool CopyByDiagonal
+        {
+            get { return _CopyByDiagonal; }
+            set
+            {
+                _CopyByDiagonal = value;
+                OnPropertyChanged(nameof(CopyByDiagonal));
+            }
+        }
+        
 
         Individual individual = PermutationFactory.GenerateIndividuals(1, 10, true)[0];
 
@@ -128,6 +147,14 @@ namespace WpfFrontend.Context
 
                 return _GraphPath;
 
+            }
+        }
+
+        public MatrixVM Matrix
+        {
+            get
+            {
+                return new MatrixVM(MatrixFactory.CreateRandomDiagonal(5, 0, 100));
             }
         }
     }

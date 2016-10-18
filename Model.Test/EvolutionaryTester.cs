@@ -15,8 +15,8 @@ namespace Model.Test
             var individual2 = new Individual(4, 3, 5, 6, 1, 2, 0);
             var co = new CrossOverOX();
             co.Cross(individual1, individual2);
-            CollectionAssert.AreEqual(new uint[] { 0, 1, 5, 3, 4, 2, 6 }, co.offspring1.ToArray());
-            CollectionAssert.AreEqual(new uint[] { 4, 3, 2, 6, 1, 5, 0 }, co.offspring2.ToArray());
+            CollectionAssert.AreEqual(new uint[] { 0, 1, 5, 3, 4, 2, 6 }, co.Offspring1.ToArray());
+            CollectionAssert.AreEqual(new uint[] { 4, 3, 2, 6, 1, 5, 0 }, co.Offspring2.ToArray());
         }
 
         [TestMethod]
@@ -40,8 +40,8 @@ namespace Model.Test
 
             var co = new CrossOverOX();
             co.Cross(individual1, individual2);
-            CollectionAssert.AreEqual(new uint[] { 9, 8, 2, 4, 3, 6, 7, 0, 5, 1 }, co.offspring1.ToArray());
-            CollectionAssert.AreEqual(new uint[] { 9, 4, 5, 6, 2, 0, 7, 1, 3, 8 }, co.offspring2.ToArray());
+            CollectionAssert.AreEqual(new uint[] { 9, 8, 2, 4, 3, 6, 7, 0, 5, 1 }, co.Offspring1.ToArray());
+            CollectionAssert.AreEqual(new uint[] { 9, 4, 5, 6, 2, 0, 7, 1, 3, 8 }, co.Offspring2.ToArray());
         }
 
         [TestMethod]
@@ -51,8 +51,8 @@ namespace Model.Test
             var individual2 = new Individual(6, 4, 0, 2, 1, 5, 3);
             var co = new CrossOverOX();
             co.Cross(individual1, individual2);
-            CollectionAssert.AreEqual(new uint[] { 0, 4, 2, 3, 1, 5, 6 }, co.offspring1.ToArray());
-            CollectionAssert.AreEqual(new uint[] { 6, 1, 0, 2, 4, 5, 3 }, co.offspring2.ToArray());
+            CollectionAssert.AreEqual(new uint[] { 0, 4, 2, 3, 1, 5, 6 }, co.Offspring1.ToArray());
+            CollectionAssert.AreEqual(new uint[] { 6, 1, 0, 2, 4, 5, 3 }, co.Offspring2.ToArray());
         }
         
         [TestMethod]
@@ -62,8 +62,8 @@ namespace Model.Test
             var individual2 = new Individual(0, 1, 2, 3, 4, 5, 6, 7, 8, 9);
             var co = new CrossOverOX();
             co.Cross(individual1, individual2);
-            CollectionAssert.AreEqual(new uint[] { 8, 1, 2, 3, 4, 5, 6, 7, 9, 0 }, co.offspring1.ToArray());
-            CollectionAssert.AreEqual(new uint[] { 0, 4, 7, 3, 6, 2, 5, 1, 8, 9 }, co.offspring2.ToArray());
+            CollectionAssert.AreEqual(new uint[] { 8, 1, 2, 3, 4, 5, 6, 7, 9, 0 }, co.Offspring1.ToArray());
+            CollectionAssert.AreEqual(new uint[] { 0, 4, 7, 3, 6, 2, 5, 1, 8, 9 }, co.Offspring2.ToArray());
         }
     }
 }

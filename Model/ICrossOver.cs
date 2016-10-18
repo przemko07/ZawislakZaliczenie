@@ -10,7 +10,7 @@ namespace Model
     {
         void Cross(Individual i1, Individual i2);
 
-        Individual offspring1 { get; }
-        Individual offspring2 { get; }
+        Individual Offspring1 { get; }
+        Individual Offspring2 { get; }
     }
 }

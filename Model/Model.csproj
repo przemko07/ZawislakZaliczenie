@@ -46,6 +46,7 @@
     <Compile Include="CrossOverOX.cs" />
     <Compile Include="Evolutionary.cs" />
     <Compile Include="ICrossOver.cs" />
+    <Compile Include="IMutation.cs" />
     <Compile Include="Individual.cs" />
     <Compile Include="Matrix.cs" />
     <Compile Include="MatrixFactory.cs" />
@@ -53,6 +54,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RandomGenerator.cs" />
+    <Compile Include="SimpleMutation.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

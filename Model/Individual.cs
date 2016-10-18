@@ -86,6 +86,10 @@ namespace Model
 
         #endregion
 
+        public Individual Clone()
+        {
+            return new Individual(nodes.ToArray());
+        }
 
         public override string ToString()
         {

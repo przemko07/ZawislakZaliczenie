@@ -8,13 +8,18 @@
         xmlns:view="clr-namespace:WpfFrontend.View"
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
-    <Grid>        
+    <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
 
-        <view:GraphV Grid.Row="0"
+        <view:MatrixV Matrix="{Binding Matrix}"
+                      Editable="{Binding Editable}"
+                      CopyByDiagonal="{Binding CopyByDiagonal}"/>
+
+        <view:GraphV Grid.Row="1"
                      Graph="{Binding Graph}"
                      GraphPath="{Binding GraphPath}"
                      NodeSize="{Binding NodeSize}"
@@ -31,12 +36,14 @@
             </ext:DataPiping.DataPipes>
         </view:GraphV>
 
-        <Grid Grid.Row="1">
+        <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="150"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>
@@ -57,6 +64,10 @@
             <Slider Grid.Column="1" Grid.Row="3" Minimum="1" Maximum="700" Value="{Binding Combine, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
 
             <CheckBox Grid.Row="4" Content="Show graph edges" IsChecked="{Binding ShowGraphEdges, UpdateSourceTrigger=PropertyChanged}"/>
+            
+            <CheckBox Grid.Row="5" Content="Matrix editable" IsChecked="{Binding Editable, UpdateSourceTrigger=PropertyChanged}"/>
+            
+            <CheckBox Grid.Row="6" Content="Matrix copy diagonal" IsChecked="{Binding CopyByDiagonal, UpdateSourceTrigger=PropertyChanged}"/>
         </Grid>
     </Grid>
 </Window>

@@ -12,14 +12,21 @@ namespace Model
 
         public Individual[] individuals;
         public Individual[] best;
+        public Individual[] newIndividuals;
         public List<int> fitness = new List<int>();
         public Matrix matrix;
+        
+        public ICrossOver CrossOver { get; set; }
+        public IMutation Mutation { get; set; }
+
 
         public Evolutionary(Individual[] individuals, Matrix matrix)
         {
             this.individuals = individuals;
             this.matrix = matrix;
+            this.newIndividuals = new Individual[individuals.Length];
         }
+
 
         void CalculateFitness()
         {
@@ -42,8 +49,6 @@ namespace Model
             return sum;
         }
 
-
-
         void Eliminate()
         {
             best = new Individual[(individuals.Length + 1) / 2];
@@ -51,34 +56,63 @@ namespace Model
             {
                 int index1 = random.Next(individuals.Length);
                 int index2 = random.Next(individuals.Length);
-                Individual i1 = individuals[index1];
-                Individual i2 = individuals[index2];
-                for (int j = 0; j < i1.Length; j++)
+
+                best[i] = individuals[fitness[index1] > fitness[index2] ? index1 : index2];
+            }
+        }
+
+        void Cross()
+        {
+            if (CrossOver == null) return;
+
+            int length = best.Length % 2 == 0 ? best.Length : best.Length - 1;
+
+            int index = 0;
+            // Offsprings
+            for (int i = 0; i < length; i += 2)
+            {
+                CrossOver.Cross(best[i], best[i + 1]);
+                newIndividuals[i] = CrossOver.Offspring1;
+                newIndividuals[i + 1] = CrossOver.Offspring2;
+                index += 2;
+            }
+
+            // Parents
+            for (int i = 0; i < length; i += 2)
+            {
+                newIndividuals[i + length] = best[i].Clone();
+                newIndividuals[i + 1 + length] = best[i + 1].Clone();
+                index += 2;
+            }
+
+            // XXX: for safety
+            while (index < newIndividuals.Length)
+            {
+                int i = random.Next(individuals.Length);
+                newIndividuals[index++] = individuals[i].Clone();
+            }
+        }
+
+        void Mutate()
+        {
+            if (Mutation == null) return;
+
+            for (int i = 0; i < newIndividuals.Length; i++)
+            {
+                Mutation.Mutate(newIndividuals[i]);
+                if (Mutation.IsMutated)
                 {
-                    best[i] = individuals[fitness[index1] > fitness[index2] ? index1 : index2];
+                    newIndividuals[i] = Mutation.MutatedIndividual;
                 }
             }
-        }
-
-        void Crossing(ICrossOver crossOver)
-        {
-            for (int i = 0; i < best.Length; i += 2)
-            {
-                //cross(best[i], best[i + 1]);
-            }
-        }
-
-        void Mutation()
-        {
-
         }
 
         public void Step()
         {
             CalculateFitness();
             Eliminate();
-            //Crossing();
-            Mutation();
+            Cross();
+            Mutate();
         }
     }
 }

@@ -15,10 +15,11 @@ namespace Model
 
             Matrix matrix = MatrixFactory.CreateRandomDiagonal(7, 0, 100);
 
-            Evolutionary evo = new Model.Evolutionary(individuals, matrix);
-
+            Evolutionary evo = new Model.Evolutionary(individuals);
+            evo.FitnessCalc = new MatrixFitnessCalc(matrix);
+            evo.Selection = new TournamentSelection(2);
             evo.CrossOver = new CrossOverOX();
-            evo.Mutation = new SimpleMutation(0.05); // 5%
+            evo.Mutation = new SimpleMutation(0.5); // 5%
 
             evo.Step();
 

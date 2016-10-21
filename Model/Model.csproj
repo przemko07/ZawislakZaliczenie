@@ -35,6 +35,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -48,6 +49,7 @@
     <Compile Include="Evolutionary.cs" />
     <Compile Include="ICrossOver.cs" />
     <Compile Include="IFitnessCalc.cs" />
+    <Compile Include="IIterationsPloter.cs" />
     <Compile Include="IMixer.cs" />
     <Compile Include="IMutation.cs" />
     <Compile Include="Individual.cs" />

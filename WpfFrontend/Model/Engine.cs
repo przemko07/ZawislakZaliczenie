@@ -1,6 +1,7 @@
 ﻿using Model;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,6 +12,7 @@ namespace WpfFrontend.Model
     public class Engine
     {
         private DoubleEvolutionary evolutionary;
+        private IIterationsPloter iterationsPloter;
 
         public enum StepNotifierStatus
         {
@@ -94,6 +96,15 @@ namespace WpfFrontend.Model
             }
         }
 
+        Bitmap ParetoFront
+        {
+            get
+            {
+                return iterationsPloter.Plot(0, 0);
+            }
+        }
+
+
         public Task Step()
         {
             return Task.Run(() =>
@@ -102,6 +113,7 @@ namespace WpfFrontend.Model
                 Started?.Invoke(this, new EventArgs());
 
                 evolutionary.Step();
+                iterationsPloter.AddGeneration(Fitness1, Fitness2);
 
                 Status = StepNotifierStatus.Finished;
                 Finished?.Invoke(this, new EventArgs());

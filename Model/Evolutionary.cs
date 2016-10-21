@@ -40,7 +40,7 @@ namespace Model
         void Cross()
         {
             if (CrossOver == null || Selection == null) return;
-            
+
             int length = Selection.Selected.Length % 2 == 0 ? Selection.Selected.Length : Selection.Selected.Length - 1;
 
             int index = 0;

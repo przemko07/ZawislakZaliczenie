@@ -19,7 +19,7 @@ namespace Model
             evo.FitnessCalc = new MatrixFitnessCalc(matrix);
             evo.Selection = new TournamentSelection(2);
             evo.CrossOver = new CrossOverOX();
-            evo.Mutation = new SimpleMutation(0.5); // 5%
+            evo.Mutation = new SimpleMutation(0.05); // 5%
 
             evo.Step();
 

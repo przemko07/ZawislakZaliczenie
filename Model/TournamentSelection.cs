@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,22 +18,26 @@ namespace Model
         {
             this.IndividualPerTournament = IndividualPerTournament;
         }
-        
+
         public uint[] Selected { get; set; }
 
         public void Select(double[] fitness)
         {
+            int[] indicies = Enumerable
+                .Range(0, fitness.Length)
+                .OrderBy(n => random.Next())
+                .ToArray();
             List<uint> selected = new List<uint>();
-            for (int i = 0; i < fitness.Length; i++)
+            for (int i = 0; i < fitness.Length;)
             {
                 double best = double.NegativeInfinity;
                 uint bestIndex = 0;
                 for (
                     int j = 0;
-                    i < IndividualPerTournament && i < fitness.Length;
+                    j < IndividualPerTournament && i < fitness.Length;
                     j++, i++)
                 {
-                    uint index = (uint)random.Next(fitness.Length);
+                    uint index = (uint)indicies[i];
                     if (fitness[index] > best)
                     {
                         best = fitness[index];

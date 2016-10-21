@@ -30,7 +30,7 @@ namespace Model
                     }
                     for (int ik = 0; ik < i - 1; ik++)
                     {
-                        if (individuals[ik] == individuals[i]) uniqe = false;
+                        if (uniquePopulation && individuals[ik] == individuals[i]) uniqe = false;
                     }
 
                 } while (!uniqe);

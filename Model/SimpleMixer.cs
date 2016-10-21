@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Model
 {
-    class SimpleMixer
+    public class SimpleMixer
     : IMixer
     {
         private Random random = RandomGenerator.GetRandom;

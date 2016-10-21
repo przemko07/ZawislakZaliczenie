@@ -34,6 +34,11 @@ namespace Model
             set { values[row, col] = value; }
         }
 
+        public bool Empty
+        {
+            get { return values == null || Rows == 0 || Cols == 0; }
+        }
+
 
         #region equality
 

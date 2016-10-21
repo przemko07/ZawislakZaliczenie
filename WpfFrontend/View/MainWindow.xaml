@@ -12,6 +12,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
             <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
 
@@ -36,7 +37,9 @@
             </ext:DataPiping.DataPipes>
         </view:GraphV>
 
-        <Grid Grid.Row="2">
+        <view:XYPlotV Grid.Row="2" Plot1="{Binding Plot1}" Plot2="{Binding Plot2}"/>
+
+        <Grid Grid.Row="3">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="150"/>
                 <ColumnDefinition Width="*"/>

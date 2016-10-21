@@ -12,26 +12,28 @@ namespace WpfFrontend.ViewModel
     public class MatrixValueVM
     : ObjectVM
     {
-        private MatrixVM matrix;
+        private readonly MatrixVM matrix;
+
         private uint row;
         private uint col;
 
+        private int _Value;
         public int Value
         {
-            get { return matrix.matrix[row, col]; }
+            get { return _Value; }
             set
             {
-                var tmp = matrix.matrix;
-                tmp[row, col] = value;
+                if (_Value == value) return;
+
+                _Value = value;
                 OnPropertyChanged(nameof(Value));
                 
                 if (matrix.CopyByDiagonal)
                 {
-                    tmp[col, row] = value;
                     matrix.Mask[col, row].OnPropertyChanged(nameof(Value));
                 }
 
-                matrix.OnMatrixChanged(matrix.matrix);
+                matrix.OnMatrixChanged();
             }
         }
 
@@ -56,10 +58,8 @@ namespace WpfFrontend.ViewModel
     public class MatrixVM
     : ObjectVM
     {
-        public event EventHandler<Matrix> MatrixChanged = null;
-        public void OnMatrixChanged(Matrix matrix) => MatrixChanged?.Invoke(this, matrix);
-
-        public readonly Matrix matrix;
+        public event EventHandler MatrixChanged = null;
+        public void OnMatrixChanged() => MatrixChanged?.Invoke(this, new EventArgs());
         public bool CopyByDiagonal;
 
 
@@ -91,7 +91,6 @@ namespace WpfFrontend.ViewModel
 
         public MatrixVM(Matrix matrix)
         {
-            this.matrix = matrix;
             Rows = matrix.Rows;
             Cols = matrix.Cols;
             Mask = new MatrixValueVM[Rows, Cols];

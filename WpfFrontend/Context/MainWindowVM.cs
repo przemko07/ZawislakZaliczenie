@@ -1,10 +1,14 @@
 ﻿using Model;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Data;
 using WpfFrontend.Extensions;
 using WpfFrontend.Model;
 using WpfFrontend.ViewModel;
@@ -123,9 +127,32 @@ namespace WpfFrontend.Context
                 OnPropertyChanged(nameof(CopyByDiagonal));
             }
         }
-        
+
 
         Individual individual = PermutationFactory.GenerateIndividuals(1, 10, true)[0];
+
+        public MainWindowVM()
+        {
+            BindingOperations.EnableCollectionSynchronization(Plot1, Plot1);
+            BindingOperations.EnableCollectionSynchronization(Plot2, Plot2);
+
+            Task.Run(() =>
+            {
+                double x0 = 0;
+                double x1 = -5;
+                double vx0 = 0.1;
+                double vx1 = 0.15;
+                
+                while (true)
+                {
+                    Thread.Sleep(50);
+                    Plot1.Add(new Point(x0, Math.Sin(x0)));
+                    Plot2.Add(new Point(x1, Math.Cos(x1)));
+                    x0 += vx0;
+                    x1 += vx1;
+                }
+            });
+        }
 
         private GraphVM _Graph;
         public GraphVM Graph
@@ -157,5 +184,8 @@ namespace WpfFrontend.Context
                 return new MatrixVM(MatrixFactory.CreateRandomDiagonal(5, 0, 100));
             }
         }
+
+        public ObservableCollection<Point> Plot1 { get; } = new ObservableCollection<Point>();
+        public ObservableCollection<Point> Plot2 { get; } = new ObservableCollection<Point>();
     }
 }

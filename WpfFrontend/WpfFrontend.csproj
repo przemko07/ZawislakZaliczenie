@@ -58,9 +58,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Converters\PointScale.cs" />
+    <Compile Include="Model\Engine.cs" />
     <Compile Include="ViewModel\MatrixVM.cs" />
     <Compile Include="View\MatrixV.xaml.cs">
       <DependentUpon>MatrixV.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\XYPlotV.xaml.cs">
+      <DependentUpon>XYPlotV.xaml</DependentUpon>
     </Compile>
     <Page Include="Controls\ErrorWindow.xaml">
       <SubType>Designer</SubType>
@@ -106,6 +111,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="View\MatrixV.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\XYPlotV.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

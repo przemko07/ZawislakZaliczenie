@@ -8,24 +8,15 @@ namespace Model
 {
     public class DoubleEvolutionary
     {
-        public readonly Evolutionary evo1;
-        public readonly Evolutionary evo2;
-
-
-        DoubleEvolutionary(Evolutionary evo1, Evolutionary evo2)
-        {
-            this.evo1 = evo1;
-            this.evo2 = evo2;
-        }
-
-
+        public Evolutionary Evo1 { get; set; }
+        public Evolutionary Evo2 { get; set; }
         public IMixer Mixer { get; set; }
 
         public void Step()
         {
-            evo1.Step();
-            evo2.Step();
-            Mixer.Mix(evo1.individuals, evo2.individuals);
+            Evo1.Step();
+            Evo2.Step();
+            Mixer.Mix(Evo1.individuals, Evo2.individuals);
         }
     }
 }

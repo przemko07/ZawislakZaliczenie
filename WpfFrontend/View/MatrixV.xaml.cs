@@ -38,6 +38,7 @@ namespace WpfFrontend.View
             MatrixV view = d as MatrixV;
             if (view == null) return;
 
+            view.Matrix.CopyByDiagonal = view.CopyByDiagonal;
             view.OnPropertyChanged(nameof(view.Matrix));
         }
 

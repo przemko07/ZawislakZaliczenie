@@ -50,8 +50,8 @@ namespace Model
                 CrossOver.Cross(
                     individuals[Selection.Selected[i]],
                     individuals[Selection.Selected[i + 1]]);
-                newIndividuals[i] = CrossOver.Offspring1;
-                newIndividuals[i + 1] = CrossOver.Offspring2;
+                newIndividuals[i] = CrossOver.Offspring1.Clone();
+                newIndividuals[i + 1] = CrossOver.Offspring2.Clone();
                 index += 2;
             }
 
@@ -91,6 +91,8 @@ namespace Model
             Select();
             Cross();
             Mutate();
+
+            individuals = newIndividuals;
         }
     }
 }

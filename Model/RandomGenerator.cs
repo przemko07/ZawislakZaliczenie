@@ -8,7 +8,7 @@ namespace Model
 {
     public static class RandomGenerator
     {
-        private static Random globalRandom = new Random();
+        private static Random globalRandom = new Random(0);
 
         public static Random GetRandom
         {

@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WpfFrontend.View"
+             xmlns:viewmodel="clr-namespace:WpfFrontend.ViewModel"
              mc:Ignorable="d">
     <Grid>
         <Grid.Resources>
@@ -13,8 +14,16 @@
                 <Setter Property="TextAlignment" Value="Center"/>
                 <Setter Property="VerticalContentAlignment" Value="Center"/>
             </Style>
+            
+            <Style TargetType="TextBlock" x:Key="std2">
+                <Setter Property="Margin" Value="1"/>
+                <Setter Property="Padding" Value="3"/>
+                <Setter Property="HorizontalAlignment" Value="Center"/>
+                <Setter Property="VerticalAlignment" Value="Center"/>
+                <Setter Property="TextAlignment" Value="Center"/>
+            </Style>
         </Grid.Resources>
-        
+
         <!-- None Editable -->
         <ItemsControl ItemsSource="{Binding Matrix.Items, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}">
             <ItemsControl.Style>
@@ -27,11 +36,14 @@
                     </Style.Triggers>
                 </Style>
             </ItemsControl.Style>
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <TextBox Text="{Binding Value}" Style="{StaticResource std}" IsReadOnly="True" Background="LightGray"/>
+            <ItemsControl.Resources>
+                <DataTemplate DataType="{x:Type viewmodel:MatrixValueVM}">
+                    <TextBox Text="{Binding Value}" Style="{StaticResource std}" Background="LightGray"/>
                 </DataTemplate>
-            </ItemsControl.ItemTemplate>
+                <DataTemplate DataType="{x:Type viewmodel:MatrixValueNameVM}">
+                    <TextBlock Text="{Binding Name}" Style="{StaticResource std2}" Background="White"/>
+                </DataTemplate>
+            </ItemsControl.Resources>
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <UniformGrid Rows="{Binding Matrix.Rows, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}"
@@ -52,8 +64,8 @@
                     </Style.Triggers>
                 </Style>
             </ItemsControl.Style>
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
+            <ItemsControl.Resources>
+                <DataTemplate DataType="{x:Type viewmodel:MatrixValueVM}">
                     <TextBox Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}">
                         <TextBox.Style>
                             <Style TargetType="TextBox" BasedOn="{StaticResource std}">
@@ -69,7 +81,10 @@
                         </TextBox.Style>
                     </TextBox>
                 </DataTemplate>
-            </ItemsControl.ItemTemplate>
+                <DataTemplate DataType="{x:Type viewmodel:MatrixValueNameVM}">
+                    <TextBlock Text="{Binding Name}" Style="{StaticResource std2}" Background="White"/>
+                </DataTemplate>
+            </ItemsControl.Resources>
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <UniformGrid Rows="{Binding Matrix.Rows, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}"

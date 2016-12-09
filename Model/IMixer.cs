@@ -9,5 +9,8 @@ namespace Model
     public interface IMixer
     {
         void Mix(Individual[] ind1, Individual[] ind2);
+
+        Individual[] Individuals1 { get; }
+        Individual[] Individuals2 { get; }
     }
 }

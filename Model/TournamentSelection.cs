@@ -30,7 +30,7 @@ namespace Model
             List<uint> selected = new List<uint>();
             for (int i = 0; i < fitness.Length;)
             {
-                double best = double.NegativeInfinity;
+                double best = double.PositiveInfinity;
                 uint bestIndex = 0;
                 for (
                     int j = 0;
@@ -38,7 +38,7 @@ namespace Model
                     j++, i++)
                 {
                     uint index = (uint)indicies[i];
-                    if (fitness[index] > best)
+                    if (fitness[index] < best)
                     {
                         best = fitness[index];
                         bestIndex = index;

@@ -11,42 +11,23 @@ namespace WpfFrontend.Model
 {
     public class Engine
     {
-        private DoubleEvolutionary evolutionary;
-        private IIterationsPloter iterationsPloter;
+        private static uint _popSize = 60;
+        private static uint _nodeCount = 7;
+        private static int _m1ValuesFrom = 0;
+        private static int _m1ValuesTo = 100;
+        private static int _m2ValuesFrom = 0;
+        private static int _m2ValuesTo = 100;
 
-        public enum StepNotifierStatus
-        {
-            NoStarted,
-            Started,
-            Finished,
-        }
-
-        public event EventHandler Started = null;
-        public event EventHandler Finished = null;
-        public StepNotifierStatus Status = StepNotifierStatus.NoStarted;
-        public uint StepsFinished = 0;
-
-
-        private Matrix _Matrix1;
+        private Matrix? _Matrix1;
         public Matrix Matrix1
         {
             get
             {
-                return _Matrix1;
-            }
-            set
-            {
-                _Matrix1 = value;
-                ReCreateEvolutionary();
-            }
-        }
-
-        private Matrix _Matrix2;
-        public Matrix Matrix2
-        {
-            get
-            {
-                return _Matrix2;
+                if (_Matrix1 == null)
+                {
+                    _Matrix1 = MatrixFactory.CreateRandomDiagonal(_nodeCount, _m1ValuesFrom, _m1ValuesTo);
+                }
+                return _Matrix1.Value;
             }
             set
             {
@@ -55,142 +36,96 @@ namespace WpfFrontend.Model
             }
         }
 
-        public Individual[] Individuals
+        private Matrix? _Matrix2;
+        public Matrix Matrix2
         {
             get
             {
-                return Enumerable
-                    .Concat(
-                        evolutionary.Evo1.individuals,
-                        evolutionary.Evo2.individuals)
-                    .ToArray();
+                if (_Matrix2 == null)
+                {
+                    _Matrix2 = MatrixFactory.CreateRandomDiagonal(_nodeCount, _m2ValuesFrom, _m2ValuesTo);
+                }
+                return _Matrix2.Value;
             }
         }
 
-        private uint _IndividualsCount = 0;
-        public uint IndividualsCount
+        private uint? _IndividualsLength;
+        public uint IndividualsLength
         {
             get
             {
-                return _IndividualsCount;
+                if (_IndividualsLength == null)
+                {
+                    _IndividualsLength = _popSize;
+                }
+                return _IndividualsLength.Value;
             }
             set
             {
-                _IndividualsCount = value;
+                _IndividualsLength = value;
                 ReCreateEvolutionary();
             }
         }
 
-        public double[] Fitness1
+        private uint? _NodesCount;
+        public uint NodesCount
         {
             get
             {
-                return evolutionary.Evo1.FitnessCalc.Fitness;
+                if (_NodesCount == null)
+                {
+                    _NodesCount = _nodeCount;
+                }
+                return _NodesCount.Value;
             }
-        }
-        public double[] Fitness2
-        {
-            get
+            set
             {
-                return evolutionary.Evo2.FitnessCalc.Fitness;
-            }
-        }
-
-        Bitmap ParetoFront
-        {
-            get
-            {
-                return iterationsPloter.Plot(0, 0);
+                _NodesCount = value;
+                ReCreateEvolutionary();
             }
         }
 
 
-        public Task Step()
+
+        private DoubleEvolutionary _Evolutionary;
+        public DoubleEvolutionary Evolutionary
         {
-            return Task.Run(() =>
+            get
             {
-                Status = StepNotifierStatus.Started;
-                Started?.Invoke(this, new EventArgs());
-
-                evolutionary.Step();
-                iterationsPloter.AddGeneration(Fitness1, Fitness2);
-
-                Status = StepNotifierStatus.Finished;
-                Finished?.Invoke(this, new EventArgs());
-            });
+                if (_Evolutionary == null)
+                {
+                    ReCreateEvolutionary();
+                }
+                return _Evolutionary;
+            }
+            private set
+            {
+                _Evolutionary = value;
+            }
         }
+
 
         private void ReCreateEvolutionary()
         {
-            if (BuildDoubleEvo())
+            _Evolutionary = new DoubleEvolutionary()
             {
-                evolutionary = new DoubleEvolutionary();
-                evolutionary.Mixer = new SimpleMixer();
-            }
-
-            if (BuildEvo1())
-            {
-                evolutionary.Evo1 = new Evolutionary(
-                    PermutationFactory.GenerateIndividuals(
-                        IndividualsCount / 2, Matrix1.Cols, true));
-                evolutionary.Evo1.Selection = new TournamentSelection(2);
-                evolutionary.Evo1.CrossOver = new CrossOverOX();
-                evolutionary.Evo1.Mutation = new SimpleMutation(0.05); // 5%
-            }
-
-            if (BuildEvo2())
-            {
-                evolutionary.Evo2 = new Evolutionary(
-                    PermutationFactory.GenerateIndividuals(
-                        IndividualsCount % 2, Matrix2.Cols, true));
-                evolutionary.Evo2.Selection = new TournamentSelection(2);
-                evolutionary.Evo2.CrossOver = new CrossOverOX();
-                evolutionary.Evo2.Mutation = new SimpleMutation(0.05); // 5%
-            }
-
-            if (BuildEvo1Fitness())
-            {
-                evolutionary.Evo1.FitnessCalc = new MatrixFitnessCalc(Matrix1);
-            }
-
-            if (BuildEvo2Fitness())
-            {
-                evolutionary.Evo2.FitnessCalc = new MatrixFitnessCalc(Matrix2);
-            }
-
-        }
-
-        private bool BuildDoubleEvo()
-        {
-            return evolutionary == null;
-        }
-
-        private bool BuildEvo1()
-        {
-            return evolutionary != null
-                && (IndividualsCount > 0 && !Matrix1.Empty)
-                || (evolutionary.Evo1.individuals.Length != IndividualsCount || evolutionary.Evo1.individuals[0].Length != Matrix2.Cols);
-        }
-
-        private bool BuildEvo2()
-        {
-            return evolutionary != null
-                && (IndividualsCount > 0 && !Matrix2.Empty)
-                || (evolutionary.Evo2.individuals.Length != IndividualsCount || evolutionary.Evo2.individuals[0].Length != Matrix2.Cols);
-        }
-
-        private bool BuildEvo1Fitness()
-        {
-            return evolutionary != null && evolutionary.Evo1 != null
-                && (evolutionary.Evo1.FitnessCalc != null || evolutionary.Evo1.FitnessCalc is MatrixFitnessCalc)
-                && ((evolutionary.Evo1.FitnessCalc as MatrixFitnessCalc).matrix != Matrix1);
-        }
-
-        private bool BuildEvo2Fitness()
-        {
-            return evolutionary != null && evolutionary.Evo2 != null
-                && (evolutionary.Evo2.FitnessCalc != null || evolutionary.Evo2.FitnessCalc is MatrixFitnessCalc)
-                && ((evolutionary.Evo2.FitnessCalc as MatrixFitnessCalc).matrix != Matrix2);
+                Evo1 = new Evolutionary(PermutationFactory.GenerateIndividuals(IndividualsLength / 2, NodesCount, true))
+                {
+                    FitnessCalc = new MatrixFitnessCalc(Matrix1),
+                    Selection = new TournamentSelection(2),
+                    CrossOver = new CrossOverOX(),
+                    Mutation = new SimpleMutation(0.05) // 5%
+                },
+                Evo2 = new Evolutionary(PermutationFactory.GenerateIndividuals(IndividualsLength / 2 + IndividualsLength % 2, NodesCount, true))
+                {
+                    FitnessCalc = new MatrixFitnessCalc(Matrix2),
+                    Selection = new TournamentSelection(2),
+                    CrossOver = new CrossOverOX(),
+                    Mutation = new SimpleMutation(0.05) // 5%
+                },
+                Mixer = new SimpleMixer(),
+            };
+            _Evolutionary.Step();
         }
     }
 }

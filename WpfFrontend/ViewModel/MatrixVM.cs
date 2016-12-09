@@ -6,9 +6,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WpfFrontend.Extensions;
+using WpfFrontend.Model;
 
 namespace WpfFrontend.ViewModel
 {
+    public class MatrixValueNameVM
+    {
+        public string Name { get; set; }
+
+        public MatrixValueNameVM(string name)
+        {
+            this.Name = name;
+        }
+    }
+
     public class MatrixValueVM
     : ObjectVM
     {
@@ -27,9 +38,10 @@ namespace WpfFrontend.ViewModel
 
                 _Value = value;
                 OnPropertyChanged(nameof(Value));
-                
+
                 if (matrix.CopyByDiagonal)
                 {
+                    matrix.Mask[col, row]._Value = value;
                     matrix.Mask[col, row].OnPropertyChanged(nameof(Value));
                 }
 
@@ -42,9 +54,10 @@ namespace WpfFrontend.ViewModel
             get { return row == col; }
         }
 
-        public MatrixValueVM(MatrixVM matrix, uint row, uint col)
+        public MatrixValueVM(MatrixVM matrix, int value, uint row, uint col)
         {
             this.matrix = matrix;
+            this._Value = value;
             this.row = row;
             this.col = col;
         }
@@ -64,7 +77,7 @@ namespace WpfFrontend.ViewModel
 
 
         public MatrixValueVM[,] Mask;
-        public ObservableCollection<MatrixValueVM> Items { get; } = new ObservableCollection<MatrixValueVM>();
+        public ObservableCollection<object> Items { get; } = new ObservableCollection<object>();
 
         private uint _Rows;
         public uint Rows
@@ -91,14 +104,21 @@ namespace WpfFrontend.ViewModel
 
         public MatrixVM(Matrix matrix)
         {
-            Rows = matrix.Rows;
-            Cols = matrix.Cols;
+            Rows = matrix.Rows + 1;
+            Cols = matrix.Cols + 1;
             Mask = new MatrixValueVM[Rows, Cols];
+            Items.Add(new MatrixValueNameVM(string.Empty));
             for (uint row = 0; row < matrix.Rows; row++)
             {
+                Items.Add(new MatrixValueNameVM(GraphFactory.Names[row]));
+            }
+
+            for (uint row = 0; row < matrix.Rows; row++)
+            {
+                Items.Add(new MatrixValueNameVM(GraphFactory.Names[row]));
                 for (uint col = 0; col < matrix.Cols; col++)
                 {
-                    var vm = new MatrixValueVM(this, row, col);
+                    var vm = new MatrixValueVM(this, matrix[row, col], row, col);
                     Items.Add(vm);
                     Mask[row, col] = vm;
                 }

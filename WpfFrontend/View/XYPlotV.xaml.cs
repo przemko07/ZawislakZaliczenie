@@ -150,7 +150,93 @@ namespace WpfFrontend.View
             }
         }
 
-        
+        private double _RawMouseX = double.NaN;
+        public double RawMouseX
+        {
+            get { return _RawMouseX; }
+            set
+            {
+                _RawMouseX = value;
+                OnPropertyChanged(nameof(RawMouseX));
+            }
+        }
+
+        private double _RawMouxeY = double.NaN;
+        public double RawMouseY
+        {
+            get { return _RawMouxeY; }
+            set
+            {
+                _RawMouxeY = value;
+                OnPropertyChanged(nameof(RawMouseY));
+            }
+        }
+
+        private double _MouseX = double.NaN;
+        public double MouseX
+        {
+            get { return _MouseX; }
+            set
+            {
+                _MouseX = value;
+                OnPropertyChanged(nameof(MouseX));
+            }
+        }
+
+        private double _MouxeY = double.NaN;
+        public double MouseY
+        {
+            get { return _MouxeY; }
+            set
+            {
+                _MouxeY = value;
+                OnPropertyChanged(nameof(MouseY));
+            }
+        }
+
+        private double _MousePlotX = double.NaN;
+        public double MousePlotX
+        {
+            get { return _MousePlotX; }
+            set
+            {
+                _MousePlotX = value;
+                OnPropertyChanged(nameof(MousePlotX));
+            }
+        }
+
+
+        private double _MousePlot1 = double.NaN;
+        public double MousePlot1
+        {
+            get { return _MousePlot1; }
+            set
+            {
+                _MousePlot1 = value;
+                OnPropertyChanged(nameof(MousePlot1));
+            }
+        }
+
+        private double _MousePlot2 = double.NaN;
+        public double MousePlot2
+        {
+            get { return _MousePlot2; }
+            set
+            {
+                _MousePlot2 = value;
+                OnPropertyChanged(nameof(MousePlot2));
+            }
+        }
+
+
+
+        protected override void OnRenderSizeChanged(SizeChangedInfo sizeInfo)
+        {
+            base.OnRenderSizeChanged(sizeInfo);
+            RecalculateScale();
+        }
+
+
         public XYPlotV()
         {
             BindingOperations.EnableCollectionSynchronization(Plots1Lines, Plots1Lines);
@@ -163,7 +249,35 @@ namespace WpfFrontend.View
 
         private void XYPlotV_SizeChanged(object sender, SizeChangedEventArgs e)
         {
+            X1 = X0;
             RecalculateScale();
+        }
+
+        protected override void OnMouseMove(MouseEventArgs e)
+        {
+            base.OnMouseMove(e);
+
+            if (ScaleX == 0 || ScaleY == 0 || Plot1.Count == 0 || Plot2.Count == 0) return;
+
+            Point pos = e.GetPosition(this);
+            RawMouseX = pos.X;
+            RawMouseY = Plots.Height - pos.Y; // I know its wrong, but at least i can see stuff
+
+            MouseX = pos.X / ScaleX;
+            MouseY = Y1 - pos.Y / ScaleY;
+            int index = (int)(MouseX - 0.5);
+            if (index < Plot1.Count)
+            {
+                MousePlotX = index;
+                MousePlot1 = Plot1[index].Y;
+                MousePlot2 = Plot2[index].Y;
+            }
+            else
+            {
+                MousePlotX = double.NaN;
+                MousePlot1 = double.NaN;
+                MousePlot2 = double.NaN;
+            }
         }
 
         private void Plot1_Changed()
@@ -312,10 +426,12 @@ namespace WpfFrontend.View
             }
             catch { }
 
-            ValueToSet valueToSet = RecalculateScale(plot1, plot2, actualWidth, actualHeight);
+            ValueToSet valueToSet = RecalculateScale(plot1, plot2, actualWidth, actualHeight, X1, Y1);
 
             try
             {
+                if (!valueToSet.setXY && !valueToSet.setScale) return;
+
                 Dispatcher.Invoke(() =>
                 {
                     if (valueToSet.setXY)
@@ -344,7 +460,7 @@ namespace WpfFrontend.View
             public double scaleX, scaleY;
         }
 
-        private static ValueToSet RecalculateScale(Point[] plot1, Point[] plot2, double actualWidth, double actualHeight)
+        private static ValueToSet RecalculateScale(Point[] plot1, Point[] plot2, double actualWidth, double actualHeight, double currentX1, double currentY1)
         {
             ValueToSet valueToSet = new ValueToSet();
             if (plot1.Length != 0 || plot2.Length != 0)
@@ -366,11 +482,15 @@ namespace WpfFrontend.View
                     yMax = Math.Max(yMax, plot2.Max(n => n.Y));
                 }
 
-                valueToSet.x1 = xMax * 1.15; // +15%
+                valueToSet.x1 = xMax * 2; // +100%
                 valueToSet.y1 = yMax * 1.15; // +15%
+
+                if (xMax < currentX1) valueToSet.setXY = false;
+                if (valueToSet.y1 != currentY1) valueToSet.setXY = true;
             }
 
-            if ((valueToSet.x1 != valueToSet.x0 && valueToSet.y1 != valueToSet.y0)
+            if (valueToSet.setXY
+                && (valueToSet.x1 != valueToSet.x0 && valueToSet.y1 != valueToSet.y0)
                 && (!double.IsNaN(actualWidth) && !double.IsNaN(actualHeight))
                 && (actualWidth != 0 && actualHeight != 0))
             {

@@ -13,22 +13,14 @@ namespace Model
 
         public void Mix(Individual[] ind1, Individual[] ind2)
         {
-            int[] indicies1 = Enumerable
-                .Range(0, ind1.Length)
-                .OrderBy(n => random.Next())
-                .ToArray();
-            int[] indicies2 = Enumerable
-                .Range(0, ind1.Length)
-                .OrderBy(n => random.Next())
-                .ToArray();
+            var col = ind1.Concat(ind2)
+                .OrderBy(n => random.Next());
 
-            for (int i = 0; i < ind1.Length; i++)
-            {
-                var copy = ind1[indicies1[i]];
-                ind2[indicies1[i]] = ind1[indicies2[i]];
-                ind1[indicies2[i]] = copy;
-            }
-
+            Individuals1 = col.Take(ind1.Length).ToArray();
+            Individuals2 = col.Skip(ind2.Length).ToArray();
         }
+        
+        public Individual[] Individuals1 { get; set; }
+        public Individual[] Individuals2 { get; set; }
     }
 }

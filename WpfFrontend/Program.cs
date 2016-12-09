@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using WpfFrontend.Context;
+using WpfFrontend.ViewModel;
 using WpfFrontend.Controls;
 using WpfFrontend.View;
 

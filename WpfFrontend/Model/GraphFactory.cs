@@ -12,12 +12,12 @@ namespace WpfFrontend.Model
     {
         public static string[] Names = "A,B,C,D,E,F,G,H,J,K,L,M,P,K,L".Split(',');
 
-        public static GraphVM GenerateClique(Individual individual)
+        public static GraphVM GenerateClique(uint nodesCount)
         {
             GraphVM graph = new GraphVM();
 
             // Create Nodes
-            for (uint i = 0; i < individual.Length; i++)
+            for (uint i = 0; i < nodesCount; i++)
             {
                 graph.Nodes.Add(new GraphNodeVM()
                 {
@@ -42,7 +42,7 @@ namespace WpfFrontend.Model
 
             return graph;
         }
-
+        
         public static GraphVM GeneratePath(GraphVM graph, Individual individual)
         {
             GraphVM path = new GraphVM();

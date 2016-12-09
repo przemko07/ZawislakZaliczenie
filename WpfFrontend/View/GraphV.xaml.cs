@@ -104,6 +104,8 @@ namespace WpfFrontend.View
                 graphV.EdgesPath.Add(edge);
                 graphV.NodesPathOrder.Add(edge.End, index++);
             }
+
+            graphV.SetAnimation();
         }
 
         public double NodesMargin
@@ -209,18 +211,9 @@ namespace WpfFrontend.View
         {
             InitializeComponent();
             SizeChanged += GraphV_SizeChanged;
-            Thread thread = new Thread(() =>
-            {
-                Thread.Sleep(500);
-                Dispatcher.Invoke(() =>
-                {
-                    SetAnimation();
-                });
-            })
-            { IsBackground = true };
-            thread.Start();
         }
 
+        
         private void SetAnimation()
         {
             storyBoard?.Stop(Selected);

@@ -31,8 +31,7 @@ namespace WpfFrontend.Model
             }
             set
             {
-                _Matrix2 = value;
-                ReCreateEvolutionary();
+                _Matrix1 = value;
             }
         }
 
@@ -46,6 +45,10 @@ namespace WpfFrontend.Model
                     _Matrix2 = MatrixFactory.CreateRandomDiagonal(_nodeCount, _m2ValuesFrom, _m2ValuesTo);
                 }
                 return _Matrix2.Value;
+            }
+            set
+            {
+                _Matrix2 = value;
             }
         }
 
@@ -63,7 +66,6 @@ namespace WpfFrontend.Model
             set
             {
                 _IndividualsLength = value;
-                ReCreateEvolutionary();
             }
         }
 
@@ -81,12 +83,9 @@ namespace WpfFrontend.Model
             set
             {
                 _NodesCount = value;
-                ReCreateEvolutionary();
             }
         }
-
-
-
+        
         private DoubleEvolutionary _Evolutionary;
         public DoubleEvolutionary Evolutionary
         {
@@ -105,7 +104,12 @@ namespace WpfFrontend.Model
         }
 
 
-        private void ReCreateEvolutionary()
+        public Engine()
+        {
+            ReCreateEvolutionary();
+        }
+
+        public void ReCreateEvolutionary()
         {
             _Evolutionary = new DoubleEvolutionary()
             {

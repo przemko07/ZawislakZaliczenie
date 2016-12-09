@@ -67,6 +67,12 @@
     <Compile Include="View\MatrixV.xaml.cs">
       <DependentUpon>MatrixV.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\ParetoFrontV.xaml.cs">
+      <DependentUpon>ParetoFrontV.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\SettingsV.xaml.cs">
+      <DependentUpon>SettingsV.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\XYPlotV.xaml.cs">
       <DependentUpon>XYPlotV.xaml</DependentUpon>
     </Compile>
@@ -117,6 +123,14 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="View\ParetoFrontV.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\SettingsV.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\XYPlotV.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -140,6 +154,7 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -161,6 +176,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Images\node_selected.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\settings.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

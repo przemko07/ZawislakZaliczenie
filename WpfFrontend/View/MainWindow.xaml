@@ -9,118 +9,111 @@
         xmlns:viewmodel="clr-namespace:WpfFrontend.ViewModel"
         mc:Ignorable="d"
         Title="TSP" Height="350" Width="525">
+
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
-            <RowDefinition Height="auto" />
-        </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="3*"/>
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-         <!-- Matricies -->
-        
-        <Grid Grid.Row="0" Grid.Column="0">
+
+        <Grid Grid.Column="0">
             <Grid.RowDefinitions>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="50"/>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="*"/>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="auto" />
             </Grid.RowDefinitions>
 
-            <!--Matricies params-->
-            <Grid Grid.Row="0">
-                <CheckBox HorizontalAlignment="Right" Content="Edit" IsChecked="{Binding Editable}"/>
-            </Grid>
+            <ToolBar Grid.Row="0">
+                <ToolBar.Resources>
+                    <Style TargetType="Image">
+                        <Setter Property="Width" Value="35"/>
+                        <Setter Property="Height" Value="35"/>
+                        <Setter Property="RenderOptions.BitmapScalingMode" Value="HighQuality"/>
+                    </Style>
+                </ToolBar.Resources>
+                <Button Command="{Binding ShowSettings}">
+                    <Image Source="\Resources\Images\settings.png"/>
+                </Button>
+            </ToolBar>
 
-            <TextBlock Grid.Row="1" Text="Matrix M1"/>
-            <view:MatrixV Grid.Row="2"
-                          Matrix="{Binding Matrix1}"
-                          Editable="{Binding Editable}"
-                          CopyByDiagonal="true"/>
+            <!--Best Path-->
+            <Grid Grid.Row="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
 
-            <TextBlock Grid.Row="4" Text="Matrix M2"/>
-            <view:MatrixV Grid.Row="5"
-                          Matrix="{Binding Matrix2}"
-                          Editable="{Binding Editable}"
-                          CopyByDiagonal="true"/>
+                <ComboBox Grid.Row="0" SelectedItem="{Binding GraphPath}" ItemsSource="{Binding GraphPathOptions}"/>
 
-        </Grid>
-
-        <!--Best Path-->
-        <Grid Grid.Row="0" Grid.Column="1">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-
-            <ComboBox Grid.Row="0" SelectedItem="{Binding GraphPath}" ItemsSource="{Binding GraphPathOptions}"/>
-
-            <view:GraphV Grid.Row="1"
+                <view:GraphV Grid.Row="1"
                          Graph="{Binding Graph}"
                          GraphPath="{Binding Graph1Path}"
                          NodeSize="{Binding NodeSize}"
                          NodesMargin="{Binding NodesMargin}"
                          NamesMargin="{Binding NamesMargin}" 
                          ShowGraphEdges="False">
-                <view:GraphV.Style>
-                    <Style TargetType="view:GraphV">
-                        <Setter Property="Visibility" Value="Hidden"/>
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding GraphPath}" Value="{x:Static viewmodel:MainWindowVM+GraphPathType.F1Path}">
-                                <Setter Property="Visibility" Value="Visible"/>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </view:GraphV.Style>
-                <ext:DataPiping.DataPipes>
-                    <ext:DataPipeCollection>
-                        <ext:DataPipe Source="{Binding Path=ActualWidth, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type view:GraphV}}}"
+                    <view:GraphV.Style>
+                        <Style TargetType="view:GraphV">
+                            <Setter Property="Visibility" Value="Hidden"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding GraphPath}" Value="{x:Static viewmodel:MainWindowVM+GraphPathType.F1Path}">
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </view:GraphV.Style>
+                    <ext:DataPiping.DataPipes>
+                        <ext:DataPipeCollection>
+                            <ext:DataPipe Source="{Binding Path=ActualWidth, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type view:GraphV}}}"
                                   Target="{Binding Path=WindowWidth, Mode=OneWayToSource}"/>
-                        <ext:DataPipe Source="{Binding Path=ActualHeight, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type view:GraphV}}}"
+                            <ext:DataPipe Source="{Binding Path=ActualHeight, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type view:GraphV}}}"
                                   Target="{Binding Path=WindowHeight, Mode=OneWayToSource}"/>
-                    </ext:DataPipeCollection>
-                </ext:DataPiping.DataPipes>
-            </view:GraphV>
+                        </ext:DataPipeCollection>
+                    </ext:DataPiping.DataPipes>
+                </view:GraphV>
 
-            <view:GraphV Grid.Row="1"
+                <view:GraphV Grid.Row="1"
                          Graph="{Binding Graph}"
                          GraphPath="{Binding Graph2Path}"
                          NodeSize="{Binding NodeSize}"
                          NodesMargin="{Binding NodesMargin}"
                          NamesMargin="{Binding NamesMargin}" 
                          ShowGraphEdges="False">
-                <view:GraphV.Style>
-                    <Style TargetType="view:GraphV">
-                        <Setter Property="Visibility" Value="Hidden"/>
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding GraphPath}" Value="{x:Static viewmodel:MainWindowVM+GraphPathType.F2Path}">
-                                <Setter Property="Visibility" Value="Visible"/>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </view:GraphV.Style>
-                <ext:DataPiping.DataPipes>
-                    <ext:DataPipeCollection>
-                        <ext:DataPipe Source="{Binding Path=ActualWidth, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type view:GraphV}}}"
+                    <view:GraphV.Style>
+                        <Style TargetType="view:GraphV">
+                            <Setter Property="Visibility" Value="Hidden"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding GraphPath}" Value="{x:Static viewmodel:MainWindowVM+GraphPathType.F2Path}">
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </view:GraphV.Style>
+                    <ext:DataPiping.DataPipes>
+                        <ext:DataPipeCollection>
+                            <ext:DataPipe Source="{Binding Path=ActualWidth, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type view:GraphV}}}"
                                   Target="{Binding Path=WindowWidth, Mode=OneWayToSource}"/>
-                        <ext:DataPipe Source="{Binding Path=ActualHeight, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type view:GraphV}}}"
+                            <ext:DataPipe Source="{Binding Path=ActualHeight, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type view:GraphV}}}"
                                   Target="{Binding Path=WindowHeight, Mode=OneWayToSource}"/>
-                    </ext:DataPipeCollection>
-                </ext:DataPiping.DataPipes>
-            </view:GraphV>
+                        </ext:DataPipeCollection>
+                    </ext:DataPiping.DataPipes>
+                </view:GraphV>
 
-            <view:XYPlotV Grid.Row="2" Plot1="{Binding Plot1}" Plot2="{Binding Plot2}"/>
+                <view:XYPlotV Grid.Row="2" Plot1="{Binding Plot1}" Plot2="{Binding Plot2}"/>
+            </Grid>
+
+            <!-- controls of evo-->
+            <Grid Grid.Row="2">
+                <Button Content="Step" Command="{Binding EvoStep}"/>
+            </Grid>
         </Grid>
 
-        
-        
-        <!-- controls of evo-->
-        <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
-            <Button Content="Step" Command="{Binding EvoStep}"/>
+        <Grid Grid.Column="1">
+
+            <view:ParetoFrontV F1="{Binding DataContext.Fitness1, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
+                               F2="{Binding DataContext.Fitness2, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"/>
+
         </Grid>
     </Grid>
 </Window>

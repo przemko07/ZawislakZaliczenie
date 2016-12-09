@@ -79,38 +79,39 @@ namespace WpfFrontend.ViewModel
         public MatrixValueVM[,] Mask;
         public ObservableCollection<object> Items { get; } = new ObservableCollection<object>();
 
-        private uint _Rows;
-        public uint Rows
+        private uint _ViewRows;
+        public uint ViewRows
         {
-            get { return _Rows; }
+            get { return _ViewRows; }
             set
             {
-                _Rows = value;
-                OnPropertyChanged(nameof(Rows));
+                _ViewRows = value;
+                OnPropertyChanged(nameof(ViewRows));
             }
         }
 
-        private uint _Cols;
-        public uint Cols
+        private uint _ViewCols;
+        public uint ViewCols
         {
-            get { return _Cols; }
+            get { return _ViewCols; }
             set
             {
-                _Cols = value;
-                OnPropertyChanged(nameof(Cols));
+                _ViewCols = value;
+                OnPropertyChanged(nameof(ViewCols));
             }
         }
 
 
         public MatrixVM(Matrix matrix)
         {
-            Rows = matrix.Rows + 1;
-            Cols = matrix.Cols + 1;
-            Mask = new MatrixValueVM[Rows, Cols];
+            ViewRows = matrix.Rows + 1;
+            ViewCols = matrix.Cols + 1;
+
+            Mask = new MatrixValueVM[matrix.Rows, matrix.Cols];
             Items.Add(new MatrixValueNameVM(string.Empty));
-            for (uint row = 0; row < matrix.Rows; row++)
+            for (uint col = 0; col < matrix.Cols; col++)
             {
-                Items.Add(new MatrixValueNameVM(GraphFactory.Names[row]));
+                Items.Add(new MatrixValueNameVM(GraphFactory.Names[col]));
             }
 
             for (uint row = 0; row < matrix.Rows; row++)
@@ -123,6 +124,8 @@ namespace WpfFrontend.ViewModel
                     Mask[row, col] = vm;
                 }
             }
+            
         }
+        
     }
 }

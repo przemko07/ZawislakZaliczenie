@@ -1,0 +1,81 @@
+﻿<Window x:Class="WpfFrontend.View.SettingsV"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:ext="clr-namespace:WpfFrontend.Extensions"
+        xmlns:local="clr-namespace:WpfFrontend"
+        xmlns:view="clr-namespace:WpfFrontend.View"
+        xmlns:viewmodel="clr-namespace:WpfFrontend.ViewModel">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="25"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!--matrices-->
+        <Grid Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!--Matricies params-->
+            <DockPanel Grid.Row="0" LastChildFill="False">
+                <Button DockPanel.Dock="Right" Margin="4" Padding="3" Content="Random" Command="{Binding RandomMatrices}"/>
+                <CheckBox DockPanel.Dock="Right" Content="Edit" Margin="4" Padding="3" IsChecked="{Binding Editable}"/>
+            </DockPanel>
+
+            <TextBlock Grid.Row="1" Text="Matrix M1"/>
+            <view:MatrixV Grid.Row="2"
+                          Matrix="{Binding Matrix1}"
+                          Editable="{Binding Editable}"
+                          CopyByDiagonal="true"/>
+
+            <TextBlock Grid.Row="4" Text="Matrix M2"/>
+            <view:MatrixV Grid.Row="5"
+                          Matrix="{Binding Matrix2}"
+                          Editable="{Binding Editable}"
+                          CopyByDiagonal="true"/>
+        </Grid>
+            
+        <!--params-->
+        <Grid Grid.Column="2">
+            <Grid.Resources>
+                <Style TargetType="TextBlock">
+                    <Setter Property="Margin" Value="4"/>
+                    <Setter Property="Padding" Value="4"/>
+                    <Setter Property="FontSize" Value="24"/>
+                </Style>
+                <Style TargetType="TextBox">
+                    <Setter Property="Margin" Value="4"/>
+                    <Setter Property="Padding" Value="4"/>
+                    <Setter Property="FontSize" Value="24"/>
+                </Style>
+            </Grid.Resources>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Grid.Column="0" Grid.Row="0" Text="Population size:"/>
+            <TextBox Grid.Column="1" Grid.Row="0" Text="{Binding PopSize, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+            
+            <TextBlock Grid.Column="0" Grid.Row="1" Text="Nodes Count:"/>
+            <TextBox Grid.Column="1" Grid.Row="1" Text="{Binding NodesCount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+        </Grid>
+    </Grid>
+</Window>

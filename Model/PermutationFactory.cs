@@ -21,22 +21,33 @@ namespace Model
                 bool uniqe = true;
                 do
                 {
-                    List<uint> values = Enumerable.Range(0, (int)singleLength).Select(n=>(uint)n).ToList();
-                    for (uint j = 0; j < singleLength; ++j)
-                    {
-                        int index = random.Next(0, values.Count);
-                        individuals[i][j] = values[index];
-                        values.RemoveAt(index);
-                    }
+                    RandomSingleIndividual(individuals, i);
                     for (int ik = 0; ik < i - 1; ik++)
                     {
                         if (uniquePopulation && individuals[ik] == individuals[i]) uniqe = false;
                     }
-
                 } while (!uniqe);
             }
 
             return individuals;
+        }
+
+        private static void RandomSingleIndividual(Individual[] individuals, int i)
+        {
+            bool[] was = new bool[individuals[i].Length];
+            for (int j = 0; j < was.Length; j++) was[j] = false;
+
+            for (uint j = 0; j < was.Length; j++)
+            {
+                uint index = 1;
+                do
+                {
+                    index = (uint)random.Next(was.Length);
+                } while (was[index]);
+
+                individuals[i][index] = j;
+                was[index] = true;
+            }
         }
     }
 }

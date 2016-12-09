@@ -10,7 +10,25 @@ namespace WpfFrontend.Model
 {
     public static class GraphFactory
     {
-        public static string[] Names = "A,B,C,D,E,F,G,H,J,K,L,M,P,K,L".Split(',');
+        public static string[] Names = "A B C D E F G H I J K L M N O P Q R S T U V W X Y Z".Split(' ');
+
+        static GraphFactory()
+        {
+            List<string> newNames = new List<string>();
+            for (int i = 0; i < Names.Length; i++)
+            {
+                newNames.Add(Names[i]);
+            }
+            for (int i = 0; i < Names.Length; i++)
+            {
+                for (int j = 0; j < Names.Length; j++)
+                {
+                    if (i == j) continue;
+                    newNames.Add(Names[i] + Names[j]);
+                }
+            }
+            Names = newNames.ToArray();
+        }
 
         public static GraphVM GenerateClique(uint nodesCount)
         {
@@ -42,7 +60,7 @@ namespace WpfFrontend.Model
 
             return graph;
         }
-        
+
         public static GraphVM GeneratePath(GraphVM graph, Individual individual)
         {
             GraphVM path = new GraphVM();

@@ -57,6 +57,7 @@
     <Compile Include="Matrix.cs" />
     <Compile Include="MatrixFactory.cs" />
     <Compile Include="MatrixFitnessCalc.cs" />
+    <Compile Include="ParetoFrontFinder.cs" />
     <Compile Include="PermutationFactory.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

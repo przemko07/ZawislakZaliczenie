@@ -3,14 +3,17 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
+using System.Windows.Media.Imaging;
 using WpfFrontend.Extensions;
 using WpfFrontend.Model;
+using WpfFrontend.View;
 
 namespace WpfFrontend.ViewModel
 {
@@ -24,6 +27,7 @@ namespace WpfFrontend.ViewModel
         }
 
         private Engine engine = new Engine();
+        private ParetoFrontFinder finder = new ParetoFrontFinder();
 
         private double _NodeSize;
         public double NodeSize
@@ -113,35 +117,6 @@ namespace WpfFrontend.ViewModel
             }
         }
 
-        private bool _Editable = false;
-        public bool Editable
-        {
-            get { return _Editable; }
-            set
-            {
-                _Editable = value;
-                OnPropertyChanged(nameof(Editable));
-            }
-        }
-
-
-        public MatrixVM Matrix1
-        {
-            get
-            {
-                return new MatrixVM(engine.Matrix1);
-            }
-        }
-
-
-        public MatrixVM Matrix2
-        {
-            get
-            {
-                return new MatrixVM(engine.Matrix1);
-            }
-        }
-
         public double[] Fitness1
         {
             get
@@ -191,6 +166,25 @@ namespace WpfFrontend.ViewModel
                     }
                 }
                 return minIndex;
+            }
+        }
+
+        public ActionCommand ShowSettings
+        {
+            get
+            {
+                return new ActionCommand(() =>
+                {
+                    new SettingsV()
+                    {
+                        EvoEngine = engine,
+                        Width = 800,
+                        Height = 640,
+                    }.ShowDialog();
+                    Graph = null;
+                    Graph1Path = null;
+                    Graph2Path = null;
+                });
             }
         }
 
@@ -301,14 +295,35 @@ namespace WpfFrontend.ViewModel
                 return new ActionCommand(() =>
                 {
                     engine.Evolutionary.Step();
-                    Graph1Path = null;
-                    Graph2Path = null;
                     Plot1.Add(new Point(Plot1.Count, Fitness1[BestIndex1]));
                     Plot2.Add(new Point(Plot2.Count, Fitness2[BestIndex1]));
+                    OnPropertyChanged(nameof(Fitness1));
+                    OnPropertyChanged(nameof(Fitness2));
+                    OnPropertyChanged(nameof(BestIndex1));
+                    OnPropertyChanged(nameof(BestIndex2));
+                    OnPropertyChanged(nameof(BestIndividual1));
+                    OnPropertyChanged(nameof(BestIndividual2));
+                    OnPropertyChanged(nameof(Graph1Path));
+                    OnPropertyChanged(nameof(Graph2Path));
                 });
             }
         }
 
+        BitmapImage BitmapToImageSource(System.Drawing.Bitmap bitmap)
+        {
+            using (MemoryStream memory = new MemoryStream())
+            {
+                bitmap.Save(memory, System.Drawing.Imaging.ImageFormat.Bmp);
+                memory.Position = 0;
+                BitmapImage bitmapimage = new BitmapImage();
+                bitmapimage.BeginInit();
+                bitmapimage.StreamSource = memory;
+                bitmapimage.CacheOption = BitmapCacheOption.OnLoad;
+                bitmapimage.EndInit();
+
+                return bitmapimage;
+            }
+        }
 
         public MainWindowVM()
         {

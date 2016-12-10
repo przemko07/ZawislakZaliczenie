@@ -31,7 +31,7 @@
             <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
 
-        <Border x:Name="Plots" BorderThickness="1" Grid.Column="1" BorderBrush="Black" Margin="3">
+        <Border x:Name="Plots" BorderThickness="1" Grid.Column="1" BorderBrush="Black" Margin="3" MouseMove="Plots_MouseMove">
             <Grid ClipToBounds="True">
                 <Grid.Background>
                     <VisualBrush TileMode="Tile"
@@ -49,7 +49,7 @@
                     <ScaleTransform ScaleY="-1"/>
                 </Grid.RenderTransform>
 
-                <!--a-->
+                <!--Info on mouse-->
                 <Canvas>
                     <Canvas.Style>
                         <Style TargetType="Canvas">
@@ -70,8 +70,8 @@
                             <ScaleTransform ScaleY="-1"/>
                         </StackPanel.RenderTransform>
                         <TextBlock Text="{Binding Data.MousePlotX, StringFormat=Itteration: {0,3:N1}, Source={StaticResource UserContext}}"/>
-                        <TextBlock Text="{Binding Data.MousePlot1, StringFormat=Red: {0,3:N1}, Source={StaticResource UserContext}}"/>
-                        <TextBlock Text="{Binding Data.MousePlot2, StringFormat=Blue: {0,3:N1}, Source={StaticResource UserContext}}"/>
+                        <TextBlock Text="{Binding Data.MousePlot1, StringFormat=F1: {0,3:N1}, Source={StaticResource UserContext}}"/>
+                        <TextBlock Text="{Binding Data.MousePlot2, StringFormat=F2: {0,3:N1}, Source={StaticResource UserContext}}"/>
                     </StackPanel>
                 </Canvas>
 
@@ -88,7 +88,7 @@
                         </Style>
                     </Path.Style>
                     <Path.Data>
-                        <EllipseGeometry RadiusX="6" RadiusY="6">
+                        <EllipseGeometry RadiusX="10" RadiusY="10">
                             <EllipseGeometry.Center>
                                 <MultiBinding Converter="{StaticResource PointScale2}">
                                     <Binding Path="Data.MousePlotX" Source="{StaticResource UserContext}"/>
@@ -115,7 +115,7 @@
                         </Style>
                     </Path.Style>
                     <Path.Data>
-                        <EllipseGeometry RadiusX="6" RadiusY="6">
+                        <EllipseGeometry RadiusX="10" RadiusY="10">
                             <EllipseGeometry.Center>
                                 <MultiBinding Converter="{StaticResource PointScale2}">
                                     <Binding Path="Data.MousePlotX" Source="{StaticResource UserContext}"/>
@@ -139,7 +139,7 @@
                         <DataTemplate>
                             <Path Fill="Red">
                                 <Path.Data>
-                                    <EllipseGeometry RadiusX="2" RadiusY="2">
+                                    <EllipseGeometry RadiusX="4" RadiusY="4">
                                         <EllipseGeometry.Center>
                                             <MultiBinding Converter="{StaticResource PointScale}">
                                                 <Binding Path="."/>
@@ -163,7 +163,7 @@
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Path Stroke="Red" StrokeThickness="1.5">
+                            <Path Stroke="Red" StrokeThickness="2.5">
                                 <Path.Data>
                                     <LineGeometry>
                                         <LineGeometry.StartPoint>
@@ -199,7 +199,7 @@
                         <DataTemplate>
                             <Path Fill="Blue">
                                 <Path.Data>
-                                    <EllipseGeometry RadiusX="2" RadiusY="2">
+                                    <EllipseGeometry RadiusX="4" RadiusY="4">
                                         <EllipseGeometry.Center>
                                             <MultiBinding Converter="{StaticResource PointScale}">
                                                 <Binding Path="."/>
@@ -223,7 +223,7 @@
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Path Stroke="Blue" StrokeThickness="1.5">
+                            <Path Stroke="Blue" StrokeThickness="2.5">
                                 <Path.Data>
                                     <LineGeometry>
                                         <LineGeometry.StartPoint>

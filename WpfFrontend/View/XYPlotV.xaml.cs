@@ -253,10 +253,8 @@ namespace WpfFrontend.View
             RecalculateScale();
         }
 
-        protected override void OnMouseMove(MouseEventArgs e)
+        private void Plots_MouseMove(object sender, MouseEventArgs e)
         {
-            base.OnMouseMove(e);
-
             if (ScaleX == 0 || ScaleY == 0 || Plot1.Count == 0 || Plot2.Count == 0) return;
 
             Point pos = e.GetPosition(this);
@@ -265,7 +263,7 @@ namespace WpfFrontend.View
 
             MouseX = pos.X / ScaleX;
             MouseY = Y1 - pos.Y / ScaleY;
-            int index = (int)(MouseX - 0.5);
+            int index = (int)(MouseX);
             if (index < Plot1.Count)
             {
                 MousePlotX = index;

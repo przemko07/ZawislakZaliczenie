@@ -106,7 +106,7 @@ namespace WpfFrontend.ViewModel
             }
         }
 
-        private bool _ShowGraphEdges = true;
+        private bool _ShowGraphEdges = false;
         public bool ShowGraphEdges
         {
             get { return _ShowGraphEdges; }
@@ -303,8 +303,39 @@ namespace WpfFrontend.ViewModel
                     OnPropertyChanged(nameof(BestIndex2));
                     OnPropertyChanged(nameof(BestIndividual1));
                     OnPropertyChanged(nameof(BestIndividual2));
-                    OnPropertyChanged(nameof(Graph1Path));
-                    OnPropertyChanged(nameof(Graph2Path));
+                    Graph1Path = null;
+                    Graph2Path = null;
+                });
+            }
+        }
+
+        private int _MultiStepsCount = 10;
+        public int MultiStepsCount
+        {
+            get { return _MultiStepsCount; }
+            set
+            {
+                _MultiStepsCount = value;
+                OnPropertyChanged(nameof(MultiStepsCount));
+            }
+        }
+
+
+        public ActionCommand EvoMultiSteps
+        {
+            get
+            {
+                return new ActionCommand(() =>
+                {
+                    Thread.Sleep(100);
+                    Task.Run(() =>
+                    {
+                        for (int i = 0; i < MultiStepsCount; i++)
+                        {
+                            Thread.Sleep(50);
+                            EvoStep.Execute(null);
+                        }
+                    });
                 });
             }
         }

@@ -11,33 +11,43 @@
         Title="TSP" Height="350" Width="525">
 
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
 
-        <Grid Grid.Column="0">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="auto" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="auto" />
-            </Grid.RowDefinitions>
+        <ToolBar Grid.Row="0">
+            <ToolBar.Resources>
+                <Style TargetType="Image">
+                    <Setter Property="Width" Value="35"/>
+                    <Setter Property="Height" Value="35"/>
+                    <Setter Property="RenderOptions.BitmapScalingMode" Value="HighQuality"/>
+                </Style>
+            </ToolBar.Resources>
+            
+            <Button Command="{Binding ShowSettings}">
+                <Image Source="\Resources\Images\settings.png"/>
+            </Button>
 
-            <ToolBar Grid.Row="0">
-                <ToolBar.Resources>
-                    <Style TargetType="Image">
-                        <Setter Property="Width" Value="35"/>
-                        <Setter Property="Height" Value="35"/>
-                        <Setter Property="RenderOptions.BitmapScalingMode" Value="HighQuality"/>
-                    </Style>
-                </ToolBar.Resources>
-                <Button Command="{Binding ShowSettings}">
-                    <Image Source="\Resources\Images\settings.png"/>
-                </Button>
-            </ToolBar>
+            <Button Command="{Binding EvoStep}">
+                <Image Source="\Resources\Images\step.png"/>
+            </Button>
+
+            <TextBox Text="{Binding MultiStepsCount}" FontSize="16" Margin="20, 2, 2, 2" Padding="3" Background="Transparent"/>
+
+            <Button Command="{Binding EvoMultiSteps}">
+                <Image Source="\Resources\Images\forward.png"/>
+            </Button>
+        </ToolBar>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
 
             <!--Best Path-->
-            <Grid Grid.Row="1">
+            <Grid Grid.Column="0">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto"/>
                     <RowDefinition Height="*"/>
@@ -52,7 +62,7 @@
                          NodeSize="{Binding NodeSize}"
                          NodesMargin="{Binding NodesMargin}"
                          NamesMargin="{Binding NamesMargin}" 
-                         ShowGraphEdges="False">
+                         ShowGraphEdges="{Binding ShowGraphEdges}">
                     <view:GraphV.Style>
                         <Style TargetType="view:GraphV">
                             <Setter Property="Visibility" Value="Hidden"/>
@@ -103,15 +113,8 @@
                 <view:XYPlotV Grid.Row="2" Plot1="{Binding Plot1}" Plot2="{Binding Plot2}"/>
             </Grid>
 
-            <!-- controls of evo-->
-            <Grid Grid.Row="2">
-                <Button Content="Step" Command="{Binding EvoStep}"/>
-            </Grid>
-        </Grid>
-
-        <Grid Grid.Column="1">
-
-            <view:ParetoFrontV F1="{Binding DataContext.Fitness1, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
+            <view:ParetoFrontV Grid.Column="1"
+                               F1="{Binding DataContext.Fitness1, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
                                F2="{Binding DataContext.Fitness2, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"/>
 
         </Grid>

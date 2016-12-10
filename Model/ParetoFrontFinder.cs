@@ -15,11 +15,12 @@ namespace Model
             for (int i = 0; i < f1.Length; i++)
             {
                 bool isPareto = true;
-                for (int j = i + 1; j < f2.Length; j++)
+                for (int j = 0; j < f2.Length; j++)
                 {
-                    if (f1[i] <= f1[j] && f2[i] <= f2[j])
+                    if (f1[i] > f1[j] && f2[i] > f2[j])
                     {
                         isPareto = false;
+                        break;
                     }
                 }
                 if (isPareto) pareto.Add((uint)i);

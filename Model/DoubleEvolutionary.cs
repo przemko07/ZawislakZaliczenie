@@ -54,6 +54,9 @@ namespace Model
             Evo2.Step();
             
             Mixer.Mix(Evo1.individuals, Evo2.individuals);
+
+            Evo1.individuals = Mixer.Individuals1;
+            Evo2.individuals = Mixer.Individuals2;
         }
     }
 }

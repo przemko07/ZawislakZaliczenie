@@ -39,6 +39,18 @@ namespace WpfFrontend.View
                     OnPropertyChanged(nameof(Color));
                 }
             }
+
+            private int _Size = 8;
+            public int Size
+            {
+                get { return _Size; }
+                set
+                {
+                    _Size = value;
+                    OnPropertyChanged(nameof(Size));
+                }
+            }
+
         }
 
         int setF1 = 0;
@@ -167,6 +179,7 @@ namespace WpfFrontend.View
             {
                 byte c = (byte)(255 - ((double)i + 1) / Generations.Count * 255);
                 Generations[i].Color = new SolidColorBrush(Color.FromArgb(255, c, c, c));
+                Generations[i].Size = i == Generations.Count- 1? 8: 4;
             }
 
             RecalculateScale();
@@ -188,7 +201,6 @@ namespace WpfFrontend.View
         private void RecalculateScale()
         {
             Point[] plot1 = new Point[0];
-            Point[] plot2 = new Point[0];
             double actualWidth = 0;
             double actualHeight = 0;
 
@@ -203,7 +215,7 @@ namespace WpfFrontend.View
             }
             catch { }
 
-            ValueToSet valueToSet = RecalculateScale(plot1, plot2, actualWidth, actualHeight, X1, Y1);
+            ValueToSet valueToSet = RecalculateScale(plot1, actualWidth, actualHeight, X1, Y1);
 
             try
             {
@@ -237,10 +249,10 @@ namespace WpfFrontend.View
             public double scaleX, scaleY;
         }
 
-        private static ValueToSet RecalculateScale(Point[] plot1, Point[] plot2, double actualWidth, double actualHeight, double currentX1, double currentY1)
+        private static ValueToSet RecalculateScale(Point[] plot1, double actualWidth, double actualHeight, double currentX1, double currentY1)
         {
             ValueToSet valueToSet = new ValueToSet();
-            if (plot1.Length != 0 || plot2.Length != 0)
+            if (plot1.Length != 0)
             {
                 valueToSet.setXY = true;
                 valueToSet.x0 = 0;
@@ -253,11 +265,6 @@ namespace WpfFrontend.View
                     xMax = plot1.Max(n => n.X);
                     yMax = plot1.Max(n => n.Y);
                 }
-                if (plot2.Any())
-                {
-                    xMax = Math.Max(xMax, plot2.Max(n => n.X));
-                    yMax = Math.Max(yMax, plot2.Max(n => n.Y));
-                }
 
                 valueToSet.x1 = xMax * 1.15; // +15%
                 valueToSet.y1 = yMax * 1.15; // +15%
@@ -266,8 +273,8 @@ namespace WpfFrontend.View
                 if (valueToSet.y1 != currentY1) valueToSet.setXY = true;
             }
 
-            if (valueToSet.setXY
-                && (valueToSet.x1 != valueToSet.x0 && valueToSet.y1 != valueToSet.y0)
+            if (
+                (valueToSet.x1 != valueToSet.x0 && valueToSet.y1 != valueToSet.y0)
                 && (!double.IsNaN(actualWidth) && !double.IsNaN(actualHeight))
                 && (actualWidth != 0 && actualHeight != 0))
             {

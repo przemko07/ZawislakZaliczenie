@@ -118,14 +118,14 @@ namespace WpfFrontend.Model
                     FitnessCalc = new MatrixFitnessCalc(Matrix1),
                     Selection = new TournamentSelection(2),
                     CrossOver = new CrossOverOX(),
-                    Mutation = new SimpleMutation(0.05) // 5%
+                    Mutation = new SimpleMutation(0.15) // 5%
                 },
                 Evo2 = new Evolutionary(PermutationFactory.GenerateIndividuals(IndividualsLength / 2 + IndividualsLength % 2, NodesCount, true))
                 {
                     FitnessCalc = new MatrixFitnessCalc(Matrix2),
                     Selection = new TournamentSelection(2),
                     CrossOver = new CrossOverOX(),
-                    Mutation = new SimpleMutation(0.05) // 5%
+                    Mutation = new SimpleMutation(0.15) // 5%
                 },
                 Mixer = new SimpleMixer(),
             };

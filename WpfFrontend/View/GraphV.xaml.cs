@@ -104,6 +104,7 @@ namespace WpfFrontend.View
                 graphV.EdgesPath.Add(edge);
                 graphV.NodesPathOrder.Add(edge.End, index++);
             }
+            ++graphV.ChangeCount;
 
             graphV.SetAnimation();
         }

@@ -26,17 +26,17 @@
             </ToolBar.Resources>
             
             <Button Command="{Binding ShowSettings}">
-                <Image Source="\Resources\Images\settings.png"/>
+                <Image Source="/Resources/Images/settings.png"/>
             </Button>
 
             <Button Command="{Binding EvoStep}">
-                <Image Source="\Resources\Images\step.png"/>
+                <Image Source="/Resources/Images/step.png"/>
             </Button>
 
             <TextBox Text="{Binding MultiStepsCount}" FontSize="16" Margin="20, 2, 2, 2" Padding="3" Background="Transparent"/>
 
             <Button Command="{Binding EvoMultiSteps}">
-                <Image Source="\Resources\Images\forward.png"/>
+                <Image Source="/Resources/Images/forward.png"/>
             </Button>
         </ToolBar>
 

@@ -21,7 +21,7 @@
 
     <Grid>
         <Canvas Panel.ZIndex="5">
-            <Image x:Name="Selected" Source="\Resources\Images\node_selected.png" RenderOptions.BitmapScalingMode="HighQuality"
+            <Image x:Name="Selected" Source="/Resources/Images/node_selected.png" RenderOptions.BitmapScalingMode="HighQuality"
                    Width="{Binding NodeSize, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}"
                    Height="{Binding NodeSize, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}"
                    Margin="{Binding NodeSize, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}, Converter={StaticResource NodeSizeToMargin}}">
@@ -43,7 +43,7 @@
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <Canvas>
-                        <Image Source="\Resources\Images\node.png" RenderOptions.BitmapScalingMode="HighQuality"
+                        <Image Source="/Resources/Images/node.png" RenderOptions.BitmapScalingMode="HighQuality"
                                Width="{Binding NodeSize, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}"
                                Height="{Binding NodeSize, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}"
                                Margin="{Binding NodeSize, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}, Converter={StaticResource NodeSizeToMargin}}"

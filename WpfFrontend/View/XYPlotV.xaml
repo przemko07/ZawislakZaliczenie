@@ -88,7 +88,7 @@
                         </Style>
                     </Path.Style>
                     <Path.Data>
-                        <EllipseGeometry RadiusX="10" RadiusY="10">
+                        <EllipseGeometry RadiusX="4" RadiusY="4">
                             <EllipseGeometry.Center>
                                 <MultiBinding Converter="{StaticResource PointScale2}">
                                     <Binding Path="Data.MousePlotX" Source="{StaticResource UserContext}"/>
@@ -115,7 +115,7 @@
                         </Style>
                     </Path.Style>
                     <Path.Data>
-                        <EllipseGeometry RadiusX="10" RadiusY="10">
+                        <EllipseGeometry RadiusX="4" RadiusY="4">
                             <EllipseGeometry.Center>
                                 <MultiBinding Converter="{StaticResource PointScale2}">
                                     <Binding Path="Data.MousePlotX" Source="{StaticResource UserContext}"/>
@@ -129,7 +129,7 @@
                 </Path>
 
                 <!--Plot 1 points-->
-                <ItemsControl ItemsSource="{Binding Data.Plot1, Source={StaticResource UserContext}}">
+                <!--<ItemsControl ItemsSource="{Binding Data.Plot1, Source={StaticResource UserContext}}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <Canvas/>
@@ -152,7 +152,7 @@
                             </Path>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
-                </ItemsControl>
+                </ItemsControl>-->
 
                 <!--Plot 1 lines-->
                 <ItemsControl ItemsSource="{Binding Data.Plot1Lines, Source={StaticResource UserContext}}">
@@ -189,7 +189,7 @@
                 </ItemsControl>
 
                 <!--Plot 2 points-->
-                <ItemsControl ItemsSource="{Binding Data.Plot2, Source={StaticResource UserContext}}">
+                <!--<ItemsControl ItemsSource="{Binding Data.Plot2, Source={StaticResource UserContext}}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <Canvas/>
@@ -212,7 +212,7 @@
                             </Path>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
-                </ItemsControl>
+                </ItemsControl>-->
 
                 <!--Plot 2 lines-->
                 <ItemsControl ItemsSource="{Binding Data.Plot2Lines, Source={StaticResource UserContext}}">

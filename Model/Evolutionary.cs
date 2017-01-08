@@ -56,10 +56,9 @@ namespace Model
             }
 
             // Parents
-            for (int i = 0; i < length; i += 2)
+            for (int i = 0; i < length && index < newIndividuals.Length; i++)
             {
                 newIndividuals[index++] = individuals[Selection.Selected[i]].Clone();
-                newIndividuals[index++] = individuals[Selection.Selected[i + 1]].Clone();
             }
 
             // XXX: for safety

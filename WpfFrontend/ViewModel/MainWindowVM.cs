@@ -74,7 +74,7 @@ namespace WpfFrontend.ViewModel
                 _Combine = value;
                 OnPropertyChanged(nameof(Combine));
 
-                NodeSize = value;
+                NodeSize = value * 0.6;
                 NodesMargin = value * 3.0;
                 NamesMargin = value * 1.65;
             }
@@ -181,12 +181,7 @@ namespace WpfFrontend.ViewModel
                         Width = 800,
                         Height = 640,
                     }.ShowDialog();
-                    _Graph = null;
-                    _Graph1Path = null;
-                    _Graph2Path = null;
-                    OnPropertyChanged(nameof(Graph));
-                    OnPropertyChanged(nameof(Graph1Path));
-                    OnPropertyChanged(nameof(Graph2Path));
+                    EvoStep.Execute(null);
                 });
             }
         }
@@ -217,6 +212,7 @@ namespace WpfFrontend.ViewModel
                 {
                     _Graph = GraphFactory.GenerateClique(engine.NodesCount);
                 }
+                _Graph.Name = "Graph";
                 return _Graph;
             }
             set
@@ -326,6 +322,7 @@ namespace WpfFrontend.ViewModel
                     if (_SelectedParetoPath == null && SelectedParetoIndex < ParetoPath.Count)
                     {
                         _SelectedParetoPath = ParetoPath[(int)SelectedParetoIndex];
+                        _SelectedParetoPath.Name = "_SelectedParetoPath";
                     }
                 }
                 catch
@@ -349,6 +346,7 @@ namespace WpfFrontend.ViewModel
                 {
                     _Graph1Path = GraphFactory.GeneratePath(Graph, BestIndividual1);
                 }
+                _Graph1Path.Name = "_Graph1Path";
                 return _Graph1Path;
             }
             set
@@ -367,6 +365,7 @@ namespace WpfFrontend.ViewModel
                 {
                     _Graph2Path = GraphFactory.GeneratePath(Graph, BestIndividual2);
                 }
+                _Graph2Path.Name = "_Graph2Path";
                 return _Graph2Path;
             }
             set
@@ -406,6 +405,7 @@ namespace WpfFrontend.ViewModel
                     OnPropertyChanged(nameof(BestIndex2));
                     OnPropertyChanged(nameof(BestIndividual1));
                     OnPropertyChanged(nameof(BestIndividual2));
+                    Graph = null;
                     Graph1Path = null; // in a getter im getting the current best
                     Graph2Path = null; // in a getter im getting the current best
 

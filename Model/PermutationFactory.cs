@@ -10,9 +10,15 @@ namespace Model
     {
         static Random random = RandomGenerator.GetRandom;
 
-
+        public static uint Factory(uint value)
+        {
+            if (value == 1) return 1;
+            return Factory(value - 1) * value;
+        }
         public static Individual[] GenerateIndividuals(uint populationSize, uint singleLength, bool uniquePopulation = false)
         {
+            if (uniquePopulation && Factory(singleLength) < populationSize) throw new Exception($"To small node count, or too big pop size. With node count ({singleLength}), maximum of pop size is {Factory(singleLength)}");
+
             Individual[] individuals = new Individual[populationSize];
 
             for (int i = 0; i < individuals.Length; ++i)
@@ -21,6 +27,7 @@ namespace Model
                 bool uniqe = true;
                 do
                 {
+                    uniqe = true;
                     RandomSingleIndividual(individuals, i);
                     for (int ik = 0; ik < i - 1; ik++)
                     {

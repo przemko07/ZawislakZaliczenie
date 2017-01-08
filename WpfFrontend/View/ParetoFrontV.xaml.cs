@@ -224,6 +224,7 @@ namespace WpfFrontend.View
             
             if (!Generations.Any()) return;
             if (!Generations.Last().Points.Any()) return;
+            if (SelectedIndex >= Generations.Last().Points.Count) return;
             SelectedPoint = Generations.Last().Points[SelectedIndex];
         }
 

@@ -168,7 +168,15 @@ namespace WpfFrontend.View
                         EvoEngine.NodesCount = NodesCount;
                         CopyMatrices();
                     }
-                    EvoEngine.ReCreateEvolutionary();
+                    try
+                    {
+                        EvoEngine.ReCreateEvolutionary();
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                        e.Cancel = true;
+                    }
                 }
             }
         }

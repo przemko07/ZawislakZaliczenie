@@ -63,8 +63,8 @@ namespace WpfFrontend.View
             {
                 foreach (var node in graphV.Graph.Nodes)
                 {
-                    graphV.Nodes[node] = graphV.CalculatePosition(node, graphV.NodesMargin);
-                    graphV.NodesNames[node] = graphV.CalculatePosition(node, graphV.NamesMargin);
+                    graphV.Nodes[node] = graphV.CalculatePosition(node, graphV.NodesMargin, graphV.ActualWidth, graphV.ActualHeight);
+                    graphV.NodesNames[node] = graphV.CalculatePosition(node, graphV.NamesMargin, graphV.ActualWidth, graphV.ActualHeight);
                 }
 
                 foreach (var edge in graphV.Graph.Edges)
@@ -122,7 +122,7 @@ namespace WpfFrontend.View
             GraphV graphV = d as GraphV;
             if (graphV == null) return;
 
-            graphV.GenerateNodePositions();
+            graphV.GenerateNodePositions(graphV.ActualWidth, graphV.ActualHeight);
         }
 
         public double NamesMargin
@@ -138,7 +138,7 @@ namespace WpfFrontend.View
             GraphV graphV = d as GraphV;
             if (graphV == null) return;
 
-            graphV.GenerateNodePositions();
+            graphV.GenerateNodePositions(graphV.ActualWidth, graphV.ActualHeight);
         }
 
         public double NodeSize
@@ -154,7 +154,7 @@ namespace WpfFrontend.View
             GraphV graphV = d as GraphV;
             if (graphV == null) return;
 
-            graphV.GenerateNodePositions();
+            graphV.GenerateNodePositions(graphV.ActualWidth, graphV.ActualHeight);
         }
 
         public bool ShowGraphEdges
@@ -214,7 +214,7 @@ namespace WpfFrontend.View
             SizeChanged += GraphV_SizeChanged;
         }
 
-        
+
         private void SetAnimation()
         {
             storyBoard?.Stop(Selected);
@@ -271,10 +271,10 @@ namespace WpfFrontend.View
 
         private void GraphV_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            GenerateNodePositions();
+            GenerateNodePositions(e.NewSize.Width, e.NewSize.Height);
         }
 
-        private void GenerateNodePositions()
+        private void GenerateNodePositions(double actualWidth, double actualHeight)
         {
             try
             {
@@ -282,8 +282,8 @@ namespace WpfFrontend.View
 
                 foreach (var node in Nodes.Keys.ToArray())
                 {
-                    Nodes[node] = CalculatePosition(node, NodesMargin);
-                    NodesNames[node] = CalculatePosition(node, NamesMargin);
+                    Nodes[node] = CalculatePosition(node, actualWidth, actualHeight, NodesMargin);
+                    NodesNames[node] = CalculatePosition(node, actualWidth, actualHeight, NamesMargin);
                 }
 
                 // doesnt need to generate new edges
@@ -295,10 +295,10 @@ namespace WpfFrontend.View
             ++ChangeCount;
         }
 
-        private Point CalculatePosition(GraphNodeVM node, double margin)
+        private Point CalculatePosition(GraphNodeVM node, double actualWidth, double actualHeight, double margin)
         {
-            double width = ActualWidth - margin;
-            double height = ActualHeight - margin;
+            double width = actualWidth - margin;
+            double height = actualHeight - margin;
             double rx = width / 2;
             double ry = height / 2;
             double cx = width / 2;

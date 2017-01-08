@@ -129,7 +129,6 @@ namespace WpfFrontend.Model
                 },
                 Mixer = new SimpleMixer(),
             };
-            _Evolutionary.Step();
         }
     }
 }

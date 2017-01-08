@@ -60,6 +60,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Converters\DoubleIsNanConverter.cs" />
+    <Compile Include="Converters\GraphPathToTxt.cs" />
     <Compile Include="Converters\PointScale2.cs" />
     <Compile Include="Converters\PointScale.cs" />
     <Compile Include="Model\Engine.cs" />

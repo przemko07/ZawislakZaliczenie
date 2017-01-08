@@ -83,6 +83,43 @@ namespace WpfFrontend.View
             pfv.CheckF();
         }
 
+        public int[] ParetoIncidies
+        {
+            get { return (int[])GetValue(ParetoIncidiesProperty); }
+            set { SetValue(ParetoIncidiesProperty, value); }
+        }
+        public static readonly DependencyProperty ParetoIncidiesProperty =
+            DependencyProperty.Register("ParetoIncidies", typeof(int[]), typeof(ParetoFrontV), new PropertyMetadata(null));
+
+        public int SelectedIndex
+        {
+            get { return (int)GetValue(SelectedIndexProperty); }
+            set { SetValue(SelectedIndexProperty, value); }
+        }
+        public static readonly DependencyProperty SelectedIndexProperty =
+            DependencyProperty.Register("SelectedIndex", typeof(int), typeof(ParetoFrontV), new PropertyMetadata(0, SelectedIndexChanged));
+        private static void SelectedIndexChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ParetoFrontV v = d as ParetoFrontV;
+            if (v == null) return;
+            if (!v.Generations.Any()) return;
+            if (!v.Generations.Last().Points.Any()) return;
+
+            v.SelectedPoint = v.Generations.Last().Points[(int)e.NewValue];
+        }
+
+        private Point _SelectedPoint;
+        public Point SelectedPoint
+        {
+            get { return _SelectedPoint; }
+            set
+            {
+                _SelectedPoint = value;
+                OnPropertyChanged(nameof(SelectedPoint));
+            }
+        }
+
+
         int maxGen = 10;
         public ObservableCollection<ParetoPointGeneration> Generations { get; } = new ObservableCollection<ParetoPointGeneration>();
         public ObservableCollection<Point> ParetoFront { get; } = new ObservableCollection<Point>();
@@ -165,6 +202,7 @@ namespace WpfFrontend.View
 
             // pareto
             uint[] indicies = ParetoFrontFinder.FindParetoFront(F1, F2);
+            ParetoIncidies = indicies.Select(n => (int)n).ToArray();
             ParetoFront.Clear();
             for (int i = 0; i < indicies.Length; i++)
             {
@@ -179,10 +217,14 @@ namespace WpfFrontend.View
             {
                 byte c = (byte)(255 - ((double)i + 1) / Generations.Count * 255);
                 Generations[i].Color = new SolidColorBrush(Color.FromArgb(255, c, c, c));
-                Generations[i].Size = i == Generations.Count- 1? 8: 4;
+                Generations[i].Size = i == Generations.Count - 1 ? 8 : 4;
             }
 
             RecalculateScale();
+            
+            if (!Generations.Any()) return;
+            if (!Generations.Last().Points.Any()) return;
+            SelectedPoint = Generations.Last().Points[SelectedIndex];
         }
 
         protected override void OnRenderSizeChanged(SizeChangedInfo sizeInfo)

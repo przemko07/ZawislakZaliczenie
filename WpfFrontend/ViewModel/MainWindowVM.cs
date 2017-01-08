@@ -231,6 +231,19 @@ namespace WpfFrontend.ViewModel
             {
                 _GraphPath = value;
                 OnPropertyChanged(nameof(GraphPath));
+
+                switch (GraphPath)
+                {
+                    case GraphPathType.F1Path:
+                        SelectedIndex = BestIndex1;
+                        break;
+                    case GraphPathType.F2Path:
+                        SelectedIndex = BestIndex2;
+                        break;
+                    case GraphPathType.ParetoPath:
+                        SelectedIndex = ParetoIncidies[SelectedParetoIndex];
+                        break;
+                }
             }
         }
 
@@ -247,6 +260,82 @@ namespace WpfFrontend.ViewModel
             }
         }
 
+        private uint[] _ParetoIncidies = new uint[0];
+        public uint[] ParetoIncidies
+        {
+            get { return _ParetoIncidies; }
+            set
+            {
+                _ParetoIncidies = value;
+                OnPropertyChanged(nameof(ParetoIncidies));
+                _ParetoPath = null;
+                OnPropertyChanged(nameof(SelectedParetoPath));
+            }
+        }
+
+        private ObservableCollection<GraphVM> _ParetoPath = null;
+        public ObservableCollection<GraphVM> ParetoPath
+        {
+            get
+            {
+                if (_ParetoPath == null)
+                {
+                    _ParetoPath = new ObservableCollection<GraphVM>(ParetoIncidies.Select(n => GraphFactory.GeneratePath(Graph, engine.Evolutionary.Individuals[n])));
+                    MaxParetoIndex = (uint)(_ParetoPath.Count - 1);
+                }
+                return _ParetoPath;
+            }
+        }
+
+        private uint _MaxParetoIndex = 0;
+        public uint MaxParetoIndex
+        {
+            get { return _MaxParetoIndex; }
+            set
+            {
+                _MaxParetoIndex = value;
+                OnPropertyChanged(nameof(MaxParetoIndex));
+            }
+        }
+
+
+        private uint _SelectedParetoIndex = 0;
+        public uint SelectedParetoIndex
+        {
+            get { return _SelectedParetoIndex; }
+            set
+            {
+                _SelectedParetoIndex = value;
+                OnPropertyChanged(nameof(SelectedParetoIndex));
+                if (value >= ParetoIncidies.Count()) value = (uint)(ParetoIncidies.Length - 1);
+                SelectedParetoPath = ParetoPath[(int)value];
+                SelectedIndex = ParetoIncidies[value];
+            }
+        }
+
+        private GraphVM _SelectedParetoPath = null;
+        public GraphVM SelectedParetoPath
+        {
+            get
+            {
+                try
+                {
+                    if (_SelectedParetoPath == null && SelectedParetoIndex < ParetoPath.Count)
+                    {
+                        _SelectedParetoPath = ParetoPath[(int)SelectedParetoIndex];
+                    }
+                }
+                catch
+                {
+                }
+                return _SelectedParetoPath;
+            }
+            set
+            {
+                _SelectedParetoPath = value;
+                OnPropertyChanged(nameof(SelectedParetoPath));
+            }
+        }
 
         private GraphVM _Graph1Path;
         public GraphVM Graph1Path
@@ -284,6 +373,17 @@ namespace WpfFrontend.ViewModel
             }
         }
 
+        private uint _SelectedIndex = 0;
+        public uint SelectedIndex
+        {
+            get { return _SelectedIndex; }
+            set
+            {
+                _SelectedIndex = value;
+                OnPropertyChanged(nameof(SelectedIndex));
+            }
+        }
+
 
         public ObservableCollection<Point> Plot1 { get; } = new ObservableCollection<Point>();
         public ObservableCollection<Point> Plot2 { get; } = new ObservableCollection<Point>();
@@ -303,8 +403,22 @@ namespace WpfFrontend.ViewModel
                     OnPropertyChanged(nameof(BestIndex2));
                     OnPropertyChanged(nameof(BestIndividual1));
                     OnPropertyChanged(nameof(BestIndividual2));
-                    Graph1Path = null;
-                    Graph2Path = null;
+                    Graph1Path = null; // in a getter im getting the current best
+                    Graph2Path = null; // in a getter im getting the current best
+
+
+                    switch (GraphPath)
+                    {
+                        case GraphPathType.F1Path:
+                            SelectedIndex = BestIndex1;
+                            break;
+                        case GraphPathType.F2Path:
+                            SelectedIndex = BestIndex2;
+                            break;
+                        case GraphPathType.ParetoPath:
+                            SelectedIndex = ParetoIncidies[SelectedParetoIndex];
+                            break;
+                    }
                 });
             }
         }
@@ -360,7 +474,7 @@ namespace WpfFrontend.ViewModel
         {
             BindingOperations.EnableCollectionSynchronization(Plot1, Plot1);
             BindingOperations.EnableCollectionSynchronization(Plot2, Plot2);
-
+            EvoStep.Execute(null);
         }
     }
 }

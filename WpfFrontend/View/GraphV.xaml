@@ -88,7 +88,6 @@
                                         </MultiBinding>
                                     </LineGeometry.EndPoint>
                                 </LineGeometry>
-
                             </Path.Data>
                         </Path>
                     </Canvas>

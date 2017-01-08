@@ -7,8 +7,21 @@
         xmlns:local="clr-namespace:WpfFrontend"
         xmlns:view="clr-namespace:WpfFrontend.View"
         xmlns:viewmodel="clr-namespace:WpfFrontend.ViewModel"
+        xmlns:conv="clr-namespace:WpfFrontend.Converters"
         mc:Ignorable="d"
         Title="TSP" Height="350" Width="525">
+    
+    <Window.Resources>
+        <Style TargetType="TextBlock" x:Key="graphPath">
+            <Setter Property="FontSize" Value="24"/>
+            <Setter Property="FontWeight" Value="Black"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="2, 4"/>
+        </Style>
+
+        <conv:GraphPathToTxt x:Key="GraphPathToTxt"/>
+    </Window.Resources>
 
     <Grid>
         <Grid.RowDefinitions>
@@ -24,7 +37,7 @@
                     <Setter Property="RenderOptions.BitmapScalingMode" Value="HighQuality"/>
                 </Style>
             </ToolBar.Resources>
-            
+
             <Button Command="{Binding ShowSettings}">
                 <Image Source="/Resources/Images/settings.png"/>
             </Button>
@@ -56,15 +69,10 @@
 
                 <ComboBox Grid.Row="0" SelectedItem="{Binding GraphPath}" ItemsSource="{Binding GraphPathOptions}"/>
 
-                <view:GraphV Grid.Row="1"
-                         Graph="{Binding Graph}"
-                         GraphPath="{Binding Graph1Path}"
-                         NodeSize="{Binding NodeSize}"
-                         NodesMargin="{Binding NodesMargin}"
-                         NamesMargin="{Binding NamesMargin}" 
-                         ShowGraphEdges="{Binding ShowGraphEdges}">
-                    <view:GraphV.Style>
-                        <Style TargetType="view:GraphV">
+                <!-- Best F1 -->
+                <DockPanel Grid.Row="1">
+                    <DockPanel.Style>
+                        <Style TargetType="DockPanel">
                             <Setter Property="Visibility" Value="Hidden"/>
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding GraphPath}" Value="{x:Static viewmodel:MainWindowVM+GraphPathType.F1Path}">
@@ -72,26 +80,31 @@
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
-                    </view:GraphV.Style>
-                    <ext:DataPiping.DataPipes>
-                        <ext:DataPipeCollection>
-                            <ext:DataPipe Source="{Binding Path=ActualWidth, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type view:GraphV}}}"
-                                  Target="{Binding Path=WindowWidth, Mode=OneWayToSource}"/>
-                            <ext:DataPipe Source="{Binding Path=ActualHeight, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type view:GraphV}}}"
-                                  Target="{Binding Path=WindowHeight, Mode=OneWayToSource}"/>
-                        </ext:DataPipeCollection>
-                    </ext:DataPiping.DataPipes>
-                </view:GraphV>
+                    </DockPanel.Style>
 
-                <view:GraphV Grid.Row="1"
+                    <TextBlock DockPanel.Dock="Bottom" Text="{Binding Graph1Path, Converter={StaticResource GraphPathToTxt}}" Style="{StaticResource graphPath}"/>
+                    <view:GraphV DockPanel.Dock="Top"
                          Graph="{Binding Graph}"
-                         GraphPath="{Binding Graph2Path}"
+                         GraphPath="{Binding Graph1Path}"
                          NodeSize="{Binding NodeSize}"
                          NodesMargin="{Binding NodesMargin}"
-                         NamesMargin="{Binding NamesMargin}" 
-                         ShowGraphEdges="False">
-                    <view:GraphV.Style>
-                        <Style TargetType="view:GraphV">
+                         NamesMargin="{Binding NamesMargin}"
+                         ShowGraphEdges="{Binding ShowGraphEdges}">
+                        <ext:DataPiping.DataPipes>
+                            <ext:DataPipeCollection>
+                                <ext:DataPipe Source="{Binding Path=ActualWidth, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type view:GraphV}}}"
+                                  Target="{Binding Path=WindowWidth, Mode=OneWayToSource}"/>
+                                <ext:DataPipe Source="{Binding Path=ActualHeight, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type view:GraphV}}}"
+                                  Target="{Binding Path=WindowHeight, Mode=OneWayToSource}"/>
+                            </ext:DataPipeCollection>
+                        </ext:DataPiping.DataPipes>
+                    </view:GraphV>
+                </DockPanel>
+
+                <!-- Best F2 -->
+                <DockPanel Grid.Row="1">
+                    <DockPanel.Style>
+                        <Style TargetType="DockPanel">
                             <Setter Property="Visibility" Value="Hidden"/>
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding GraphPath}" Value="{x:Static viewmodel:MainWindowVM+GraphPathType.F2Path}">
@@ -99,21 +112,68 @@
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
-                    </view:GraphV.Style>
-                    <ext:DataPiping.DataPipes>
-                        <ext:DataPipeCollection>
-                            <ext:DataPipe Source="{Binding Path=ActualWidth, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type view:GraphV}}}"
-                                  Target="{Binding Path=WindowWidth, Mode=OneWayToSource}"/>
-                            <ext:DataPipe Source="{Binding Path=ActualHeight, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type view:GraphV}}}"
-                                  Target="{Binding Path=WindowHeight, Mode=OneWayToSource}"/>
-                        </ext:DataPipeCollection>
-                    </ext:DataPiping.DataPipes>
-                </view:GraphV>
+                    </DockPanel.Style>
 
-                <view:XYPlotV Grid.Row="2" Plot1="{Binding Plot1}" Plot2="{Binding Plot2}"/>
+                    <TextBlock DockPanel.Dock="Bottom" Text="{Binding Graph2Path, Converter={StaticResource GraphPathToTxt}}" Style="{StaticResource graphPath}"/>
+                    <view:GraphV DockPanel.Dock="Top"
+                         Graph="{Binding Graph}"
+                         GraphPath="{Binding Graph2Path}"
+                         NodeSize="{Binding NodeSize}"
+                         NodesMargin="{Binding NodesMargin}"
+                         NamesMargin="{Binding NamesMargin}"
+                         ShowGraphEdges="{Binding ShowGraphEdges}">
+                        <ext:DataPiping.DataPipes>
+                            <ext:DataPipeCollection>
+                                <ext:DataPipe Source="{Binding Path=ActualWidth, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type view:GraphV}}}"
+                                  Target="{Binding Path=WindowWidth, Mode=OneWayToSource}"/>
+                                <ext:DataPipe Source="{Binding Path=ActualHeight, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type view:GraphV}}}"
+                                  Target="{Binding Path=WindowHeight, Mode=OneWayToSource}"/>
+                            </ext:DataPipeCollection>
+                        </ext:DataPiping.DataPipes>
+                    </view:GraphV>
+                </DockPanel>
+
+                <!-- Best Pareto -->
+                <DockPanel Grid.Row="1">
+                    <DockPanel.Style>
+                        <Style TargetType="DockPanel">
+                            <Setter Property="Visibility" Value="Hidden"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding GraphPath}" Value="{x:Static viewmodel:MainWindowVM+GraphPathType.ParetoPath}">
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DockPanel.Style>
+
+                    <Slider DockPanel.Dock="Top" Minimum="0" Margin="2, 4" TickPlacement="BottomRight" 
+                            Maximum="{Binding MaxParetoIndex}" Value="{Binding SelectedParetoIndex}" />
+                    <TextBlock DockPanel.Dock="Bottom" Text="{Binding SelectedParetoPath, Converter={StaticResource GraphPathToTxt}}" Style="{StaticResource graphPath}"/>
+                    
+                    <view:GraphV DockPanel.Dock="Top"
+                         Graph="{Binding Graph}"
+                         GraphPath="{Binding SelectedParetoPath}"
+                         NodeSize="{Binding NodeSize}"
+                         NodesMargin="{Binding NodesMargin}"
+                         NamesMargin="{Binding NamesMargin}"
+                         ShowGraphEdges="{Binding ShowGraphEdges}">
+                        <ext:DataPiping.DataPipes>
+                            <ext:DataPipeCollection>
+                                <ext:DataPipe Source="{Binding Path=ActualWidth, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type view:GraphV}}}"
+                                  Target="{Binding Path=WindowWidth, Mode=OneWayToSource}"/>
+                                <ext:DataPipe Source="{Binding Path=ActualHeight, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type view:GraphV}}}"
+                                  Target="{Binding Path=WindowHeight, Mode=OneWayToSource}"/>
+                            </ext:DataPipeCollection>
+                        </ext:DataPiping.DataPipes>
+                    </view:GraphV>
+                </DockPanel>
+                
+                <view:XYPlotV Grid.Row="4" Plot1="{Binding Plot1}" Plot2="{Binding Plot2}"/>
             </Grid>
 
             <view:ParetoFrontV Grid.Column="1"
+                               SelectedIndex="{Binding DataContext.SelectedIndex, Mode=TwoWay, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
+                               ParetoIncidies="{Binding DataContext.ParetoIncidies, Mode=TwoWay, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
                                F1="{Binding DataContext.Fitness1, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
                                F2="{Binding DataContext.Fitness2, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"/>
 

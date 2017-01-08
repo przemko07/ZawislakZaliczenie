@@ -47,7 +47,7 @@
                 </Grid.RenderTransform>
 
                 <Grid x:Name="Plots">
-                    <ItemsControl ItemsSource="{Binding Generations}">
+                    <ItemsControl ItemsSource="{Binding Generations}" Panel.ZIndex="100">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
                                 <ItemsControl ItemsSource="{Binding Points}">
@@ -81,7 +81,7 @@
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
 
-                    <ItemsControl ItemsSource="{Binding ParetoFront}">
+                    <ItemsControl ItemsSource="{Binding ParetoFront}" Panel.ZIndex="100">
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <Canvas/>
@@ -89,9 +89,7 @@
                         </ItemsControl.ItemsPanel>
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <Path StrokeThickness="2"
-                                  Stroke="Yellow"
-                                  Fill="Red">
+                                <Path StrokeThickness="2" Stroke="Yellow" Fill="Red">
                                     <Path.ToolTip>
                                         <ToolTip>
                                             <TextBlock Text="{Binding .}"/>
@@ -112,6 +110,22 @@
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
+
+                    <Canvas Panel.ZIndex="0">
+                        <Path StrokeThickness="0" Fill="Yellow">
+                            <Path.Data>
+                                <EllipseGeometry RadiusX="15" RadiusY="15">
+                                    <EllipseGeometry.Center>
+                                        <MultiBinding Converter="{StaticResource PointScale}">
+                                            <Binding Path="SelectedPoint"/>
+                                            <Binding Path="Data.ScaleX" Source="{StaticResource UserContext}"/>
+                                            <Binding Path="Data.ScaleY" Source="{StaticResource UserContext}"/>
+                                        </MultiBinding>
+                                    </EllipseGeometry.Center>
+                                </EllipseGeometry>
+                            </Path.Data>
+                        </Path>
+                    </Canvas>
                 </Grid>
             </Grid>
         </Border>
@@ -119,13 +133,22 @@
         <DockPanel Grid.Column="0" Grid.Row="0">
             <TextBlock DockPanel.Dock="Top" Margin="3" Text="{Binding Y1, StringFormat={}{0,3:N1}}"/>
             <TextBlock DockPanel.Dock="Bottom" Margin="3" Text="{Binding Y0, StringFormat={}{0,3:N1}}"/>
-            <Grid/>
+            <StackPanel DockPanel.Dock="Top" VerticalAlignment="Center" Orientation="Horizontal">
+                <StackPanel.LayoutTransform>
+                    <RotateTransform Angle="90"/>
+                </StackPanel.LayoutTransform>
+                <TextBlock Text="F1" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="16"/>
+                <Rectangle Width="50" Height="25" Fill="Red"/>
+            </StackPanel>
         </DockPanel>
 
         <DockPanel Grid.Column="1" Grid.Row="1">
             <TextBlock DockPanel.Dock="Left" Margin="3" Text="{Binding X0, StringFormat={}{0,3:N1}}"/>
             <TextBlock DockPanel.Dock="Right" Margin="3" Text="{Binding X1, StringFormat={}{0,3:N1}}"/>
-            <Grid/>
+            <StackPanel DockPanel.Dock="Top" HorizontalAlignment="Center" Orientation="Horizontal">
+                <TextBlock Text="F2" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="16"/>
+                <Rectangle Width="50" Height="25" Fill="Blue"/>
+            </StackPanel>
         </DockPanel>
     </Grid>
 </UserControl>

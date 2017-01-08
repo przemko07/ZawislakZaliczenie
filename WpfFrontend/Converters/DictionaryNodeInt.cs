@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -23,14 +24,17 @@ namespace WpfFrontend.Converters
             if (values[1] == null) return null;
             GraphNodeVM node = values[1] as GraphNodeVM;
             if (node == null) return null;
+            if (!nodes.Any()) return null;
+
 
             try
             {
                 var tmp = nodes[node];
                 return tmp.ToString();
             }
-            catch
+            catch(Exception e)
             {
+                Trace.WriteLine(e);
                 return null;
             }
         }

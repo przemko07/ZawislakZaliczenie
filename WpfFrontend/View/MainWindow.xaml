@@ -19,7 +19,7 @@
             <Setter Property="HorizontalAlignment" Value="Center"/>
             <Setter Property="Margin" Value="2, 4"/>
         </Style>
-
+        <conv:DebugConverter x:Key="DebugConverter"/>
         <conv:GraphPathToTxt x:Key="GraphPathToTxt"/>
     </Window.Resources>
 

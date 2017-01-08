@@ -25,18 +25,10 @@ namespace WpfFrontend.Converters
             GraphNodeVM node = values[1] as GraphNodeVM;
             if (node == null) return null;
             if (!nodes.Any()) return null;
+            if (!nodes.ContainsKey(node)) return null;
 
-
-            try
-            {
-                var tmp = nodes[node];
-                return tmp.ToString();
-            }
-            catch(Exception e)
-            {
-                Trace.WriteLine(e);
-                return null;
-            }
+            var tmp = nodes[node];
+            return tmp.ToString();
         }
 
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)

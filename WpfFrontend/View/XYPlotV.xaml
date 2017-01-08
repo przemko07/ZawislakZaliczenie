@@ -88,7 +88,7 @@
                         </Style>
                     </Path.Style>
                     <Path.Data>
-                        <EllipseGeometry RadiusX="4" RadiusY="4">
+                        <EllipseGeometry RadiusX="8" RadiusY="8">
                             <EllipseGeometry.Center>
                                 <MultiBinding Converter="{StaticResource PointScale2}">
                                     <Binding Path="Data.MousePlotX" Source="{StaticResource UserContext}"/>
@@ -115,7 +115,7 @@
                         </Style>
                     </Path.Style>
                     <Path.Data>
-                        <EllipseGeometry RadiusX="4" RadiusY="4">
+                        <EllipseGeometry RadiusX="8" RadiusY="8">
                             <EllipseGeometry.Center>
                                 <MultiBinding Converter="{StaticResource PointScale2}">
                                     <Binding Path="Data.MousePlotX" Source="{StaticResource UserContext}"/>

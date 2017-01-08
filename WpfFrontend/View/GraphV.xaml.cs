@@ -53,18 +53,22 @@ namespace WpfFrontend.View
 
             graphV.Nodes.Clear();
             graphV.Edges.Clear();
+            graphV.NodesNames.Clear();
+            graphV.EdgesPath.Clear();
+            graphV.NodesPathOrder.Clear();
 
             if (graphV.Graph == null) return;
 
             graphV.positioner = new CircleGraphPositioner(graphV.Graph);
 
-
+            double actualWidth = graphV.ActualWidth;
+            double actualHeight = graphV.ActualHeight;
             try
             {
                 foreach (var node in graphV.Graph.Nodes)
                 {
-                    graphV.Nodes[node] = graphV.CalculatePosition(node, graphV.NodesMargin, graphV.ActualWidth, graphV.ActualHeight);
-                    graphV.NodesNames[node] = graphV.CalculatePosition(node, graphV.NamesMargin, graphV.ActualWidth, graphV.ActualHeight);
+                    graphV.Nodes[node] = graphV.CalculatePosition(node, graphV.NodesMargin, actualWidth, actualHeight);
+                    graphV.NodesNames[node] = graphV.CalculatePosition(node, graphV.NamesMargin, actualWidth, actualHeight);
                 }
 
                 foreach (var edge in graphV.Graph.Edges)
@@ -282,8 +286,8 @@ namespace WpfFrontend.View
 
                 foreach (var node in Nodes.Keys.ToArray())
                 {
-                    Nodes[node] = CalculatePosition(node, actualWidth, actualHeight, NodesMargin);
-                    NodesNames[node] = CalculatePosition(node, actualWidth, actualHeight, NamesMargin);
+                    Nodes[node] = CalculatePosition(node, NodesMargin, actualWidth, actualHeight);
+                    NodesNames[node] = CalculatePosition(node, NamesMargin, actualWidth, actualHeight);
                 }
 
                 // doesnt need to generate new edges
@@ -295,7 +299,7 @@ namespace WpfFrontend.View
             ++ChangeCount;
         }
 
-        private Point CalculatePosition(GraphNodeVM node, double actualWidth, double actualHeight, double margin)
+        private Point CalculatePosition(GraphNodeVM node, double margin, double actualWidth, double actualHeight)
         {
             double width = actualWidth - margin;
             double height = actualHeight - margin;

@@ -46,8 +46,8 @@
             </ItemsControl.Resources>
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <UniformGrid Rows="{Binding Matrix.Rows, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}"
-                                 Columns="{Binding Matrix.Cols, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}"/>
+                    <UniformGrid Rows="{Binding Matrix.ViewRows, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}"
+                                 Columns="{Binding Matrix.ViewCols, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}"/>
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
         </ItemsControl>
@@ -87,8 +87,8 @@
             </ItemsControl.Resources>
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <UniformGrid Rows="{Binding Matrix.Rows, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}"
-                                 Columns="{Binding Matrix.Cols, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}"/>
+                    <UniformGrid Rows="{Binding Matrix.ViewRows, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}"
+                                 Columns="{Binding Matrix.ViewCols, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}"/>
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
         </ItemsControl>

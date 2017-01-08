@@ -39,6 +39,7 @@ namespace Model
 
         void Cross()
         {
+            newIndividuals = new Individual[individuals.Length];
             if (CrossOver == null || Selection == null) return;
 
             int length = Selection.Selected.Length % 2 == 0 ? Selection.Selected.Length : Selection.Selected.Length - 1;
@@ -50,17 +51,15 @@ namespace Model
                 CrossOver.Cross(
                     individuals[Selection.Selected[i]],
                     individuals[Selection.Selected[i + 1]]);
-                newIndividuals[i] = CrossOver.Offspring1.Clone();
-                newIndividuals[i + 1] = CrossOver.Offspring2.Clone();
-                index += 2;
+                newIndividuals[index++] = CrossOver.Offspring1.Clone();
+                newIndividuals[index++] = CrossOver.Offspring2.Clone();
             }
 
             // Parents
             for (int i = 0; i < length; i += 2)
             {
-                newIndividuals[i + length] = individuals[Selection.Selected[i]].Clone();
-                newIndividuals[i + 1 + length] = individuals[Selection.Selected[i + 1]].Clone();
-                index += 2;
+                newIndividuals[index++] = individuals[Selection.Selected[i]].Clone();
+                newIndividuals[index++] = individuals[Selection.Selected[i + 1]].Clone();
             }
 
             // XXX: for safety

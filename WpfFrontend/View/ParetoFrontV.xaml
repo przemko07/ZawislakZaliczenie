@@ -62,8 +62,8 @@
                                                   Stroke="Yellow"
                                                   Fill="{Binding DataContext.Color, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl, AncestorLevel=1}}">
                                                 <Path.Data>
-                                                    <EllipseGeometry RadiusX="{Binding DataContext.Size, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl, AncestorLevel=1}}"
-                                                                     RadiusY="{Binding DataContext.Size, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl, AncestorLevel=1}}">
+                                                    <EllipseGeometry RadiusX="{Binding DataContext.Size, RelativeSource={RelativeSource  AncestorLevel=1, Mode=FindAncestor, AncestorType=ItemsControl}}"
+                                                                     RadiusY="{Binding DataContext.Size, RelativeSource={RelativeSource  AncestorLevel=1, Mode=FindAncestor, AncestorType=ItemsControl}}">
                                                         <EllipseGeometry.Center>
                                                             <MultiBinding Converter="{StaticResource PointScale}">
                                                                 <Binding Path="."/>

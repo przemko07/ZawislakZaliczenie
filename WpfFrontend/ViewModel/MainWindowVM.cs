@@ -181,9 +181,12 @@ namespace WpfFrontend.ViewModel
                         Width = 800,
                         Height = 640,
                     }.ShowDialog();
-                    Graph = null;
-                    Graph1Path = null;
-                    Graph2Path = null;
+                    _Graph = null;
+                    _Graph1Path = null;
+                    _Graph2Path = null;
+                    OnPropertyChanged(nameof(Graph));
+                    OnPropertyChanged(nameof(Graph1Path));
+                    OnPropertyChanged(nameof(Graph2Path));
                 });
             }
         }

@@ -40,6 +40,7 @@ namespace Model
         void Cross()
         {
             newIndividuals = new Individual[individuals.Length];
+
             if (CrossOver == null || Selection == null) return;
 
             int length = Selection.Selected.Length % 2 == 0 ? Selection.Selected.Length : Selection.Selected.Length - 1;

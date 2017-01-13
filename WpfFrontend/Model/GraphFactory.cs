@@ -67,10 +67,12 @@ namespace WpfFrontend.Model
 
             for (uint i = 1; i < individual.Length; i++)
             {
+                var b = (int)individual[i];
+                var p = (int)individual[i - 1];
                 var edge = new GraphEdgeVM()
                 {
-                    Begin = graph.Nodes[(int)individual[i - 1]],
-                    End = graph.Nodes[(int)individual[i]],
+                    Begin = graph.Nodes[p],
+                    End = graph.Nodes[b],
                 };
                 path.Edges.Add(edge);
             }

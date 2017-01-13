@@ -9,7 +9,6 @@ namespace WpfFrontend.ViewModel
     public class GraphEdgeVM
     {
         public string Name { get; set; } = null;
-        public double Wage { get; set; } = 0.0;
         public GraphNodeVM Begin { get; set; } = null;
         public GraphNodeVM End { get; set; } = null;
 

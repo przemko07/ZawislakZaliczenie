@@ -298,8 +298,14 @@ namespace WpfFrontend.ViewModel
             {
                 if (_ParetoPath == null)
                 {
-                    _ParetoPath = new ObservableCollection<GraphPathVM>(ParetoIncidies
-                        .Select(n => GraphFactory.GeneratePath(Graph, engine.Evolutionary.Individuals[n])));
+                    try
+                    {
+                        _ParetoPath = new ObservableCollection<GraphPathVM>(ParetoIncidies
+                            .Select(n => GraphFactory.GeneratePath(Graph, engine.Evolutionary.Individuals[n])));
+                    }
+                    catch (Exception e)
+                    {
+                    }
                 }
                 return _ParetoPath;
             }
@@ -325,7 +331,7 @@ namespace WpfFrontend.ViewModel
         {
             get
             {
-                if (_SelectedParetoPath == null && SelectedParetoIndex < ParetoPath.Count)
+                if (ParetoPath != null && _SelectedParetoPath == null && SelectedParetoIndex < ParetoPath.Count)
                 {
                     _SelectedParetoPath = ParetoPath[(int)SelectedParetoIndex];
                     _SelectedParetoPath.Name = "_SelectedParetoPath";
@@ -434,6 +440,18 @@ namespace WpfFrontend.ViewModel
             }
         }
 
+        private int _CurrentStep = 0;
+        public int CurrentStep
+        {
+            get { return _CurrentStep; }
+            set
+            {
+                _CurrentStep = value;
+                OnPropertyChanged(nameof(CurrentStep));
+            }
+        }
+
+
         bool stops = false;
         public ActionCommand EvoMultiSteps
         {
@@ -441,15 +459,23 @@ namespace WpfFrontend.ViewModel
             {
                 return new ActionCommand(() =>
                 {
+                    if (MultiStepsCount > 20)
+                    {
+                        var opti = MessageBox.Show("This ammount of steps will slow down application. Do you want to optimalize view part?", "Optimalize", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                        engine.Optimalize = opti == MessageBoxResult.Yes;
+                    }
                     Thread.Sleep(100);
                     Task.Run(() =>
                     {
+                        CurrentStep = 0;
                         for (int i = 0; i < MultiStepsCount - 1; i++)
                         {
+                            ++CurrentStep;
                             if (stops) { stops = false; return; }
                             Thread.Sleep(50);
                             EvoStep.Execute(engine.Optimalize);
                         }
+                        ++CurrentStep;
                         if (stops) { stops = false; return; }
                         EvoStep.Execute(null);
                     });
@@ -487,6 +513,7 @@ namespace WpfFrontend.ViewModel
                                 F2 = engine.Matrix2,
                                 Individuals = engine.Evolutionary.Individuals,
                                 PopSize = engine.IndividualsLength,
+                                Mutation = engine.Mutation,
                             };
 
                             SettingsXml.Write(s, ofd.FileName);

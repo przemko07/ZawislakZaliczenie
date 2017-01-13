@@ -68,6 +68,8 @@
             <Button Command="{Binding InfoCommand}" ToolTip="Info">
                 <Image Source="/Resources/Images/info.png"/>
             </Button>
+
+            <ProgressBar Width="150" Minimum="0" Maximum="{Binding MultiStepsCount}" Value="{Binding CurrentStep}"/>
         </ToolBar>
 
         <Grid Grid.Row="1">

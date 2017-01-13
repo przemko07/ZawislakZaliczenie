@@ -88,7 +88,7 @@ namespace WpfFrontend.View
             NodesPathOrder.Clear();
 
             if (Graph == null) return;
-            
+
             positioner = new CircleGraphPositioner(Graph);
 
             double actualWidth = ActualWidth;

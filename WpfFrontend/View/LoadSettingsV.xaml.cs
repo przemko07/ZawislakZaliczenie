@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -75,26 +76,26 @@ namespace WpfFrontend.View
                 OnPropertyChanged(nameof(Path));
             }
         }
-        
+
         public Engine engine;
 
-        public void LoadSettingsFile()
+        private void LoadSettingsFile()
         {
-            SettingsXml s = null;
-            try
-            {
-                s = SettingsXml.Load(Path);
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show($"Error during loading xml->{e}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
-            }
+            SettingsXml s = SettingsXml.Load(Path);
+            if (s.F1.Empty) throw new Exception("F1 matrix empty");
+            if (s.F2.Empty) throw new Exception("F2 matrix empty");
+            if (s.F1.Cols != s.F1.Rows) throw new Exception("F1 matrix must be a square matrix");
+            if (s.F2.Cols != s.F2.Rows) throw new Exception("F2 matrix must be a square matrix");
+            if (s.F1.Cols != s.F2.Cols) throw new Exception("F1 must be the same size as F2");
+
+            uint oldCols = engine.Matrix1.Cols;
+
             if (LoadMatricies)
             {
                 engine.Matrix1 = s.F1;
                 engine.Matrix2 = s.F2;
                 engine.NodesCount = s.F1.Cols;
+                engine.Mutation = s.Mutation;
             }
 
             if (LoadPopSize)
@@ -108,9 +109,9 @@ namespace WpfFrontend.View
             }
             else
             {
-                if (engine.Matrix1.Cols != s.F1.Cols)
+                if (oldCols != s.F1.Cols)
                 {
-                    throw new Exception("Cannot leave old population, NodesCount changed.");
+                    throw new Exception("Cannot leave old population, matricies size are different");
                 }
 
                 var copy = engine.Evolutionary.Individuals.ToArray();
@@ -153,9 +154,17 @@ namespace WpfFrontend.View
             {
                 return new ActionCommand(() =>
                 {
-                    LoadSettingsFile();
-                    OnLoadCommand?.Invoke();
-                    Close();
+                    try
+                    {
+                        LoadSettingsFile();
+                        OnLoadCommand?.Invoke();
+                        Close();
+                    }
+                    catch (Exception e)
+                    {
+                        Trace.WriteLine(e.ToString());
+                        MessageBox.Show(e.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
                 });
             }
         }

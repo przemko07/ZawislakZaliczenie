@@ -44,6 +44,7 @@ namespace WpfFrontend.View
             t.Matrix2 = new MatrixVM(t.EvoEngine.Matrix2);
             t.PopSize = t.EvoEngine.IndividualsLength;
             t.NodesCount = t.EvoEngine.NodesCount;
+            t.Mutation = t.EvoEngine.Mutation;
             t.Optimalize = t.EvoEngine.Optimalize;
             t.wasChange = false;
         }
@@ -83,6 +84,34 @@ namespace WpfFrontend.View
                 wasChange = true;
             }
         }
+
+        public class IND
+        {
+            public uint index { get; set; }
+            public string value { get; set; }
+        }
+
+        private IND[] _Individuals;
+        public IND[] Individuals
+        {
+            get
+            {
+                if (_Individuals == null)
+                {
+                    _Individuals = new IND[EvoEngine.IndividualsLength];
+                    for (uint i = 0; i < EvoEngine.IndividualsLength; i++)
+                    {
+                        _Individuals[i] = new IND()
+                        {
+                            index = i,
+                            value = EvoEngine.Evolutionary.Individuals[i].ToString()
+                        };
+                    }
+                }
+                return _Individuals;
+            }
+        }
+
         private void _Matrix_MatrixChanged(object sender, EventArgs e)
         {
             wasChange = true;
@@ -122,6 +151,18 @@ namespace WpfFrontend.View
                 wasChange = true;
             }
         }
+
+        private double _Mutation;
+        public double Mutation
+        {
+            get { return _Mutation; }
+            set
+            {
+                _Mutation = value;
+                OnPropertyChanged(nameof(Mutation));
+            }
+        }
+
 
         private bool _Optimalize;
         public bool Optimalize

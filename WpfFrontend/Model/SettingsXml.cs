@@ -35,6 +35,9 @@ namespace WpfFrontend.Model
 
         public uint PopSize { get; set; }
 
+        [XmlElement("Mutation")]
+        public double Mutation { get; set; }
+
         [XmlElement("Individuals")]
         public string[] TxtIndividuals { get; set; }
 

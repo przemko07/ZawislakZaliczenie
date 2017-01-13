@@ -17,6 +17,7 @@ namespace WpfFrontend.Model
         private static int _m1ValuesTo = 100;
         private static int _m2ValuesFrom = 0;
         private static int _m2ValuesTo = 100;
+        private static double _mutation = 0.15;
 
         private Matrix? _Matrix1;
         public Matrix Matrix1
@@ -86,6 +87,21 @@ namespace WpfFrontend.Model
             }
         }
 
+        private double? _Mutation;
+        public double Mutation
+        {
+            get
+            {
+                if (_Mutation == null)
+                {
+                    _Mutation = _mutation;
+                }
+                return _Mutation.Value;
+            }
+            set { _mutation = value; }
+        }
+        
+
         private DoubleEvolutionary _Evolutionary;
         public DoubleEvolutionary Evolutionary
         {
@@ -112,21 +128,23 @@ namespace WpfFrontend.Model
 
         public void ReCreateEvolutionary()
         {
+            var individuals = PermutationFactory.GenerateIndividuals(IndividualsLength, NodesCount, true);
+
             _Evolutionary = new DoubleEvolutionary()
             {
-                Evo1 = new Evolutionary(PermutationFactory.GenerateIndividuals(IndividualsLength / 2, NodesCount, true))
+                Evo1 = new Evolutionary(individuals.Take((int)IndividualsLength / 2).ToArray())
                 {
                     FitnessCalc = new MatrixFitnessCalc(Matrix1),
                     Selection = new TournamentSelection(2),
                     CrossOver = new CrossOverOX(),
-                    Mutation = new SimpleMutation(0.15) // 5%
+                    Mutation = new SimpleMutation(Mutation)
                 },
-                Evo2 = new Evolutionary(PermutationFactory.GenerateIndividuals(IndividualsLength / 2 + IndividualsLength % 2, NodesCount, true))
+                Evo2 = new Evolutionary(individuals.Skip((int)IndividualsLength / 2).ToArray())
                 {
                     FitnessCalc = new MatrixFitnessCalc(Matrix2),
                     Selection = new TournamentSelection(2),
                     CrossOver = new CrossOverOX(),
-                    Mutation = new SimpleMutation(0.15) // 5%
+                    Mutation = new SimpleMutation(Mutation)
                 },
                 Mixer = new SimpleMixer(),
             };

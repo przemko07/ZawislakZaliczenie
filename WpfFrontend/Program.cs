@@ -20,9 +20,16 @@ namespace WpfFrontend
         [STAThread]
         public static void Main(string[] args)
         {
+            MainWindow mainWindow = null;
             try
             {
-                _Main(args);
+                Application app = new Application();
+
+                MainWindowVM context = new MainWindowVM();
+
+                mainWindow = new MainWindow(context);
+
+                app.Run(mainWindow);
             }
             catch (Exception e)
             {
@@ -38,17 +45,10 @@ namespace WpfFrontend
                     Trace.WriteLine(e2);
                 }
             }
-        }
-
-        private static void _Main(string[] args)
-        {
-            Application app = new Application();
-
-            MainWindowVM context = new MainWindowVM();
-
-            MainWindow mainWindow = new MainWindow(context);
-
-            app.Run(mainWindow);
+            finally
+            {
+                mainWindow?.Close();
+            }
         }
     }
 }

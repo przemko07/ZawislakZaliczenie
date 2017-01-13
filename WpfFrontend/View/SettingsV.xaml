@@ -69,8 +69,7 @@
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
+                <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
             <TextBlock Grid.Column="0" Grid.Row="0" Text="Population size:"/>
@@ -79,8 +78,24 @@
             <TextBlock Grid.Column="0" Grid.Row="1" Text="Nodes Count:"/>
             <TextBox Grid.Column="1" Grid.Row="1" Text="{Binding NodesCount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
-            <TextBlock Grid.Column="0" Grid.Row="2" Text="Optimalize view:"/>
-            <TextBox Grid.Column="1" Grid.Row="2" Text="{Binding Optimalize, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBlock Grid.Column="0" Grid.Row="2" Text="Mutation chance:"/>
+            <TextBox Grid.Column="1" Grid.Row="2" Text="{Binding Mutation, StringFormat=N2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+            <TextBlock Grid.Column="0" Grid.Row="3" Text="Optimalize view:"/>
+            <TextBox Grid.Column="1" Grid.Row="3" Text="{Binding Optimalize, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+            <ListBox Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="4" ItemsSource="{Binding Individuals}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="["  FontSize="16" Margin="2"/>
+                            <TextBlock Text="{Binding index}"  FontSize="16" Margin="2"/>
+                            <TextBlock Text="] =   "  FontSize="16" Margin="2"/>
+                            <TextBlock Text="{Binding value}" FontSize="16" Margin="2"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
         </Grid>
     </Grid>
 </Window>

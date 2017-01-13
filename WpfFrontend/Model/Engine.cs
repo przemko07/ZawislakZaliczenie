@@ -103,6 +103,7 @@ namespace WpfFrontend.Model
             }
         }
 
+        public bool Optimalize = false;
 
         public Engine()
         {

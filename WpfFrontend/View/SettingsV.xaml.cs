@@ -44,6 +44,7 @@ namespace WpfFrontend.View
             t.Matrix2 = new MatrixVM(t.EvoEngine.Matrix2);
             t.PopSize = t.EvoEngine.IndividualsLength;
             t.NodesCount = t.EvoEngine.NodesCount;
+            t.Optimalize = t.EvoEngine.Optimalize;
             t.wasChange = false;
         }
 
@@ -122,6 +123,19 @@ namespace WpfFrontend.View
             }
         }
 
+        private bool _Optimalize;
+        public bool Optimalize
+        {
+            get { return _Optimalize; }
+            set
+            {
+                _Optimalize = value;
+                OnPropertyChanged(nameof(Optimalize));
+                wasChange = true;
+            }
+        }
+
+
 
         public ActionCommand Exit
         {
@@ -168,6 +182,9 @@ namespace WpfFrontend.View
                         EvoEngine.NodesCount = NodesCount;
                         CopyMatrices();
                     }
+
+                    EvoEngine.Optimalize = Optimalize;
+
                     try
                     {
                         EvoEngine.ReCreateEvolutionary();

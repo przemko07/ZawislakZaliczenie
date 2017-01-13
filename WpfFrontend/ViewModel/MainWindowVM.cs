@@ -387,8 +387,7 @@ namespace WpfFrontend.ViewModel
                 OnPropertyChanged(nameof(SelectedIndex));
             }
         }
-
-
+        
         public ObservableCollection<Point> Plot1 { get; } = new ObservableCollection<Point>();
         public ObservableCollection<Point> Plot2 { get; } = new ObservableCollection<Point>();
 
@@ -396,11 +395,16 @@ namespace WpfFrontend.ViewModel
         {
             get
             {
-                return new ActionCommand(() =>
+                return new ActionCommand((o) =>
                 {
+                    bool refresh = true;
+                    if (o is bool) refresh = !(bool)o;
                     engine.Evolutionary.Step();
                     Plot1.Add(new Point(Plot1.Count, Fitness1[BestIndex1]));
                     Plot2.Add(new Point(Plot2.Count, Fitness2[BestIndex1]));
+
+                    if (!refresh) return;
+
                     OnPropertyChanged(nameof(Fitness1));
                     OnPropertyChanged(nameof(Fitness2));
                     OnPropertyChanged(nameof(BestIndex1));
@@ -448,11 +452,12 @@ namespace WpfFrontend.ViewModel
                     Thread.Sleep(100);
                     Task.Run(() =>
                     {
-                        for (int i = 0; i < MultiStepsCount; i++)
+                        for (int i = 0; i < MultiStepsCount - 1; i++)
                         {
                             Thread.Sleep(50);
-                            EvoStep.Execute(null);
+                            EvoStep.Execute(engine.Optimalize);
                         }
+                        EvoStep.Execute(null);
                     });
                 });
             }

@@ -18,15 +18,23 @@ namespace Model
         }
 
 
-        public double[] Fitness { get; set; }
+
+        private double[] _Fitness = new double[0];
+        public double[] Fitness
+        {
+            get { return _Fitness; }
+            set { _Fitness = value.ToArray(); }
+        }
+
 
         public void Calculate(Individual[] individuals)
         {
-            Fitness = new double[individuals.Length];
+            var tmp = new double[individuals.Length];
             for (int i = 0; i < individuals.Length; i++)
             {
-                Fitness[i] = CalculateForSingle(individuals[i]);
+                tmp[i] = CalculateForSingle(individuals[i]);
             }
+            Fitness = tmp;
         }
 
         public int CalculateForSingle(Individual individual)

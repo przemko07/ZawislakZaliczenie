@@ -30,7 +30,9 @@ namespace Model
                 Evo1.FitnessCalc.Calculate(Evo2.individuals);
                 double[] fitnessEvo2 = Evo1.FitnessCalc.Fitness;
 
-                return fitnessEvo1.Concat(fitnessEvo2).ToArray();
+                var result = fitnessEvo1.Concat(fitnessEvo2).ToArray();
+
+                return result;
             }
         }
 
@@ -44,7 +46,9 @@ namespace Model
                 Evo2.FitnessCalc.Calculate(Evo2.individuals);
                 double[] fitnessEvo2 = Evo2.FitnessCalc.Fitness;
 
-                return fitnessEvo1.Concat(fitnessEvo2).ToArray();
+                var result = fitnessEvo1.Concat(fitnessEvo2).ToArray();
+
+                return result;
             }
         }
 
@@ -52,7 +56,7 @@ namespace Model
         {
             Evo1.Step();
             Evo2.Step();
-            
+
             Mixer.Mix(Evo1.individuals, Evo2.individuals);
 
             Evo1.individuals = Mixer.Individuals1;

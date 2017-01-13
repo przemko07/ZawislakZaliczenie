@@ -325,7 +325,7 @@ namespace WpfFrontend.View
             }
             Plot2Lines = Plots2Lines[plot2];
         }
-
+        
         private void Plot1_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             ObservableCollection<Point> col = sender as ObservableCollection<Point>;

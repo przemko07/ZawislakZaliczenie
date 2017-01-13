@@ -121,6 +121,7 @@ namespace WpfFrontend.ViewModel
         {
             get
             {
+                return engine.Evolutionary.Fitness1;
                 return engine.Evolutionary.Evo1.FitnessCalc.Fitness;
             }
         }
@@ -129,6 +130,7 @@ namespace WpfFrontend.ViewModel
         {
             get
             {
+                return engine.Evolutionary.Fitness2;
                 return engine.Evolutionary.Evo2.FitnessCalc.Fitness;
             }
         }
@@ -192,6 +194,7 @@ namespace WpfFrontend.ViewModel
         {
             get
             {
+                return engine.Evolutionary.Individuals[BestIndex1];
                 return engine.Evolutionary.Evo1.individuals[BestIndex1];
             }
         }
@@ -200,6 +203,7 @@ namespace WpfFrontend.ViewModel
         {
             get
             {
+                return engine.Evolutionary.Individuals[BestIndex2];
                 return engine.Evolutionary.Evo2.individuals[BestIndex2];
             }
         }

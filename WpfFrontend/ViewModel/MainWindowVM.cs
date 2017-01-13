@@ -123,7 +123,6 @@ namespace WpfFrontend.ViewModel
             get
             {
                 return engine.Evolutionary.Fitness1;
-                return engine.Evolutionary.Evo1.FitnessCalc.Fitness;
             }
         }
 
@@ -132,7 +131,6 @@ namespace WpfFrontend.ViewModel
             get
             {
                 return engine.Evolutionary.Fitness2;
-                return engine.Evolutionary.Evo2.FitnessCalc.Fitness;
             }
         }
 
@@ -195,7 +193,6 @@ namespace WpfFrontend.ViewModel
             get
             {
                 return engine.Evolutionary.Individuals[BestIndex1];
-                return engine.Evolutionary.Evo1.individuals[BestIndex1];
             }
         }
 
@@ -204,7 +201,6 @@ namespace WpfFrontend.ViewModel
             get
             {
                 return engine.Evolutionary.Individuals[BestIndex2];
-                return engine.Evolutionary.Evo2.individuals[BestIndex2];
             }
         }
 
@@ -224,43 +220,6 @@ namespace WpfFrontend.ViewModel
             {
                 _Graph = value;
                 OnPropertyChanged(nameof(Graph));
-            }
-        }
-
-        private GraphPathType _GraphPath;
-        public GraphPathType GraphPath
-        {
-            get { return _GraphPath; }
-            set
-            {
-                _GraphPath = value;
-                OnPropertyChanged(nameof(GraphPath));
-
-                switch (GraphPath)
-                {
-                    case GraphPathType.F1Path:
-                        SelectedIndex = BestIndex1;
-                        break;
-                    case GraphPathType.F2Path:
-                        SelectedIndex = BestIndex2;
-                        break;
-                    case GraphPathType.ParetoPath:
-                        SelectedIndex = ParetoIncidies[SelectedParetoIndex];
-                        break;
-                }
-            }
-        }
-
-        public GraphPathType[] GraphPathOptions
-        {
-            get
-            {
-                return new GraphPathType[]
-                    {
-                        GraphPathType.F1Path,
-                        GraphPathType.F2Path,
-                        GraphPathType.ParetoPath,
-                    };
             }
         }
 
@@ -305,12 +264,12 @@ namespace WpfFrontend.ViewModel
                     }
                     catch (Exception e)
                     {
+                        Trace.WriteLine(e);
                     }
                 }
                 return _ParetoPath;
             }
         }
-
 
         private uint _SelectedParetoIndex = 0;
         public uint SelectedParetoIndex
@@ -342,44 +301,6 @@ namespace WpfFrontend.ViewModel
             {
                 _SelectedParetoPath = value;
                 OnPropertyChanged(nameof(SelectedParetoPath));
-            }
-        }
-
-        private GraphPathVM _Graph1Path;
-        public GraphPathVM Graph1Path
-        {
-            get
-            {
-                if (_Graph1Path == null)
-                {
-                    _Graph1Path = GraphFactory.GeneratePath(Graph, BestIndividual1);
-                }
-                _Graph1Path.Name = "_Graph1Path";
-                return _Graph1Path;
-            }
-            set
-            {
-                _Graph1Path = value;
-                OnPropertyChanged(nameof(Graph1Path));
-            }
-        }
-
-        private GraphPathVM _Graph2Path;
-        public GraphPathVM Graph2Path
-        {
-            get
-            {
-                if (_Graph2Path == null)
-                {
-                    _Graph2Path = GraphFactory.GeneratePath(Graph, BestIndividual2);
-                }
-                _Graph2Path.Name = "_Graph2Path";
-                return _Graph2Path;
-            }
-            set
-            {
-                _Graph2Path = value;
-                OnPropertyChanged(nameof(Graph2Path));
             }
         }
 
@@ -418,15 +339,13 @@ namespace WpfFrontend.ViewModel
 
         private void RefreshView()
         {
+            _Graph = null;
             OnPropertyChanged(nameof(Fitness1));
             OnPropertyChanged(nameof(Fitness2));
             OnPropertyChanged(nameof(BestIndex1));
             OnPropertyChanged(nameof(BestIndex2));
             OnPropertyChanged(nameof(BestIndividual1));
             OnPropertyChanged(nameof(BestIndividual2));
-            _Graph = null;
-            Graph1Path = null; // in a getter im getting the current best
-            Graph2Path = null; // in a getter im getting the current best
         }
 
         private int _MultiStepsCount = 10;

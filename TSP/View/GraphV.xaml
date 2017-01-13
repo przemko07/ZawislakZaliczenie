@@ -1,0 +1,181 @@
+﻿<UserControl x:Class="TSP.View.GraphV"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TSP.View"
+             xmlns:ext="clr-namespace:TSP.Extensions"
+             xmlns:converters="clr-namespace:TSP.Converters"
+             xmlns:viewmodel="clr-namespace:TSP.ViewModel"
+             mc:Ignorable="d"
+             x:Name="GraphControl"
+             Background="LightBlue">
+    <UserControl.Resources>
+        <converters:DebugConverter x:Key="DebugConverter"/>
+        <converters:Dictionaryitem x:Key="Dictionaryitem"/>
+        <converters:DictionaryNodeInt x:Key="DictionaryNodeInt"/>
+        <converters:NodeSizeToMargin x:Key="NodeSizeToMargin"/>
+        <converters:TextBlockToMargin x:Key="TextBlockToMargin"/>
+        <converters:DivConverter x:Key="DivConverter"/>
+    </UserControl.Resources>
+
+    <Grid>
+        <Canvas Panel.ZIndex="5">
+            <Image x:Name="Selected" Source="/Resources/Images/node_selected.png" RenderOptions.BitmapScalingMode="HighQuality"
+                   Width="{Binding NodeSize, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}"
+                   Height="{Binding NodeSize, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}"
+                   Margin="{Binding NodeSize, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}, Converter={StaticResource NodeSizeToMargin}}">
+                <Image.Style>
+                    <Style TargetType="Image">
+                        <Setter Property="Visibility" Value="Visible"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding EdgesPath.Count, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}" Value="0">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Image.Style>
+            </Image>
+        </Canvas>
+
+        <!-- Show Nodes of graph -->
+        <ItemsControl Panel.ZIndex="4" ItemsSource="{Binding Nodes, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Canvas>
+                        <Image Source="/Resources/Images/node.png" RenderOptions.BitmapScalingMode="HighQuality"
+                               Width="{Binding NodeSize, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}"
+                               Height="{Binding NodeSize, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}"
+                               Margin="{Binding NodeSize, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}, Converter={StaticResource NodeSizeToMargin}}"
+                               Canvas.Left="{Binding Value.X}"
+                               Canvas.Top="{Binding Value.Y}"/>
+                    </Canvas>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+
+        <!-- Show Edges of graph -->
+        <ItemsControl Panel.ZIndex="1" ItemsSource="{Binding Edges, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}">
+            <ItemsControl.Style>
+                <Style TargetType="ItemsControl">
+                    <Setter Property="Visibility" Value="Visible"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding ShowGraphEdges, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}" Value="false">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ItemsControl.Style>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Canvas>
+                        <Path Stroke="DarkBlue" StrokeThickness="{Binding NodeSize, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}, Converter={StaticResource DivConverter}, ConverterParameter=5}">
+                            <Path.Data>
+                                <LineGeometry>
+                                    <LineGeometry.StartPoint>
+                                        <MultiBinding Converter="{StaticResource Dictionaryitem}">
+                                            <Binding Path="Nodes" RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType=UserControl}"/>
+                                            <Binding Path="Begin"/>
+                                            <Binding Path="ChangeCount" RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType=UserControl}"/>
+                                        </MultiBinding>
+                                    </LineGeometry.StartPoint>
+
+                                    <LineGeometry.EndPoint>
+                                        <MultiBinding Converter="{StaticResource Dictionaryitem}">
+                                            <Binding Path="Nodes" RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType=UserControl}"/>
+                                            <Binding Path="End"/>
+                                            <Binding Path="ChangeCount" RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType=UserControl}"/>
+                                        </MultiBinding>
+                                    </LineGeometry.EndPoint>
+                                </LineGeometry>
+                            </Path.Data>
+                        </Path>
+                    </Canvas>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+
+        <!-- Show names of Nodes of graph -->
+        <ItemsControl Panel.ZIndex="6" ItemsSource="{Binding NodesNames, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}">
+            <ItemsControl.Style>
+                <Style TargetType="ItemsControl">
+                    <Setter Property="Visibility" Value="Visible"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding ShowNodeNames, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}" Value="false">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ItemsControl.Style>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Canvas>
+                        <StackPanel Orientation="Horizontal"
+                                    Canvas.Left="{Binding Value.X}"
+                                    Canvas.Top="{Binding Value.Y}">
+                            <StackPanel.Margin>
+                                <MultiBinding Converter="{StaticResource TextBlockToMargin}">
+                                    <Binding RelativeSource="{RelativeSource Self}"/>
+                                    <Binding Path="NodeSize" RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType=UserControl}"/>
+                                </MultiBinding>
+                            </StackPanel.Margin>
+
+                            <TextBlock Text="{Binding Key.Name}"
+                                   Foreground="White"
+                                   TextAlignment="Center"
+                                   HorizontalAlignment="Center"
+                                   FontSize="{Binding NodeSize, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}"
+                                   FontWeight="Black">
+                            </TextBlock>
+
+                            <TextBlock Foreground="Red"
+                                   TextAlignment="Center"
+                                   HorizontalAlignment="Center"
+                                   FontSize="{Binding NodeSize, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}"
+                                   FontWeight="Black">
+                                <TextBlock.Text>
+                                    <MultiBinding Converter="{StaticResource DictionaryNodeInt}">
+                                        <Binding Path="NodesPathOrder" RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType=UserControl}"/>
+                                        <Binding Path="Key"/>
+                                        <Binding Path="ChangeCount" RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType=UserControl}"/>
+                                    </MultiBinding>
+                                </TextBlock.Text>
+                            </TextBlock>
+                        </StackPanel>
+                    </Canvas>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+
+        <!-- Show Edges of graph path -->
+        <ItemsControl Panel.ZIndex="3" ItemsSource="{Binding EdgesPath, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Canvas>
+                        <Path Stroke="Purple" StrokeThickness="{Binding NodeSize, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}, Converter={StaticResource DivConverter}, ConverterParameter=5}">
+                            <Path.Data>
+                                <LineGeometry>
+                                    <LineGeometry.StartPoint>
+                                        <MultiBinding Converter="{StaticResource Dictionaryitem}">
+                                            <Binding Path="Nodes" RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType=UserControl}"/>
+                                            <Binding Path="Begin"/>
+                                            <Binding Path="ChangeCount" RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType=UserControl}"/>
+                                        </MultiBinding>
+                                    </LineGeometry.StartPoint>
+
+                                    <LineGeometry.EndPoint>
+                                        <MultiBinding Converter="{StaticResource Dictionaryitem}">
+                                            <Binding Path="Nodes" RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType=UserControl}"/>
+                                            <Binding Path="End"/>
+                                            <Binding Path="ChangeCount" RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType=UserControl}"/>
+                                        </MultiBinding>
+                                    </LineGeometry.EndPoint>
+                                </LineGeometry>
+                            </Path.Data>
+                        </Path>
+                    </Canvas>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </Grid>
+</UserControl>

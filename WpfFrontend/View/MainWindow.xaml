@@ -84,7 +84,6 @@
 
                     <TextBlock DockPanel.Dock="Bottom" Text="{Binding Graph1Path, Converter={StaticResource GraphPathToTxt}}" Style="{StaticResource graphPath}"/>
                     <view:GraphV DockPanel.Dock="Top"
-                         Graph="{Binding Graph}"
                          GraphPath="{Binding Graph1Path}"
                          NodeSize="{Binding NodeSize}"
                          NodesMargin="{Binding NodesMargin}"
@@ -116,7 +115,6 @@
 
                     <TextBlock DockPanel.Dock="Bottom" Text="{Binding Graph2Path, Converter={StaticResource GraphPathToTxt}}" Style="{StaticResource graphPath}"/>
                     <view:GraphV DockPanel.Dock="Top"
-                         Graph="{Binding Graph}"
                          GraphPath="{Binding Graph2Path}"
                          NodeSize="{Binding NodeSize}"
                          NodesMargin="{Binding NodesMargin}"
@@ -151,7 +149,6 @@
                     <TextBlock DockPanel.Dock="Bottom" Text="{Binding SelectedParetoPath, Converter={StaticResource GraphPathToTxt}}" Style="{StaticResource graphPath}"/>
                     
                     <view:GraphV DockPanel.Dock="Top"
-                         Graph="{Binding Graph}"
                          GraphPath="{Binding SelectedParetoPath}"
                          NodeSize="{Binding NodeSize}"
                          NodesMargin="{Binding NodesMargin}"

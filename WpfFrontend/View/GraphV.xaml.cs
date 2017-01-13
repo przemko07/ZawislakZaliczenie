@@ -37,80 +37,75 @@ namespace WpfFrontend.View
 
         #region dependency property
 
-        public GraphVM Graph
+        public GraphPathVM GraphPath
         {
-            get { return (GraphVM)GetValue(GraphProperty); }
-            set { SetValue(GraphProperty, value); }
-        }
-        public static readonly DependencyProperty GraphProperty =
-            DependencyProperty.Register("Graph", typeof(GraphVM), typeof(GraphV), new PropertyMetadata(null, GraphChangedCallback));
-        private static void GraphChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            if (d == null) return;
-            GraphV graphV = d as GraphV;
-            if (graphV == null) return;
-
-
-            graphV.Nodes.Clear();
-            graphV.Edges.Clear();
-            graphV.NodesNames.Clear();
-            graphV.EdgesPath.Clear();
-            graphV.NodesPathOrder.Clear();
-
-            if (graphV.Graph == null) return;
-
-            graphV.positioner = new CircleGraphPositioner(graphV.Graph);
-
-            double actualWidth = graphV.ActualWidth;
-            double actualHeight = graphV.ActualHeight;
-            try
-            {
-                foreach (var node in graphV.Graph.Nodes)
-                {
-                    graphV.Nodes[node] = graphV.CalculatePosition(node, graphV.NodesMargin, actualWidth, actualHeight);
-                    graphV.NodesNames[node] = graphV.CalculatePosition(node, graphV.NamesMargin, actualWidth, actualHeight);
-                }
-
-                foreach (var edge in graphV.Graph.Edges)
-                {
-                    graphV.Edges.Add(edge);
-                }
-            }
-            catch (Exception ex)
-            {
-                Trace.WriteLine(ex);
-            }
-            ++graphV.ChangeCount;
-        }
-
-        public GraphVM GraphPath
-        {
-            get { return (GraphVM)GetValue(GraphPathProperty); }
+            get { return (GraphPathVM)GetValue(GraphPathProperty); }
             set { SetValue(GraphPathProperty, value); }
         }
         public static readonly DependencyProperty GraphPathProperty =
-            DependencyProperty.Register("GraphPath", typeof(GraphVM), typeof(GraphV), new PropertyMetadata(null, GraphPathChangedCallback));
+            DependencyProperty.Register("GraphPath", typeof(GraphPathVM), typeof(GraphV), new PropertyMetadata(null, GraphPathChangedCallback));
         private static void GraphPathChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             if (d == null) return;
             GraphV graphV = d as GraphV;
             if (graphV == null) return;
 
-            graphV.EdgesPath.Clear();
-            graphV.NodesPathOrder.Clear();
+            graphV.SmartGraphPathParentChanged();
 
-            if (graphV.GraphPath == null) return;
+            graphV.SmartGraphPathCahnged();
+        }
+
+        private void SmartGraphPathCahnged()
+        {
+            EdgesPath.Clear();
+            NodesPathOrder.Clear();
+
+            if (GraphPath == null) return;
 
             int index = 0;
-            graphV.NodesPathOrder.Add(graphV.GraphPath.Edges.First().Begin, index++);
-            foreach (var edge in graphV.GraphPath.Edges)
+            NodesPathOrder.Add(GraphPath.Edges.First().Begin, index++);
+            foreach (var edge in GraphPath.Edges)
             {
-                graphV.EdgesPath.Add(edge);
-                graphV.NodesPathOrder.Add(edge.End, index++);
+                EdgesPath.Add(edge);
+                NodesPathOrder.Add(edge.End, index++);
             }
-            ++graphV.ChangeCount;
+            ++ChangeCount;
 
-            graphV.SetAnimation();
+            SetAnimation();
+        }
+
+        private void SmartGraphPathParentChanged()
+        {
+            GraphVM previous = Graph;
+            Graph = GraphPath?.Parent;
+            if (Graph != null && Graph == previous) return;
+            previous = Graph;
+
+            Nodes.Clear();
+            Edges.Clear();
+            NodesNames.Clear();
+            EdgesPath.Clear();
+            NodesPathOrder.Clear();
+
+            if (Graph == null) return;
+            
+            positioner = new CircleGraphPositioner(Graph);
+
+            double actualWidth = ActualWidth;
+            double actualHeight = ActualHeight;
+
+            foreach (var node in Graph.Nodes)
+            {
+                Nodes[node] = CalculatePosition(node, NodesMargin, actualWidth, actualHeight);
+                NodesNames[node] = CalculatePosition(node, NamesMargin, actualWidth, actualHeight);
+            }
+
+            foreach (var edge in Graph.Edges)
+            {
+                Edges.Add(edge);
+            }
+
+            ++ChangeCount;
         }
 
         public double NodesMargin
@@ -210,6 +205,18 @@ namespace WpfFrontend.View
                 OnPropertyChanged(nameof(ChangeCount));
             }
         }
+
+        private GraphVM _Graph = null;
+        public GraphVM Graph
+        {
+            get { return _Graph; }
+            private set
+            {
+                _Graph = value;
+                OnPropertyChanged(nameof(Graph));
+            }
+        }
+
 
 
         public GraphV()

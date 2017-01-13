@@ -61,9 +61,9 @@ namespace WpfFrontend.Model
             return graph;
         }
 
-        public static GraphVM GeneratePath(GraphVM graph, Individual individual)
+        public static GraphPathVM GeneratePath(GraphVM graph, Individual individual)
         {
-            GraphVM path = new GraphVM();
+            GraphPathVM path = new GraphPathVM(graph);
 
             for (uint i = 1; i < individual.Length; i++)
             {

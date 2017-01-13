@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -257,7 +258,8 @@ namespace WpfFrontend.View
         {
             if (ScaleX == 0 || ScaleY == 0 || Plot1.Count == 0 || Plot2.Count == 0) return;
 
-            Point pos = e.GetPosition(this);
+            Point pos = e.GetPosition(sender as IInputElement);
+
             RawMouseX = pos.X;
             RawMouseY = Plots.Height - pos.Y; // I know its wrong, but at least i can see stuff
 

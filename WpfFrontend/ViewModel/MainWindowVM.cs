@@ -269,7 +269,7 @@ namespace WpfFrontend.ViewModel
                 _ParetoIncidies = value;
                 OnPropertyChanged(nameof(ParetoIncidies));
 
-                MaxParetoIndex = (uint)(_ParetoPath.Count - 1);
+                MaxParetoIndex = (uint)(ParetoIncidies.Length - 1);
                 _ParetoPath = null;
                 _SelectedParetoPath = null;
                 OnPropertyChanged(nameof(SelectedParetoPath));

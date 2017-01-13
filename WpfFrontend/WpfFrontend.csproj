@@ -64,7 +64,11 @@
     <Compile Include="Converters\PointScale2.cs" />
     <Compile Include="Converters\PointScale.cs" />
     <Compile Include="Model\Engine.cs" />
+    <Compile Include="Model\SettingsXml.cs" />
     <Compile Include="ViewModel\MatrixVM.cs" />
+    <Compile Include="View\LoadSettingsV.xaml.cs">
+      <DependentUpon>LoadSettingsV.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\MatrixV.xaml.cs">
       <DependentUpon>MatrixV.xaml</DependentUpon>
     </Compile>
@@ -82,6 +86,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\GraphV.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\LoadSettingsV.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -184,6 +192,19 @@
   <ItemGroup>
     <Resource Include="Resources\Images\forward.png" />
     <Resource Include="Resources\Images\step.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\load.png" />
+    <Resource Include="Resources\Images\save.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\stop.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\save2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\browse.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

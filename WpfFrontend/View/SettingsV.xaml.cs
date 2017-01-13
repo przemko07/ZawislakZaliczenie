@@ -131,7 +131,7 @@ namespace WpfFrontend.View
             {
                 _Optimalize = value;
                 OnPropertyChanged(nameof(Optimalize));
-                wasChange = true;
+                EvoEngine.Optimalize = value;
             }
         }
 
@@ -182,8 +182,6 @@ namespace WpfFrontend.View
                         EvoEngine.NodesCount = NodesCount;
                         CopyMatrices();
                     }
-
-                    EvoEngine.Optimalize = Optimalize;
 
                     try
                     {

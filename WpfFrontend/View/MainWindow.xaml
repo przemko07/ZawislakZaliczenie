@@ -38,18 +38,30 @@
                 </Style>
             </ToolBar.Resources>
 
-            <Button Command="{Binding ShowSettings}">
+            <Button Command="{Binding ShowSettings}" ToolTip="Settings">
                 <Image Source="/Resources/Images/settings.png"/>
             </Button>
 
-            <Button Command="{Binding EvoStep}">
+            <Button Command="{Binding EvoStep}" ToolTip="1 evo step">
                 <Image Source="/Resources/Images/step.png"/>
             </Button>
 
             <TextBox Text="{Binding MultiStepsCount}" FontSize="16" Margin="20, 2, 2, 2" Padding="3" Background="Transparent"/>
 
-            <Button Command="{Binding EvoMultiSteps}">
+            <Button Command="{Binding EvoMultiSteps}" ToolTip="Multi evo step">
                 <Image Source="/Resources/Images/forward.png"/>
+            </Button>
+
+            <Button Command="{Binding StopMultiSteps}" ToolTip="Stop multi evo steps">
+                <Image Source="/Resources/Images/stop.png"/>
+            </Button>
+
+            <Button Command="{Binding SaveCommand}" ToolTip="Save">
+                <Image Source="/Resources/Images/save2.png"/>
+            </Button>
+
+            <Button Command="{Binding LoadCommand}" ToolTip="Load">
+                <Image Source="/Resources/Images/load.png"/>
             </Button>
         </ToolBar>
 

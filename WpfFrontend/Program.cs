@@ -8,6 +8,10 @@ using System.Windows;
 using WpfFrontend.ViewModel;
 using WpfFrontend.Controls;
 using WpfFrontend.View;
+using Model;
+using WpfFrontend.Model;
+using System.Xml.Serialization;
+using System.IO;
 
 namespace WpfFrontend
 {

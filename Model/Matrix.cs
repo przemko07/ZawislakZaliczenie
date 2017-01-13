@@ -39,6 +39,26 @@ namespace Model
             get { return values == null || Rows == 0 || Cols == 0; }
         }
 
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine();
+            string firstdigitFormat = "{0:000}";
+            string digitFormat = ", {0:000}";
+            for (uint row = 0; row < this.Rows; row++)
+            {
+                sb.AppendFormat(firstdigitFormat, this[row, 0]);
+                for (uint col = 1; col < this.Cols; col++)
+                {
+                    sb.AppendFormat(digitFormat, this[row, col]);
+                }
+                sb.AppendLine();
+            }
+            sb.AppendLine();
+
+            return sb.ToString();
+        }
+
 
         #region equality
 
@@ -64,7 +84,7 @@ namespace Model
                     if (this[row, col] != other[row, col]) return false;
                 }
             }
-            return false;
+            return true;
         }
 
         public static bool operator ==(Matrix i1, Matrix i2)

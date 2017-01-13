@@ -18,6 +18,12 @@ namespace Model
             {
                 return Evo1.individuals.Concat(Evo2.individuals).ToArray();
             }
+            set
+            {
+                int split = value.Length / 2;
+                Evo1.individuals = value.Take(split).ToArray();
+                Evo2.individuals = value.Skip(split).ToArray();
+            }
         }
 
         public double[] Fitness1

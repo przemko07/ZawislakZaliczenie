@@ -1,4 +1,5 @@
-﻿using Model;
+﻿using Microsoft.Win32;
+using Model;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -183,8 +184,7 @@ namespace WpfFrontend.ViewModel
                         Width = 800,
                         Height = 640,
                     }.ShowDialog();
-                    _Graph = null;
-                    EvoStep.Execute(null);
+                    RefreshView();
                 });
             }
         }
@@ -387,7 +387,7 @@ namespace WpfFrontend.ViewModel
                 OnPropertyChanged(nameof(SelectedIndex));
             }
         }
-        
+
         public ObservableCollection<Point> Plot1 { get; } = new ObservableCollection<Point>();
         public ObservableCollection<Point> Plot2 { get; } = new ObservableCollection<Point>();
 
@@ -405,30 +405,22 @@ namespace WpfFrontend.ViewModel
 
                     if (!refresh) return;
 
-                    OnPropertyChanged(nameof(Fitness1));
-                    OnPropertyChanged(nameof(Fitness2));
-                    OnPropertyChanged(nameof(BestIndex1));
-                    OnPropertyChanged(nameof(BestIndex2));
-                    OnPropertyChanged(nameof(BestIndividual1));
-                    OnPropertyChanged(nameof(BestIndividual2));
-                    Graph1Path = null; // in a getter im getting the current best
-                    Graph2Path = null; // in a getter im getting the current best
-
-
-                    switch (GraphPath)
-                    {
-                        case GraphPathType.F1Path:
-                            SelectedIndex = BestIndex1;
-                            break;
-                        case GraphPathType.F2Path:
-                            SelectedIndex = BestIndex2;
-                            break;
-                        case GraphPathType.ParetoPath:
-                            SelectedIndex = ParetoIncidies[SelectedParetoIndex];
-                            break;
-                    }
+                    RefreshView();
                 });
             }
+        }
+
+        private void RefreshView()
+        {
+            OnPropertyChanged(nameof(Fitness1));
+            OnPropertyChanged(nameof(Fitness2));
+            OnPropertyChanged(nameof(BestIndex1));
+            OnPropertyChanged(nameof(BestIndex2));
+            OnPropertyChanged(nameof(BestIndividual1));
+            OnPropertyChanged(nameof(BestIndividual2));
+            _Graph = null;
+            Graph1Path = null; // in a getter im getting the current best
+            Graph2Path = null; // in a getter im getting the current best
         }
 
         private int _MultiStepsCount = 10;
@@ -442,7 +434,7 @@ namespace WpfFrontend.ViewModel
             }
         }
 
-
+        bool stops = false;
         public ActionCommand EvoMultiSteps
         {
             get
@@ -454,11 +446,73 @@ namespace WpfFrontend.ViewModel
                     {
                         for (int i = 0; i < MultiStepsCount - 1; i++)
                         {
+                            if (stops) { stops = false; return; }
                             Thread.Sleep(50);
                             EvoStep.Execute(engine.Optimalize);
                         }
+                        if (stops) { stops = false; return; }
                         EvoStep.Execute(null);
                     });
+                });
+            }
+        }
+
+        public ActionCommand StopMultiSteps
+        {
+            get
+            {
+                return new ActionCommand(() =>
+                {
+                    stops = true;
+                });
+            }
+        }
+
+        public ActionCommand SaveCommand
+        {
+            get
+            {
+                return new ActionCommand(() =>
+                {
+                    
+                    SaveFileDialog ofd = new SaveFileDialog();
+                    ofd.Filter = "Graphs settings (*.xml)|*.xml|All Files (*.*)|*.*";
+                    if (ofd.ShowDialog() == true && ofd.FileName != string.Empty)
+                    {
+                        try
+                        {
+                            SettingsXml s = new SettingsXml()
+                            {
+                                F1 = engine.Matrix1,
+                                F2 = engine.Matrix2,
+                                Individuals = engine.Evolutionary.Individuals,
+                                PopSize = engine.IndividualsLength,
+                            };
+
+                            SettingsXml.Write(s, ofd.FileName);
+                        }
+                        catch (Exception e)
+                        {
+                            MessageBox.Show($"Cant save file->{e}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                        }
+                    }
+                });
+            }
+        }
+
+        public ActionCommand LoadCommand
+        {
+            get
+            {
+                return new ActionCommand(() =>
+                {
+                    LoadSettingsV v = new LoadSettingsV();
+                    v.engine = engine;
+                    v.OnLoadCommand = new Action(() =>
+                    {
+                        RefreshView();
+                    });
+                    v.Show();
                 });
             }
         }

@@ -85,7 +85,7 @@ namespace WpfFrontend.Model
                 _NodesCount = value;
             }
         }
-        
+
         private DoubleEvolutionary _Evolutionary;
         public DoubleEvolutionary Evolutionary
         {

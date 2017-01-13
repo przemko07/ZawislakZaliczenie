@@ -6,7 +6,9 @@
         xmlns:ext="clr-namespace:WpfFrontend.Extensions"
         xmlns:local="clr-namespace:WpfFrontend"
         xmlns:view="clr-namespace:WpfFrontend.View"
-        xmlns:viewmodel="clr-namespace:WpfFrontend.ViewModel">
+        xmlns:viewmodel="clr-namespace:WpfFrontend.ViewModel"
+        Icon="/Resources/Images/icon.png"
+        Title="Settings">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>

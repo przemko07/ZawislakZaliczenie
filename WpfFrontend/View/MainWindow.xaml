@@ -9,7 +9,8 @@
         xmlns:viewmodel="clr-namespace:WpfFrontend.ViewModel"
         xmlns:conv="clr-namespace:WpfFrontend.Converters"
         mc:Ignorable="d"
-        Title="TSP" Height="350" Width="525">
+        Icon="/Resources/Images/icon.png"
+        Title="Traveling salesman problem" Height="350" Width="525">
     
     <Window.Resources>
         <Style TargetType="TextBlock" x:Key="graphPath">
@@ -62,6 +63,10 @@
 
             <Button Command="{Binding LoadCommand}" ToolTip="Load">
                 <Image Source="/Resources/Images/load.png"/>
+            </Button>
+
+            <Button Command="{Binding InfoCommand}" ToolTip="Info">
+                <Image Source="/Resources/Images/info.png"/>
             </Button>
         </ToolBar>
 

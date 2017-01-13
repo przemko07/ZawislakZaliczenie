@@ -37,6 +37,9 @@
   <PropertyGroup>
     <StartupObject>WpfFrontend.Program</StartupObject>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>icon.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -66,6 +69,9 @@
     <Compile Include="Model\Engine.cs" />
     <Compile Include="Model\SettingsXml.cs" />
     <Compile Include="ViewModel\MatrixVM.cs" />
+    <Compile Include="View\InfoV.xaml.cs">
+      <DependentUpon>InfoV.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\LoadSettingsV.xaml.cs">
       <DependentUpon>LoadSettingsV.xaml</DependentUpon>
     </Compile>
@@ -86,6 +92,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\GraphV.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\InfoV.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -205,6 +215,18 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Images\browse.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\info.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\ath.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

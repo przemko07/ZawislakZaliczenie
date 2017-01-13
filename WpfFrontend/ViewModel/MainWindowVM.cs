@@ -474,7 +474,7 @@ namespace WpfFrontend.ViewModel
             {
                 return new ActionCommand(() =>
                 {
-                    
+
                     SaveFileDialog ofd = new SaveFileDialog();
                     ofd.Filter = "Graphs settings (*.xml)|*.xml|All Files (*.*)|*.*";
                     if (ofd.ShowDialog() == true && ofd.FileName != string.Empty)
@@ -513,6 +513,18 @@ namespace WpfFrontend.ViewModel
                         RefreshView();
                     });
                     v.Show();
+                });
+            }
+        }
+
+        public ActionCommand InfoCommand
+        {
+            get
+            {
+                return new ActionCommand(() =>
+                {
+                    InfoV info = new InfoV();
+                    info.Show();
                 });
             }
         }

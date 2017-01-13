@@ -60,13 +60,12 @@
                                         <DataTemplate>
                                             <Path StrokeThickness="2"
                                                   Stroke="Yellow"
-                                                  Fill="{Binding DataContext.Color, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl, AncestorLevel=1}}">
+                                                  Fill="{Binding Color}">
                                                 <Path.Data>
-                                                    <EllipseGeometry RadiusX="{Binding DataContext.Size, RelativeSource={RelativeSource  AncestorLevel=1, Mode=FindAncestor, AncestorType=ItemsControl}}"
-                                                                     RadiusY="{Binding DataContext.Size, RelativeSource={RelativeSource  AncestorLevel=1, Mode=FindAncestor, AncestorType=ItemsControl}}">
+                                                    <EllipseGeometry x:Name="abc" RadiusX="{Binding Size}" RadiusY="{Binding Size}">
                                                         <EllipseGeometry.Center>
                                                             <MultiBinding Converter="{StaticResource PointScale}">
-                                                                <Binding Path="."/>
+                                                                <Binding Path="Position"/>
                                                                 <Binding Path="Data.ScaleX" Source="{StaticResource UserContext}"/>
                                                                 <Binding Path="Data.ScaleY" Source="{StaticResource UserContext}"/>
                                                             </MultiBinding>
@@ -117,7 +116,7 @@
                                 <EllipseGeometry RadiusX="15" RadiusY="15">
                                     <EllipseGeometry.Center>
                                         <MultiBinding Converter="{StaticResource PointScale}">
-                                            <Binding Path="SelectedPoint"/>
+                                            <Binding Path="SelectedPoint.Position"/>
                                             <Binding Path="Data.ScaleX" Source="{StaticResource UserContext}"/>
                                             <Binding Path="Data.ScaleY" Source="{StaticResource UserContext}"/>
                                         </MultiBinding>

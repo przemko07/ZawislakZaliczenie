@@ -14,7 +14,7 @@ namespace WpfFrontend.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            GraphVM g = value as GraphVM;
+            GraphPathVM g = value as GraphPathVM;
             if (g == null) return string.Empty;
             if (!g.Edges.Any()) return string.Empty;
 

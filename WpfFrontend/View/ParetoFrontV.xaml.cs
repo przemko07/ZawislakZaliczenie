@@ -25,32 +25,74 @@ namespace WpfFrontend.View
     /// </summary>
     public partial class ParetoFrontV : UserControl, INotifyPropertyChanged
     {
-        public class ParetoPointGeneration
-        : ObjectVM
+        public class MyPoint
+        : INotifyPropertyChanged
         {
-            public ObservableCollection<Point> Points { get; } = new ObservableCollection<Point>();
-            private Brush _Color = Brushes.Black;
+            private Point _Position;
+            public Point Position
+            {
+                get { return _Position; }
+                set { SetValue(ref _Position, value); }
+            }
+
+
+            private Brush _Color = Brushes.Green;
             public Brush Color
             {
                 get { return _Color; }
-                set
-                {
-                    _Color = value;
-                    OnPropertyChanged(nameof(Color));
-                }
+                set { SetValue(ref _Color, value); }
             }
 
-            private int _Size = 8;
+            private int _Size = 1;
             public int Size
             {
                 get { return _Size; }
+                set { SetValue(ref _Size, value); }
+            }
+
+            public MyPoint(double x, double y)
+            {
+                this.Position = new Point(x, y);
+            }
+
+
+            private void SetValue<T>(ref T property, T value, [CallerMemberName]string name = "")
+            {
+                if (property.Equals(value)) return;
+                property = value;
+                OnPropertyChanged(name);
+            }
+            public event PropertyChangedEventHandler PropertyChanged;
+            protected void OnPropertyChanged([CallerMemberName] string propertyName = "")
+                => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        public class ParetoPointGeneration
+        : ObjectVM
+        {
+            public ObservableCollection<MyPoint> Points { get; } = new ObservableCollection<MyPoint>();
+
+            public Brush Color
+            {
                 set
                 {
-                    _Size = value;
-                    OnPropertyChanged(nameof(Size));
+                    foreach (var point in Points)
+                    {
+                        point.Color = value;
+                    }
                 }
             }
 
+            public int Size
+            {
+                set
+                {
+                    foreach (var point in Points)
+                    {
+                        point.Size = value;
+                    }
+                }
+            }
         }
 
         int setF1 = 0;
@@ -108,8 +150,8 @@ namespace WpfFrontend.View
             v.SelectedPoint = v.Generations.Last().Points[(int)e.NewValue];
         }
 
-        private Point _SelectedPoint;
-        public Point SelectedPoint
+        private MyPoint _SelectedPoint;
+        public MyPoint SelectedPoint
         {
             get { return _SelectedPoint; }
             set
@@ -197,7 +239,7 @@ namespace WpfFrontend.View
             ParetoPointGeneration gen = new ParetoPointGeneration();
             for (int i = 0; i < F1.Length; i++)
             {
-                gen.Points.Add(new Point(F1[i], F2[i]));
+                gen.Points.Add(new MyPoint(F1[i], F2[i]));
             }
 
             // pareto
@@ -221,7 +263,7 @@ namespace WpfFrontend.View
             }
 
             RecalculateScale();
-            
+
             if (!Generations.Any()) return;
             if (!Generations.Last().Points.Any()) return;
             if (SelectedIndex >= Generations.Last().Points.Count) return;
@@ -243,7 +285,7 @@ namespace WpfFrontend.View
 
         private void RecalculateScale()
         {
-            Point[] plot1 = new Point[0];
+            MyPoint[] plot1 = new MyPoint[0];
             double actualWidth = 0;
             double actualHeight = 0;
 
@@ -292,7 +334,7 @@ namespace WpfFrontend.View
             public double scaleX, scaleY;
         }
 
-        private static ValueToSet RecalculateScale(Point[] plot1, double actualWidth, double actualHeight, double currentX1, double currentY1)
+        private static ValueToSet RecalculateScale(MyPoint[] plot1, double actualWidth, double actualHeight, double currentX1, double currentY1)
         {
             ValueToSet valueToSet = new ValueToSet();
             if (plot1.Length != 0)
@@ -305,8 +347,8 @@ namespace WpfFrontend.View
                 var yMax = double.NegativeInfinity;
                 if (plot1.Any())
                 {
-                    xMax = plot1.Max(n => n.X);
-                    yMax = plot1.Max(n => n.Y);
+                    xMax = plot1.Max(n => n.Position.X);
+                    yMax = plot1.Max(n => n.Position.Y);
                 }
 
                 valueToSet.x1 = xMax * 1.15; // +15%
@@ -329,6 +371,13 @@ namespace WpfFrontend.View
             return valueToSet;
         }
 
+
+        private void SetValue<T>(ref T property, T value, [CallerMemberName]string name = "")
+        {
+            if (property.Equals(value)) return;
+            property = value;
+            OnPropertyChanged(name);
+        }
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string propertyName = "")
             => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

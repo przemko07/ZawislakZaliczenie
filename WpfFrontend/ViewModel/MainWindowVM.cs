@@ -268,8 +268,22 @@ namespace WpfFrontend.ViewModel
             {
                 _ParetoIncidies = value;
                 OnPropertyChanged(nameof(ParetoIncidies));
+
+                MaxParetoIndex = (uint)(_ParetoPath.Count - 1);
                 _ParetoPath = null;
+                _SelectedParetoPath = null;
                 OnPropertyChanged(nameof(SelectedParetoPath));
+            }
+        }
+
+        private uint _MaxParetoIndex = 0;
+        public uint MaxParetoIndex
+        {
+            get { return _MaxParetoIndex; }
+            set
+            {
+                _MaxParetoIndex = value;
+                OnPropertyChanged(nameof(MaxParetoIndex));
             }
         }
 
@@ -282,20 +296,8 @@ namespace WpfFrontend.ViewModel
                 {
                     _ParetoPath = new ObservableCollection<GraphPathVM>(ParetoIncidies
                         .Select(n => GraphFactory.GeneratePath(Graph, engine.Evolutionary.Individuals[n])));
-                    MaxParetoIndex = (uint)(_ParetoPath.Count - 1);
                 }
                 return _ParetoPath;
-            }
-        }
-
-        private uint _MaxParetoIndex = 0;
-        public uint MaxParetoIndex
-        {
-            get { return _MaxParetoIndex; }
-            set
-            {
-                _MaxParetoIndex = value;
-                OnPropertyChanged(nameof(MaxParetoIndex));
             }
         }
 
@@ -319,16 +321,10 @@ namespace WpfFrontend.ViewModel
         {
             get
             {
-                try
+                if (_SelectedParetoPath == null && SelectedParetoIndex < ParetoPath.Count)
                 {
-                    if (_SelectedParetoPath == null && SelectedParetoIndex < ParetoPath.Count)
-                    {
-                        _SelectedParetoPath = ParetoPath[(int)SelectedParetoIndex];
-                        _SelectedParetoPath.Name = "_SelectedParetoPath";
-                    }
-                }
-                catch
-                {
+                    _SelectedParetoPath = ParetoPath[(int)SelectedParetoIndex];
+                    _SelectedParetoPath.Name = "_SelectedParetoPath";
                 }
                 return _SelectedParetoPath;
             }

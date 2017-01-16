@@ -42,7 +42,7 @@ namespace TSP.View
 
             t.Matrix1 = new MatrixVM(t.EvoEngine.Matrix1);
             t.Matrix2 = new MatrixVM(t.EvoEngine.Matrix2);
-            t.PopSize = t.EvoEngine.IndividualsLength;
+            t.PopSize = (uint)t.EvoEngine.Evolutionary.Individuals.Length;
             t.NodesCount = t.EvoEngine.NodesCount;
             t.Mutation = t.EvoEngine.Mutation;
             t.Optimalize = t.EvoEngine.Optimalize;
@@ -98,8 +98,8 @@ namespace TSP.View
             {
                 if (_Individuals == null)
                 {
-                    _Individuals = new IND[EvoEngine.IndividualsLength];
-                    for (uint i = 0; i < EvoEngine.IndividualsLength; i++)
+                    _Individuals = new IND[EvoEngine.Evolutionary.Individuals.Length];
+                    for (uint i = 0; i < EvoEngine.Evolutionary.Individuals.Length; i++)
                     {
                         _Individuals[i] = new IND()
                         {
@@ -160,6 +160,7 @@ namespace TSP.View
             {
                 _Mutation = value;
                 OnPropertyChanged(nameof(Mutation));
+                wasChange = true;
             }
         }
 
@@ -223,6 +224,8 @@ namespace TSP.View
                         EvoEngine.NodesCount = NodesCount;
                         CopyMatrices();
                     }
+
+                    EvoEngine.Mutation = Mutation;
 
                     try
                     {

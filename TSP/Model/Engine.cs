@@ -98,7 +98,7 @@ namespace TSP.Model
                 }
                 return _Mutation.Value;
             }
-            set { _mutation = value; }
+            set { _Mutation = value; }
         }
         
 
@@ -132,14 +132,14 @@ namespace TSP.Model
 
             _Evolutionary = new DoubleEvolutionary()
             {
-                Evo1 = new Evolutionary(individuals.Take((int)IndividualsLength / 2).ToArray())
+                Evo1 = new Evolutionary(individuals.Take((int)individuals.Length / 2).ToArray())
                 {
                     FitnessCalc = new MatrixFitnessCalc(Matrix1),
                     Selection = new TournamentSelection(2),
                     CrossOver = new CrossOverOX(),
                     Mutation = new SimpleMutation(Mutation)
                 },
-                Evo2 = new Evolutionary(individuals.Skip((int)IndividualsLength / 2).ToArray())
+                Evo2 = new Evolutionary(individuals.Skip((int)individuals.Length / 2).ToArray())
                 {
                     FitnessCalc = new MatrixFitnessCalc(Matrix2),
                     Selection = new TournamentSelection(2),

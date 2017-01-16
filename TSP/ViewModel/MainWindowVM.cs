@@ -431,7 +431,7 @@ namespace TSP.ViewModel
                                 F1 = engine.Matrix1,
                                 F2 = engine.Matrix2,
                                 Individuals = engine.Evolutionary.Individuals,
-                                PopSize = engine.IndividualsLength,
+                                PopSize = (uint)engine.Evolutionary.Individuals.Length,
                                 Mutation = engine.Mutation,
                             };
 

@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:TSP.View"
         mc:Ignorable="d"
         Icon="/Resources/Images/icon.png"
-        Title="Info" Height="330" Width="450">
+        Title="Info" Height="360" Width="450">
     <Window.Background>
         <LinearGradientBrush StartPoint="0, 0" EndPoint="1, 1">
             <GradientStop Color="White" Offset="0"/>
@@ -53,6 +53,7 @@
             <TextBlock Text="Program creators"/>
                 <TextBlock Text="Damian Nycz"/>
                 <TextBlock Text="Krzysztof Kruczek"/>
+                <TextBlock Text="Mikołaj Brocki"/>
                 <TextBlock Text="Przemysław Sojka"/>
                 <Separator/>
                 <TextBlock Text="ATH Bielsko-Biała 2017"/>
